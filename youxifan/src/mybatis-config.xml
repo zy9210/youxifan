@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+ 
+<configuration> 
+ 
+    <settings> 
+        <!-- changes from the defaults for testing --> 
+        <setting name="cacheEnabled" value="false" /> 
+        <setting name="useGeneratedKeys" value="true" /> 
+        <setting name="defaultExecutorType" value="REUSE" /> 
+    </settings> 
+ 
+ 	<typeAliases>  
+      <typeAlias alias="Student" type="com.youxifan.pojo.Student"/>  
+      <typeAlias alias="User" type="com.youxifan.pojo.User"/>
+      <typeAlias alias="Doc" type="com.youxifan.pojo.Doc"/>
+      <typeAlias alias="Tag" type="com.youxifan.pojo.Tag"/>
+      <typeAlias alias="Vote" type="com.youxifan.pojo.Vote"/>
+    </typeAliases>  
+ 
+    <mappers> 
+        <mapper resource="com/youxifan/dao/StudentDao.xml" /> 
+        <mapper resource="com/youxifan/dao/UserDao.xml" /> 
+        <mapper resource="com/youxifan/dao/DocDao.xml" /> 
+        <mapper resource="com/youxifan/dao/TagDao.xml" /> 
+        <mapper resource="com/youxifan/dao/VoteDao.xml" />
+    </mappers> 
+ 
+</configuration>  

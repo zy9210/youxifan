@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    version: $Id: DocMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="Doc">
+
+    <select id="queryDoc" resultType="Doc"  >
+        select 
+		  d.doc_id as docid,
+		  d.upper_doc_id as upperdocid,
+		  d.title as title,
+		  d.content as content,
+		  d.doc_type as doctype,
+		  d.doc_point as docpoint,
+		  d.bs_flag as bsflag,
+		  d.creater_id as createrid,
+		  d.create_date as createdate,
+		  d.modify_date as modifydate
+		from document d;
+    </select>
+    
+    <select id="queryDocq" resultMap="docResult" > 
+select t.* from (
+	select 
+	  d.doc_id as docid,
+	  d.upper_doc_id as upperdocid,
+	  d.title as title,
+	  d.content as content,
+	  d.doc_type as doctype,
+	  d.doc_point as docpoint,
+	  d.bs_flag as bsflag,
+	  d.creater_id as createrid,
+	  d.create_date as doccreatedate,
+	  d.modify_date as docmodifydate,
+	  u.user_name as username,
+	  u.alias as alias,
+	  u.email as email,
+	  u.user_point as userpoint,
+	  u.image_url as imageurl,
+	  u.create_date as usercreatedate,
+	  u.modify_date as usermodifydate
+	from document d
+	left join user u on(u.user_id = d.creater_id)
+	where d.bs_flag = '1'
+	and d.doc_type = '1'
+	order by d.create_date desc
+) t limit 0, 10
+    </select>
+    
+    <select id="selbyid" parameterType="long" resultMap="docResult" > 
+	select 
+	  d.doc_id as docid,
+	  d.upper_doc_id as upperdocid,
+	  d.title as title,
+	  d.content as content,
+	  d.doc_type as doctype,
+	  d.doc_point as docpoint,
+	  d.bs_flag as bsflag,
+	  d.creater_id as createrid,
+	  d.create_date as doccreatedate,
+	  d.modify_date as docmodifydate,
+	  u.user_name as username,
+	  u.alias as alias,
+	  u.email as email,
+	  u.user_point as userpoint,
+	  u.image_url as imageurl,
+	  u.create_date as usercreatedate,
+	  u.modify_date as usermodifydate
+	from document d
+	left join user u on(u.user_id = d.creater_id)
+	where d.bs_flag = '1'
+	and  d.doc_id = #{docid}
+    </select>
+    
+    
+    <select id="getAnswers" parameterType="long" resultMap="docResult" > 
+	select 
+	  d.doc_id as docid,
+	  d.upper_doc_id as upperdocid,
+	  d.title as title,
+	  d.content as content,
+	  d.doc_type as doctype,
+	  d.doc_point as docpoint,
+	  d.bs_flag as bsflag,
+	  d.creater_id as createrid,
+	  d.create_date as doccreatedate,
+	  d.modify_date as docmodifydate,
+	  u.user_name as username,
+	  u.alias as alias,
+	  u.email as email,
+	  u.user_point as userpoint,
+	  u.image_url as imageurl,
+	  u.create_date as usercreatedate,
+	  u.modify_date as usermodifydate
+	from document d
+	left join user u on(u.user_id = d.creater_id)
+	where d.bs_flag = '1'
+	and  d.upper_doc_id = #{docid}
+    </select>
+    
+    <resultMap id="docResult" type="Doc"> 
+		<id property="docid" column="docid" /> 
+		<result property="upperdocid" column="upperdocid" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="doctype" column="doctype" />
+		<result property="docpoint" column="docpoint" />
+		<result property="bsflag" column="bsflag" /> 
+		<result property="createdate" column="doccreatedate" />
+		<result property="modifydate" column="docmodifydate" />
+		<result property="createrid" column="createrid" />
+		<association property="creater" column="createrid"
+			javaType="User">
+			<id property="userid" column="createrid" /> 
+			<result property="username" column="username" /> 
+			<result property="alias" column="alias" /> 
+			<result property="email" column="email" /> 
+			<result property="userpoint" column="userpoint" /> 
+			<result property="imageurl" column="imageurl" />  
+			<result property="createdate" column="usercreatedate" /> 
+			<result property="modifydate" column="usermodifydate" /> 
+		</association>
+	</resultMap>
+
+    <insert id="insertDoc" parameterType="Doc">   
+	    insert into document 
+		(upper_doc_id,title,content,doc_type,doc_point,
+		bs_flag,creater_id,create_date,modify_date) 
+		values
+		(#{upperdocid},#{title},#{content},#{doctype},#{docpoint},
+		'1',#{createrid},now(),now());
+	</insert>  
+    
+    
+    
+    <update id="updateDoc" parameterType="Doc"> 
+		update document set 
+		name = #{user}, 
+		psw = #{psw}
+		where id = #{id} 
+	</update> 
+
+
+
+    <delete id="delDoc" parameterType="Doc" > 
+		delete from document where id = #{id} 
+	</delete>
+	
+</mapper>

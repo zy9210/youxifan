@@ -1,0 +1,71 @@
+
+/* 上传头像的分离的css */
+.blue_border {
+	border: 1px solid #9ABBE5;
+}
+.small_img {
+	padding: 0px;
+	width:50px;
+	height:50px;
+	overflow:hidden;
+}
+.big_img {
+	height: 300px;
+	width: 300px;
+	overflow:hidden;
+	padding: 0px;
+}
+.upload {
+	height: 550px;
+	background-color: #FFFFFF;
+}
+.url_bot input {
+	display: block;
+	float: left;
+	margin-left: 15px;
+}
+.eqimg { 
+    
+}
+.uploadifyQueueItem {
+	font: 11px Verdana, Geneva, sans-serif;
+	border: 2px solid #E5E5E5;
+	background-color: #F5F5F5;
+	margin-top: 5px;
+	padding: 10px;
+	width: 320px;
+}
+.uploadifyError {
+	border: 2px solid #FBCBBC !important;
+	background-color: #FDE5DD !important;
+}
+.uploadifyQueueItem .cancel {
+	float: right;
+}
+.uploadifyProgress {
+	background-color: #FFFFFF;
+	border-top: 1px solid #808080;
+	border-left: 1px solid #808080;
+	border-right: 1px solid #C5C5C5;
+	border-bottom: 1px solid #C5C5C5;
+	margin-top: 10px;
+	width: 100%;
+}
+.uploadifyProgressBar {
+	background-color: #0099FF;
+	width: 1px;
+	height: 3px;
+}
+.member {
+	height: 380px;
+}
+
+h2{
+	margin:5px 0px;
+}
+
+ul{
+	margin:5px 0px 5px 20px;
+	padding:0px
+}
+/* 上传头像的分离的css */

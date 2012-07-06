@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    version: $Id: UserMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="User">
+
+    <select id="queryUser" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			create_date as createdate,
+			modify_date as modifydate
+		from user;
+    </select>
+    
+    <select id="getUserByEmail" parameterType="String" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			create_date as createdate,
+			modify_date as modifydate
+		from user
+		where user.email = #{email};
+    </select>
+    
+
+    
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userid" >   
+	    <![CDATA[
+	    insert into user
+		  (user_name,
+		   alias,
+		   email, 
+		   password, 
+		   signing_message, 
+		   user_point,
+		   user_level, 
+		   bs_flag,
+		   create_date, 
+		   modify_date)
+		values
+		  (#{username},
+		    #{alias},
+		  	#{email},
+		  	#{password},
+		  	#{signing}, 
+		  	#{userpoint},
+		  	#{userlevel}, 
+		  	'1',
+		  	now(),
+		  	now());
+		  	]]> 
+		  	<selectKey resultType="long" keyProperty="userid"> 
+                <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>    
+                <!-- 该方法LAST_INSERT_ID()与数据库连接绑定，同属统一会话级别，不会发生上述MS SQL Server的函数问题。 --> 
+        </selectKey> 
+		  	
+	</insert>  
+    
+    <update id="updateHeadUrl" parameterType="User"> 
+		update User set 
+		image_url = concat("/uploads/",user_id ,"/",user_id ,".jpg") 
+		where user_id = #{userid} 
+	</update> 
+    
+    <update id="updateUser" parameterType="User"> 
+		update User set 
+		name = #{user}, 
+		psw = #{psw}
+		where id = #{id} 
+	</update> 
+
+
+
+    <delete id="delUser" parameterType="User" > 
+		delete from User where id = #{id} 
+	</delete>
+	
+</mapper>

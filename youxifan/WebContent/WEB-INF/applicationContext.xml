@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<context:annotation-config /> 
+
+	<!--  默认
+		<context:property-placeholder location="classpath:/config.properties" />
+		使用自己的class加载属性   使在程序中能用到properties
+	-->
+	<bean id="PropertiesUtil"
+		class="com.youxifan.utils.PropertiesUtil">
+		<property name="locations">
+			<list>
+				<value>classpath:config.properties</value>
+				<value>classpath:log4j.properties</value>	
+			</list>
+		</property>
+		<!--  
+			<property name="location"><value>/WEB-INF/config.properties</value></property>
+		-->
+		<property name="fileEncoding">
+			<value>UTF-8</value>
+		</property>
+	</bean>
+
+
+	
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+	
+	<!--  -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 有了 configLocation 设置就可以在configLocation中设置mapper了
+		<property name="mapperLocations" value="classpath:com/mvc/dao/**/*.xml" />
+		-->
+	</bean>  
+	 
+	<!-- 标准配置 
+		要开启 Spring 的 事务处 理，在 Spring 的 XML 配 置文件中 简单创 建一个
+		DataSourceTransactionManager对象 -->
+	<!--  -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource" /> 
+	</bean> 
+	
+	 
+	
+	<!-- SqlSessionTemplate是MyBatis-Spring的核心。这个类负责管理MyBatis的SqlSession，
+	调用 MyBatis的 SQL 方法，翻译异常。 SqlSessionTemplate是线程安全的，可以被多个 DAO
+	所共享使用 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> 
+		<constructor-arg index="0" ref="sqlSessionFactory" /> 
+	</bean> 
+
+
+	<!--  自动扫描mapper
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.youxifan.dao" />
+	</bean>
+	--> 
+
+
+	<!--  如下注入 SqlSessionTemplate： -->
+	<bean id="studentDao" class="com.youxifan.dao.StudentDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean> 
+	<bean id="userDao" class="com.youxifan.dao.UserDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean>
+	<bean id="docDao" class="com.youxifan.dao.DocDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean> 
+	<bean id="tagDao" class="com.youxifan.dao.TagDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean> 
+	<bean id="voteDao" class="com.youxifan.dao.VoteDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean> 
+
+
+
+	<!--  -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven mode="aspectj"/>
+    <aop:aspectj-autoproxy/>  
+
+</beans>

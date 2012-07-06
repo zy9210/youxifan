@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    Copyright 2010-2011 The myBatis Team
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!--
+    version: $Id: tagMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="Tag">
+
+    <select id="queryTag" resultType="Tag"  >
+        select 
+		   tag_id as tagid,
+		   tag_name as tagname,
+		   tag_point as tagpoint
+		from tag
+		order by tag.tag_point desc
+    </select>
+    
+    <select id="queryTagLikeName" resultType="Tag"  >
+select 
+   tag_id as tagid,
+   tag_name as tagname,
+   tag_point as tagpoint
+from tag
+where tag.tag_name like '%'+#{likename}+'%'
+order by tag.tag_point desc
+    </select>
+
+    <select id="queryTagByName" resultType="Tag"  >
+select 
+   tag_id as tagid,
+   tag_name as tagname,
+   tag_point as tagpoint
+from tag
+where tag.tag_name = #{tagname}
+order by tag.tag_point desc
+    </select>
+    
+    <insert id="insertTag" parameterType="Tag">   
+insert into tag (tag_name,tag_point) values (#{tagname},1);
+	</insert>  
+    
+    
+    
+    <update id="updateTag" parameterType="Tag"> 
+update tag set tag.tag_point=tag_point+1 where tag.tag_id = #{tagid}
+	</update> 
+
+
+
+    <delete id="delTag" parameterType="Tag" > 
+		delete from student where id = #{id} 
+	</delete>
+	
+</mapper>
