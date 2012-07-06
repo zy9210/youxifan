@@ -71,6 +71,7 @@
         		/script/,
         		/login,
         		/checkEmail/,
+        		/ImageValidServlet,
         		/logout
 			</param-value>
 		</init-param>

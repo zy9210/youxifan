@@ -82,6 +82,7 @@ public class LoginFilter implements Filter {
 				// ②-4将用户的请求URL保存在session中，用于登录成功之后，跳到目标URL
 				session.setAttribute(CommonUtil.LOGIN_TO_URL, toUrl);
 				// ②-5转发到登录页面
+				log.info("通不过的链接：==="+toUrl);
 				request.getRequestDispatcher(this.loginJSP).forward(request,
 						response);
 				return;
@@ -108,6 +109,7 @@ public class LoginFilter implements Filter {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	public void init(FilterConfig arg0) throws ServletException {
 
