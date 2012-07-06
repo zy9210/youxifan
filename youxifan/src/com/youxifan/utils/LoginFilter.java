@@ -27,8 +27,6 @@ public class LoginFilter implements Filter {
 	protected final transient Log log = LogFactory
 	.getLog(LoginFilter.class);
 	
-	@Autowired
-	private UserService userService;
 
 
 	private String loginJSP = "/";
@@ -106,13 +104,11 @@ public class LoginFilter implements Filter {
 		return false;
 	}
 
-	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 
 
