@@ -1,6 +1,8 @@
 package com.youxifan.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
@@ -16,6 +18,10 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 	public Object getUserByEmail(String email) {
 		return getSqlSession().selectOne("User.getUserByEmail",email);
 	} 
+	public void changePassword(Map param){
+		getSqlSession().update("User.changePassword", param);
+	}
+	
 	
 	public Object save(Object model) {
 		int row = getSqlSession().insert("User.insertUser",model);

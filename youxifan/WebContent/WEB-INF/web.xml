@@ -29,7 +29,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/applicationContext.xml,/WEB-INF/spring-servlet.xml
+			/WEB-INF/applicationContext.xml,/WEB-INF/spring-servlet.xml,/WEB-INF/applicationBigString.xml
 		</param-value>
 		<!--不是默认名字的时候需要打开  默认: WEB-INF文件夹下寻找名为[servlet-name]-servlet.xml
 			<param-value>classpath:applicationContext*.xml</param-value> 
@@ -71,6 +71,7 @@
         		/script/,
         		/login,
         		/checkEmail/,
+        		/getpwd/,
         		/ImageValidServlet,
         		/logout
 			</param-value>

@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -99,9 +98,9 @@ public class UserController {
 			}
 		}
 		if (cautologin) {
+			log.debug("自动登录，转到："+goto_url);
 			User user = userService.getUserByEmail(cemail);
-			session.setAttribute(CommonUtil.USER_CONTEXT, user);
-			 
+			session.setAttribute(CommonUtil.USER_CONTEXT, user); 
 			return StringUtils.isEmpty(goto_url)?"redirect:/doc":"redirect:"+goto_url;
 		}
 		
@@ -129,9 +128,11 @@ public class UserController {
 		
 		User user = userService.getUserByEmail(email);
 		if (user == null) {
+			log.debug("该邮箱没有注册");
 			modelMap.put("msg", "该邮箱没有注册");
 			login = false;
 		}else if (StringUtils.isEmpty(pwd) || !pwd.equals(CommonUtil.decoderStr(user.getPassword()))) {
+			log.debug(email+"登录时密码错误！");
 			modelMap.put("msg", "密码错误");
 			login = false;
 		}else { 
@@ -151,14 +152,13 @@ public class UserController {
                 response.addCookie(loginCookie);
 			}
 //			return "redirect:/jcrop/userhead.jsp";
-			return "redirect:/doc";
+			return StringUtils.isEmpty(goto_url)?"redirect:/doc":"redirect:"+goto_url;
 		}
 		return "login";
 	}
 	
 	@RequestMapping(value = "/checkEmail/{email}/")
-	@ResponseBody
-	public Map checkEmail(@PathVariable String email ){
+	public void checkEmail(@PathVariable String email,PrintWriter writer){
 
 		String retValue = "";
 		if (userService.checkEmail(email)) {
@@ -166,10 +166,7 @@ public class UserController {
 		}else {
 			retValue = "{\"check\":\"False\"}";
 		}
-//		 writer.print(retValue);
-		Map retMap = new HashMap();
-		retMap.put("check", "错误"); 
-		return retMap;
+		writer.print(retValue); 
 	}
 	
 	

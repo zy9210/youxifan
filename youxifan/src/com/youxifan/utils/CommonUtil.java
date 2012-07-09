@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Time;
 import java.text.*;
 import java.util.*;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -243,6 +244,24 @@ public class CommonUtil
 			}
 		}
 	}
+	
+	
+	public static String complete(String queryContent, Properties p)
+    {
+		Set<Object> keys = p.keySet();
+		for (Object key : keys) {
+			String  keystr = (String) key;
+			queryContent=queryContent.replace("@{"+keystr+"}", p.getProperty(keystr));
+		}
+		
+        return queryContent;
+    }
+	
+	
+	
+	
+	
+	
 
     public static void main(String[] args) 
     {

@@ -1,6 +1,8 @@
 package com.youxifan.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,17 @@ public class UserService {
 		if (user == null) {
 			return true;
 		}
+		return false;
+	}
+	
+	/**
+	 *根据email修改对账号的密码
+	 */
+	public boolean changePassword(String email,String password){
+		Map p = new HashMap<String, String>();
+		p.put("email", email);
+		p.put("password", CommonUtil.encoderStr(password)); 
+		entityDao.changePassword(p);
 		return false;
 	}
 	

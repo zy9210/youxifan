@@ -18,8 +18,7 @@ import com.youxifan.pojo.User;
 public class TagDaoTest {
 	@Autowired
 	private TagDao tagDao;
-	
-	 
+
 	
 	@Test
     public void testSaveTag() {

@@ -26,14 +26,11 @@ import java.util.Properties;
 import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-
-import com.sun.mail.smtp.*;
-import com.youxifan.controller.UserController;
+ 
+import com.sun.mail.smtp.*; 
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.LogFactory; 
 
 /**
  *	EMail Object.
@@ -1168,15 +1165,16 @@ public final class EMail implements Serializable
 	 */
 
 	public static void main(String[] args) {
-		EMail mail = new EMail("smtp.gmail.com", 465,true, 
-		"mail@eyeshot.cn", "eyeshot", "zhaoyu@becit.cn", "ggy", 
-		"Test Email", "test");
+		EMail mail = new EMail("smtp.163.com", 25,false, 
+		"zy9210@163.com", "eyeshot", "zy9210@126.com", "ggy", 
+		"Test Email", "test<br/>dd<br/><br/>");
 		
 		
-		mail.setMessageHTML("test");
+		mail.setMessageHTML("test<br/>dd<br/><br/>");
 		
-		mail.createAuthenticator("zhaoyu@chinatour4u.com","eyeshot");
+		mail.createAuthenticator("zy9210@163.com","zy43489537");
+//				mail.sendWithoutWait();
+		System.out.println(mail.send());
 		
-		mail.sendWithoutWait();
 	}
 }	//	EMail

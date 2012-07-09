@@ -72,6 +72,9 @@ input[type=submit] {
 	<div class="content"> 
 	<form method="post" action="<%=contextPath%>/user/login">
     	<table style="margin:0 auto;">
+    		<tr>
+    			<td colspan="2" style="text-align:center;color:blue;" > &nbsp;${msg} </td> 
+    		</tr>
             <tr>
                 <td>邮箱</td>
                 <td>密码</td> 
@@ -83,7 +86,7 @@ input[type=submit] {
             </tr>
             <tr>
                 <td><input type="checkbox" id="remlginstate" name="remlginstate"/>记住我的登录状态</td>
-                <td><a href="#"   id="ele9" >忘记密码</a></td>
+                <td><a href="javascript:void(0)"   id="ele9" >忘记密码</a></td>
             </tr>
             <tr >
                 <td colspan="2" style="text-align:center" > <a href="<%=contextPath%>/jsp/register.jsp" >申请注册</a>需要邀请码</td> 
@@ -106,7 +109,7 @@ input[type=submit] {
     <div class="main" style="text-align:left; padding-left:20px; ">
     
 	   <div style="font: bold 20px 宋体; padding:10px 0; "> 请输入您注册的邮箱：</div>
-	   <input type="text" id="getpwdemail" />
+	   <input type="text" id="getpwdemail" onBlur="testEmail(this)" />
 		<span id="msg" style="color:red"></span>
 	   <div>
 	   		<input type="button" value="发送" id="sendemail" onclick="getpwd()" style="margin-top:10px; padding:5px 10px;font: bold 20px 宋体;" />
@@ -120,6 +123,7 @@ input[type=submit] {
     </div>
 </div>
 <script language="javascript">
+
         $(document).ready(function() {
 
             //示例9，综合效果
@@ -149,22 +153,33 @@ input[type=submit] {
             }
         });
 
-
+		
         function getpwd(){
-            var email = $("#getpwdemail").val();  
+
+        	var email = $("#getpwdemail").val(); 
+        	
+        	var myReg =/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+			if(myReg.test(email)==false){
+				$("#msg").html("邮箱格式不正确！");
+				return;
+			}
+			
+             
         	$.ajax( {
         		type : "POST",
-        		url : "<%=contextPath%>/user/checkEmail/" + email+"/",
+        		url : "<%=contextPath%>/getpwd/sendEmail/" + email+"/",
         		dataType: "json",
         		success : function(data) { 
-        			if(data.check == "True"){ 
-        				$("#msg").html("已发送，请查收。");  
-        			}else{
-        				$("#msg").html("该邮箱未注册！");
-        			} 
+        			if(data.send == "true"){ 
+        				$("#msg").html("邮件发送成功！");  
+        			}else if(data.send == "noemail"){
+        				$("#msg").html("该邮箱没有注册！");
+        			} else{
+        				$("#msg").html("发送失败,稍后重试！");
+            		}
         		},
         		error :function(){
-        			alert("网络连接出错！");
+        			$("#msg").html("网络连接出错！");
         		}
         	});
         }

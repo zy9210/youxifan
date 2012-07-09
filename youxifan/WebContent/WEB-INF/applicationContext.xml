@@ -91,7 +91,9 @@
 	<bean id="voteDao" class="com.youxifan.dao.VoteDaoImpl"> 
 		<property name="sqlSessionTemplate" ref="sqlSession" /> 
 	</bean> 
-
+	<bean id="getpwdDao" class="com.youxifan.dao.GetpwdDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean> 
 
 
 	<!--  -->

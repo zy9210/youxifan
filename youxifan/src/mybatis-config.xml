@@ -18,6 +18,7 @@
       <typeAlias alias="Doc" type="com.youxifan.pojo.Doc"/>
       <typeAlias alias="Tag" type="com.youxifan.pojo.Tag"/>
       <typeAlias alias="Vote" type="com.youxifan.pojo.Vote"/>
+      <typeAlias alias="Getpwd" type="com.youxifan.pojo.Getpwd"/>
     </typeAliases>  
  
     <mappers> 
@@ -26,6 +27,7 @@
         <mapper resource="com/youxifan/dao/DocDao.xml" /> 
         <mapper resource="com/youxifan/dao/TagDao.xml" /> 
         <mapper resource="com/youxifan/dao/VoteDao.xml" />
+        <mapper resource="com/youxifan/dao/GetpwdDao.xml" />
     </mappers> 
  
 </configuration>  
