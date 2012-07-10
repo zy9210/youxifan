@@ -86,7 +86,7 @@ input[type=submit] {
             </tr>
             <tr>
                 <td><input type="checkbox" id="remlginstate" name="remlginstate"/>记住我的登录状态</td>
-                <td><a href="javascript:void(0)"   id="ele9" >忘记密码</a></td>
+                <td><span  id="ele9" style="color:blue; text-indent:10px; cursor:hand;"> 忘记密码 </span></td>
             </tr>
             <tr >
                 <td colspan="2" style="text-align:center" > <a href="<%=contextPath%>/jsp/register.jsp" >申请注册</a>需要邀请码</td> 
