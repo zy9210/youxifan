@@ -169,6 +169,6 @@
 
 
 	<welcome-file-list>
-		<welcome-file>/user/login</welcome-file>
+		<welcome-file>jsp/login.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>

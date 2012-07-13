@@ -1,6 +1,7 @@
 package com.youxifan.pojo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class Doc implements Serializable {
 	private String creatername;  
 	private String bsflag;
 	private String doctype;
-	private int docpoint;	
+	private BigDecimal docpoint;	
+	private long views;
+	private long answer;
 	private Date modifydate;
 	private Date createdate;
 	private User creater;
@@ -28,6 +31,20 @@ public class Doc implements Serializable {
 	private List<Doc> answers;
 	
 	
+	public long getAnswer() {
+		return answer;
+	}
+	public void setAnswer(long answer) {
+		this.answer = answer;
+	}
+	
+	
+	public long getViews() {
+		return views;
+	}
+	public void setViews(long views) {
+		this.views = views;
+	}
 
 	public long getDocid() {
 		return docid;
@@ -77,10 +94,10 @@ public class Doc implements Serializable {
 	public void setDoctype(String doctype) {
 		this.doctype = doctype;
 	}
-	public int getDocpoint() {
+	public BigDecimal getDocpoint() {
 		return docpoint;
 	}
-	public void setDocpoint(int docpoint) {
+	public void setDocpoint(BigDecimal docpoint) {
 		this.docpoint = docpoint;
 	}
 	public Date getModifydate() {

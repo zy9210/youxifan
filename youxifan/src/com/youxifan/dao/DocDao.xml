@@ -22,6 +22,40 @@
 		from document d;
     </select>
     
+    <select id="getDocbyCreatedate" parameterType="map"  resultType="Doc"  >
+        select 
+		  d.doc_id as docid,
+		  d.upper_doc_id as upperdocid,
+		  d.title as title,
+		  d.content as content,
+		  d.doc_type as doctype,
+		  d.doc_point as docpoint,
+		  d.bs_flag as bsflag,
+		  d.creater_id as createrid,
+		  d.create_date as createdate,
+		  d.modify_date as modifydate,
+		  d.views as views,
+		  d.answers as answer,
+		  d.creater_name as creatername
+		from document d
+		where d.bs_flag = '1'
+		and d.doc_type = '1'
+		
+		<choose> 
+			<when test="sort == 'hot'"> 
+				order by d.views desc
+			</when> 
+			<when test="sort == 'noanswer'"> 
+				order by d.answers desc
+			</when> 
+			<otherwise> 
+				order by d.create_date desc
+			</otherwise> 
+		</choose> 
+		
+		limit #{start}, #{end} ;
+    </select>
+    
     <select id="queryDocq" resultMap="docResult" > 
 select t.* from (
 	select 
@@ -143,7 +177,11 @@ select t.* from (
 		where id = #{id} 
 	</update> 
 
-
+	<update id="updateViews" parameterType="long"> 
+		update document set 
+		views = views+1
+		where doc_id = #{id} 
+	</update> 
 
     <delete id="delDoc" parameterType="Doc" > 
 		delete from document where id = #{id} 

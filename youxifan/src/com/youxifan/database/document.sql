@@ -8,8 +8,10 @@ CREATE TABLE `youxifan`.`document` (
   `content` TEXT NOT NULL COMMENT '内容',
   `doc_type` VARCHAR(2) NOT NULL COMMENT '文档类型1:问题2:文章3:回答4:评论',
   `bs_flag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '0:无效 1:有效',
-  `doc_point` INTEGER NOT NULL DEFAULT 0 COMMENT '文档的积分可以为负',
+  `doc_point` FLOAT(10,2)  DEFAULT 0 COMMENT '文档的积分可以为负',
+  `views` BIGINT  DEFAULT 0 COMMENT '浏览量',
   `creater_id` INTEGER UNSIGNED NOT NULL COMMENT '创建者id',
+  `creater_name` VARCHAR(60) COMMENT '创建用户名',
   `create_date` DATETIME NOT NULL COMMENT '创建时间',
   `modify_date` DATETIME NOT NULL COMMENT '修改时间',
   PRIMARY KEY(`doc_id`)
@@ -26,7 +28,9 @@ select
   d.bs_flag as bsflag,
   d.creater_id as createrid,
   d.create_date as createdate,
-  d.modify_date as modifydate
+  d.modify_date as modifydate,
+  d.creater_name as creatername,
+  d.views as views
 from document d;
 
 insert into document 
@@ -41,6 +45,7 @@ insert into document
 bs_flag,creater_id,create_date,modify_date) 
 values
 ("adf","1","1",21,now(),now());
+
 
 select t.* from (
 	select 

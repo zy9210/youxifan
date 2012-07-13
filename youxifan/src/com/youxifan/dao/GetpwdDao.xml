@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    Copyright 2010-2011 The myBatis Team
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!--
+    version: $Id: tagMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="Getpwd">
+
+
+    <select id="queryGetpwd" parameterType="string" resultType="Getpwd"  >
+<![CDATA[
+
+select 
+  email as email,
+  getpwdstr as getpwdstr,
+  create_date as createdate,
+  bs_flag as baflag
+from getpwd
+where getpwdstr = #{getpwdstr}
+  and bs_flag = '1'
+
+]]>
+    </select>
+    
+    <insert id="insertGetpwd" parameterType="Getpwd">   
+<![CDATA[
+
+insert into getpwd (email,getpwdstr,create_date,modify_date,bs_flag)
+values (#{email} ,#{getpwdstr} ,now(),now(),'1')
+
+]]>
+	</insert>  
+    
+    
+    
+    <update id="updateGetpwd" parameterType="Getpwd"> 
+
+<![CDATA[
+
+insert into getpwd (email,getpwdstr,create_date,modify_date)
+values (#{email} ,#{getpwdstr} ,now(),now())
+
+]]>
+
+	</update> 
+
+
+
+    <update id="delGetpwd" parameterType="string" > 
+<![CDATA[
+
+update getpwd set 
+bs_flag = '0'
+where getpwdstr = #{getpwdstr} 
+
+]]>
+	</update>
+	
+</mapper>

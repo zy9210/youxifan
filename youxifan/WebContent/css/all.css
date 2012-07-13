@@ -430,6 +430,7 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 .postarea{
 	width:630px;
 	height:150px;
+	resize: none;
 	border: 1px solid #BFBFBF;
 	border-radius: 5px; 
 	-webkit-border-radius: 5px; 

@@ -85,6 +85,7 @@ public class UserController {
 	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request,HttpServletResponse response, HttpSession session,ModelMap modelMap){
 		String goto_url = (String)session.getAttribute(CommonUtil.LOGIN_TO_URL);
+//		session.removeAttribute(CommonUtil.LOGIN_TO_URL);
 		Cookie[] cookies =request.getCookies(); 
 		boolean cautologin = false;
 		String cemail = null;
@@ -98,9 +99,10 @@ public class UserController {
 			}
 		}
 		if (cautologin) {
-			log.debug("自动登录，转到："+goto_url);
+			log.debug(cemail+"自动登录，转到："+goto_url);
 			User user = userService.getUserByEmail(cemail);
 			session.setAttribute(CommonUtil.USER_CONTEXT, user); 
+			session.removeAttribute(CommonUtil.LOGIN_TO_URL);
 			return StringUtils.isEmpty(goto_url)?"redirect:/doc":"redirect:"+goto_url;
 		}
 		
@@ -130,10 +132,12 @@ public class UserController {
 		if (user == null) {
 			log.debug("该邮箱没有注册");
 			modelMap.put("msg", "该邮箱没有注册");
+			modelMap.put("loginemail", email);
 			login = false;
 		}else if (StringUtils.isEmpty(pwd) || !pwd.equals(CommonUtil.decoderStr(user.getPassword()))) {
 			log.debug(email+"登录时密码错误！");
 			modelMap.put("msg", "密码错误");
+			modelMap.put("loginemail", email);
 			login = false;
 		}else { 
 			session.setAttribute(CommonUtil.USER_CONTEXT, user);
@@ -152,6 +156,7 @@ public class UserController {
                 response.addCookie(loginCookie);
 			}
 //			return "redirect:/jcrop/userhead.jsp";
+			session.removeAttribute(CommonUtil.LOGIN_TO_URL);
 			return StringUtils.isEmpty(goto_url)?"redirect:/doc":"redirect:"+goto_url;
 		}
 		return "login";

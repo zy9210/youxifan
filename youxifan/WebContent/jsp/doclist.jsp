@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>首页</title> 
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">
-
-
+<script language="javascript" src="<%=contextPath%>/script/jquery.js"></script>
+<script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
 </head>
 
 <body>
@@ -44,12 +44,12 @@
         </div> 
     </div> 
     
-    <div class="questions"> 
+    <div id="questions"> 
 <c:forEach items="${doclist}" var="doc">
         <div class="summary" id="question-summary-${doc.docid}">
             <h3 style=""><a href="<%=contextPath%>/doc/id/${doc.docid}" class="question-hyperlink">${doc.title}</a></h3>
             <div class="qinfo"  >
-                <span class="qcreator"  >${doc.creater.username}</span>  
+                <span class="qcreator"  >${doc.creatername}</span>  
                 <span class="qcreatedate">发表于${doc.createdateStr}</span>
                 <span class="guanzhu"><a href="#" >关注 </a></span>
             </div>
@@ -63,8 +63,10 @@
              </div>
         </div> 
 </c:forEach>
-    
-    
+<c:if  test="${fn:length(doclist)== 30}">
+    <input id="nextp" type="button" onclick="nextpage(30,20)" value="更多"/>
+</c:if>    
+ <input id="nextp" type="button" onclick="nextpage(30,20)" value="更多"/>
     <!-- end #questions --></div>
   
     
@@ -135,5 +137,61 @@
     <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
     <!-- end .footer --></div>
   <!-- end .container --></div>
+  
+  
+  
+ 	<!-- template -->
+	<textarea id="Template-Items" rows="0" cols="0" style="display:none;">
+	<!-- 
+		
+		{#foreach $T as doc}
+		<div class="summary" id="question-summary-{$T.doc.docid}">
+			<h3 style=""><a href="youxifan/doc/id/{$T.doc.docid}" class="question-hyperlink">{$T.doc.title}</a></h3>
+			<div class="qinfo"  >
+				<span class="qcreator"  >{$T.doc.creatername}</span>  
+				<span class="qcreatedate">发表于{$T.doc.createdateStr}</span>
+				<span class="guanzhu"><a href="#" >关注 </a></span>
+			</div>
+			<div class="excerpt">
+				{$T.doc.content}
+			</div>
+			<div class="tags" > 
+				{#foreach $T.doc.tags as tag}
+				<a href="#" class="taglink" title="title" >{$T.tag.name}</a> 
+				{#/for}
+			 </div>
+		</div> 
+		{#/for}
+			
+			
+	  -->
+	</textarea>
+
+
+  <script language="javascript">
+  
+  function nextpage(  start,  step){
+	  $("#nextp").remove();
+	  var template = $("#doctemp").html(); 
+	  var container = $("#questions");
+	  var newdiv = $("<div/>");   
+	  $.ajax( {
+			type : "POST",
+			url : "<%=contextPath%>/doc/sort/${sort}/page/0/10",
+			dataType: "json",
+			success : function(data) {  
+				$(newdiv).setTemplateElement("Template-Items").processTemplate(data);
+				container.append($(newdiv).html());
+			    var startno = parseInt(start)+parseInt(step);
+			    container.append($("<input id='nextp' type='button' onclick='nextpage("+startno+","+step+")' value='更多'/>") ); 
+			},
+			error :function(){
+				alert("网络连接出错！");
+			}
+		});
+		  
+  }
+  
+  </script>
 </body>
 </html>

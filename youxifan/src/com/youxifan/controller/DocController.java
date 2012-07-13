@@ -3,7 +3,9 @@ package com.youxifan.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,11 +43,28 @@ public class DocController {
 	
 	@RequestMapping(method=RequestMethod.GET )
 	public String load(ModelMap modelMap){
-		List<Object> list = docService.getDocList();
+		Map map = new HashMap();
+		map.put("start", 0);
+		map.put("end", 30);
+		List<Object> list = docService.newestDoc(map);
 		modelMap.put("doclist", list);
 		modelMap.put("sort", "newest");
 		return "doclist";
 	}
+	
+	@RequestMapping(value = "/sort/{sort}/page/{start}/{step}" )
+	@ResponseBody
+	public List answer(@PathVariable String sort,@PathVariable int start, @PathVariable int step){
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("end", start+step);
+		map.put("sort", sort);
+		List<Object> list = docService.newestDoc(map);
+		
+		
+		return list;
+	}
+	
 	
 	
 	@RequestMapping(method=RequestMethod.POST )

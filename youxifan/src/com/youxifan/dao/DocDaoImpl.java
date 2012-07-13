@@ -1,6 +1,8 @@
 package com.youxifan.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.youxifan.pojo.Doc;
@@ -21,6 +23,13 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 
 	} 
 	
+	
+	public List<Object> newestDoc(Map map) {
+		List<Object> docList = (List<Object>) getSqlSession()
+			.selectList("Doc.getDocbyCreatedate",map);
+		return docList;
+
+	} 
 
 	public List<Doc> getAnswers(Long upperdocid ) {
 		List<Doc> docList = (List<Doc>) getSqlSession()
@@ -32,6 +41,10 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 	public Object save(Object model) {
 		int row = getSqlSession().insert("Doc.insertDoc",model);
 		return model;
+	}
+	
+	public void updateViews(long docid) {
+		int row = getSqlSession().update("Doc.updateViews",docid);
 	}
 
 	public Object getDocByID(Long docid) {
