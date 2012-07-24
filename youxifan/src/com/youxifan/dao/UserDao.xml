@@ -42,7 +42,23 @@
 		where user.email = #{email};
     </select>
     
-
+	<select id="getUserByID" parameterType="long" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			create_date as createdate,
+			modify_date as modifydate
+		from user
+		where user.user_id = #{userid};
+    </select>
     
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userid" >   
 	    <![CDATA[

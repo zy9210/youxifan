@@ -11,12 +11,17 @@
        http://www.springframework.org/schema/mvc   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
        
 
-
+	
+      
+      
+      
+      
+      
 	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
-	<!-- 简写：  <mvc:annotation-driven />   
+	<!-- 简写：  <mvc:annotation-driven />  
 		<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	-->
-	<mvc:annotation-driven />   
+	<mvc:annotation-driven />  
 	  
 	<!-- 把标记了@Controller注解的类转换为bean  -->
 	<!-- 自动扫描所有注解该路径   --> 
@@ -28,14 +33,43 @@
 -->	
 	<mvc:default-servlet-handler/>
 
+	<mvc:view-controller path="/" view-name="login" /> 
+	
+	
+	
+	
+	
+
+	<!--  
+		好像是根据请求头来决定用什么viewResolver    
+		但是<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">的级别比这个高  上面设置了这个会无效
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">  
+	    <property name="order" value="1" />  
+	    <property name="mediaTypes">  
+	        <map>  
+	            <entry key="json" value="application/json" />  
+	        </map>  
+	    </property>  
+	    <property name="defaultViews">  
+	        <list>  
+	            <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />  
+	        </list>  
+	    </property>  
+	    <property name="ignoreAcceptHeader" value="true" />  
+	</bean> 
+	
+	-->
+	
+	
 
 
 
-
+	<!-- org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter --> 
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >  
 	    <property name="messageConverters">  
 	        <list>  
-	            <ref bean="mappingJacksonHttpMessageConverter"/>  
+	            <ref bean="mappingJacksonHttpMessageConverter"/>   
 	        </list>  
 	    </property>  
 	</bean>  
@@ -46,6 +80,30 @@
 	        </list>  
 	    </property>  
 	</bean> 
+	<!-- 实际上通过setSupportedMediaTypes方法，其实也就是StringHttpMessageConverter在类注释 中说明的
+      	-->
+	<bean id="StringConverter1" class="org.springframework.http.converter.StringHttpMessageConverter">    
+		<property name="supportedMediaTypes">    
+			<list>  
+				<value>text/plain;charset=UTF-8</value>  
+			</list>    
+		</property>    
+	</bean>  
+	<!-- 
+		如果再多看一下StringHttpMessageConverter的源码，可以到它的父类中AbstractHttpMessageConverter有这么个方法： 
+		protected MediaType getDefaultContentType(T t) {  
+		       List<MediaType> mediaTypes = getSupportedMediaTypes();  
+		       return (!mediaTypes.isEmpty() ? mediaTypes.get(0) : null);  
+		   }   
+	 --> 	
+	<bean id="myStringHttpMessageConverter" class="com.youxifan.utils.MyStringHttpMessageConverter" />  
+      
+	            
+	            
+	            
+	            
+	            
+	            
 
 	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
 	<bean

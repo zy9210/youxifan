@@ -73,12 +73,14 @@
         		/checkEmail/,
         		/getpwd/,
         		/ImageValidServlet,
+        		/tag/,
+        		/test/,
         		/logout
 			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>loginJSP</param-name>
-			<param-value>/user/login</param-value>
+			<param-value>/login</param-value>
 		</init-param> 
 	</filter>
 	<filter-mapping>

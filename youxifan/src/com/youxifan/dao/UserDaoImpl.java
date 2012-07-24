@@ -17,7 +17,13 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 	
 	public Object getUserByEmail(String email) {
 		return getSqlSession().selectOne("User.getUserByEmail",email);
-	} 
+	}
+	
+	public Object getUserByID(long userid){
+		return getSqlSession().selectOne("User.getUserByID",userid);
+	}
+	
+	
 	public void changePassword(Map param){
 		getSqlSession().update("User.changePassword", param);
 	}

@@ -36,7 +36,7 @@ public class DocDaoTest {
 	
 	@Test
     public void testQueryDoc() {
-		List<Object> list = docDao.queryDoc();
+		List<Object> list = null;//docDao.queryDoc();
 		Doc doc = null;
 		for (int i = 0; i<list.size(); i++) {
 			doc = (Doc) list.get(i);

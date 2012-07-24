@@ -10,27 +10,37 @@ import com.youxifan.pojo.Doc;
 public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 	
 
-	public List<Object> query( ) {
+	
+	//根据sort分组 有分页
+	public List<Object> queryDoc(Map map) {
 		List<Object> docList = (List<Object>) getSqlSession()
-			.selectList("Doc.queryDoc");
-		return docList;
-
-	} 
-	public List<Object> queryDoc( ) {
-		List<Object> docList = (List<Object>) getSqlSession()
-			.selectList("Doc.queryDocq");
+			.selectList("Doc.queryDoc",map);
 		return docList;
 
 	} 
 	
-	
-	public List<Object> newestDoc(Map map) {
+	//根据userid去question 有分页
+	public List<Object> usersQ(Map map) {
 		List<Object> docList = (List<Object>) getSqlSession()
-			.selectList("Doc.getDocbyCreatedate",map);
-		return docList;
-
+			.selectList("Doc.usersQuestion",map);
+		return docList; 
 	} 
-
+	
+	//根据userid去查回答过的问题 有分页
+	public List<Object> userAnsweredQ(Map map) {
+		List<Object> docList = (List<Object>) getSqlSession()
+			.selectList("Doc.userAnsweredQ",map);
+		return docList; 
+	} 
+	
+	//根据userid去查关注过的问题 有分页
+	public List<Object> userFollowedQ(Map map) {
+		List<Object> docList = (List<Object>) getSqlSession()
+			.selectList("Doc.userFollowedQ",map);
+		return docList; 
+	} 
+	
+	
 	public List<Doc> getAnswers(Long upperdocid ) {
 		List<Doc> docList = (List<Doc>) getSqlSession()
 			.selectList("Doc.getAnswers",upperdocid);

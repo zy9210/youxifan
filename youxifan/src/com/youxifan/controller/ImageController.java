@@ -96,11 +96,7 @@ System.out.println(savePath);
 		}
         
 	}
-	
-	@RequestMapping(params = "method=save")
-	public void add(HttpServletRequest request,  HttpServletResponse response) throws Exception{
-		
-	}
+	 
 	
 	@RequestMapping(params = "method=save")
 	public String save(HttpServletRequest request, ModelMap modelMap){

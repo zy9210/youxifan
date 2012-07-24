@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.youxifan.pojo.Doc;
 import com.youxifan.pojo.User;
 import com.youxifan.service.DocService;
+import com.youxifan.service.TagService;
 import com.youxifan.service.UserService;
 import com.youxifan.utils.CommonUtil;
 
@@ -37,6 +38,9 @@ public class DocController {
 	
 	@Autowired
 	private DocService docService;
+	@Autowired
+	private TagService tagService;
+	
 	public DocController(){
 		
 	}
@@ -46,20 +50,32 @@ public class DocController {
 		Map map = new HashMap();
 		map.put("start", 0);
 		map.put("end", 30);
-		List<Object> list = docService.newestDoc(map);
+		List<Object> list = docService.queryDoc(map);
 		modelMap.put("doclist", list);
-		modelMap.put("sort", "newest");
+		modelMap.put("tab", "newest");
 		return "doclist";
 	}
 	
-	@RequestMapping(value = "/sort/{sort}/page/{start}/{step}" )
+	@RequestMapping(value = "/tab/{tab}" )
+	public String queryTab(ModelMap modelMap,@PathVariable String tab){
+		Map map = new HashMap();
+		map.put("start", 0);
+		map.put("end", 30);
+		map.put("sort", tab);
+		List<Object> list = docService.queryDoc(map);
+		modelMap.put("doclist", list);
+		modelMap.put("tab", tab);
+		return "doclist";
+	}
+	
+	@RequestMapping(value = "/tab/{tab}/page/{start}/{step}" )
 	@ResponseBody
-	public List answer(@PathVariable String sort,@PathVariable int start, @PathVariable int step){
+	public List queryTabPage(@PathVariable String tab,@PathVariable int start, @PathVariable int step){
 		Map map = new HashMap();
 		map.put("start", start);
 		map.put("end", start+step);
-		map.put("sort", sort);
-		List<Object> list = docService.newestDoc(map);
+		map.put("sort", tab);
+		List<Object> list = docService.queryDoc(map);
 		
 		
 		return list;
@@ -67,40 +83,51 @@ public class DocController {
 	
 	
 	
-	@RequestMapping(method=RequestMethod.POST )
-	public String save(HttpServletRequest request, ModelMap modelMap,HttpServletResponse response){
+	@RequestMapping(value = "/add" )
+	public String save(HttpServletRequest request, ModelMap modelMap,HttpServletResponse response,HttpSession session){
 		
-		HttpSession session = request.getSession();
-		User user = (User)session.getAttribute("loginuser");
-		if (user == null) {
-			request.setAttribute("backpath", "");
-			return "login";
-		}
-		String title = request.getParameter("title");
-		String content = request.getParameter("post-text");
-		String doctype = request.getParameter("doctype");
-		String upperdocid = request.getParameter("upperdocid");
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
+		
+		String title = request.getParameter("post_title");
+		String content = request.getParameter("post_content");
+		String doctype = request.getParameter("post_type"); 
+		String subtags = request.getParameter("subtags");
+		String gametext = request.getParameter("gametext"); 
 		
 		Doc doc = new Doc();
 		doc.setTitle(title);
 		doc.setContent(content);
-		doc.setDoctype(doctype);
-		if (!StringUtils.isEmpty(upperdocid)) {
-			doc.setUpperdocid(new Integer(upperdocid));
+		doc.setDoctype(doctype); 
+
+		Map paraMap =(Map) session.getAttribute(CommonUtil.REQUEST_PARAMETERS);
+		if (paraMap != null) {
+			doc.setTitle(((String[])paraMap.get("post_title"))[0]);
+			doc.setContent(((String[])paraMap.get("post_content"))[0]);
+			doc.setDoctype(((String[])paraMap.get("post_type"))[0]); 
+			gametext = ((String[])paraMap.get("gametext"))[0];
+			subtags = ((String[])paraMap.get("subtags"))[0];
+			session.removeAttribute(CommonUtil.REQUEST_PARAMETERS);
 		}
+		if (StringUtils.isEmpty(title)) {
+			modelMap.put("addstate", "标题不能为空！");
+			return "ask";
+		}
+
+		doc.setCreatername(user.getUsername());
 		doc.setCreater(user);
 		doc.setCreaterid(user.getUserid());
 		try{
 			docService.save(doc);
 			modelMap.put("addstate", "添加成功");
-			return "redirect:/s/doc";
+			tagService.saveTagStr(doc.getDocid(),gametext,subtags);
+			return "redirect:/user/"+user.getUserid()+"/tab/askq";
 		}
 		catch(Exception e){
 			log.error(e.getMessage());
 			modelMap.put("addstate", "添加失败");
 		}
 		
-		return "redirect:/s/doc";
+		return "redirect:/user/"+user.getUserid()+"/tab/askq";
 	}
 
 	

@@ -3,17 +3,18 @@ DROP table `youxifan`.`document`;
 
 CREATE TABLE `youxifan`.`document` (
   `doc_id` BIGINT  UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `upper_doc_id` INTEGER UNSIGNED COMMENT '被follow的doc_id',
+  `upper_doc_id` BIGINT UNSIGNED COMMENT '被follow的doc_id',
   `title` VARCHAR(200) COMMENT '标题',
   `content` TEXT NOT NULL COMMENT '内容',
   `doc_type` VARCHAR(2) NOT NULL COMMENT '文档类型1:问题2:文章3:回答4:评论',
   `bs_flag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '0:无效 1:有效',
   `doc_point` FLOAT(10,2)  DEFAULT 0 COMMENT '文档的积分可以为负',
   `views` BIGINT  DEFAULT 0 COMMENT '浏览量',
-  `creater_id` INTEGER UNSIGNED NOT NULL COMMENT '创建者id',
+  `creater_id` BIGINT UNSIGNED NOT NULL COMMENT '创建者id',
   `creater_name` VARCHAR(60) COMMENT '创建用户名',
   `create_date` DATETIME NOT NULL COMMENT '创建时间',
   `modify_date` DATETIME NOT NULL COMMENT '修改时间',
+  `answers` INTEGER UNSIGNED DEFAULT 0 COMMENT '回答数',
   PRIMARY KEY(`doc_id`)
 )
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;

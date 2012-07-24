@@ -1,14 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="/include/head.jspf"%>
+	pageEncoding="UTF-8"%>
+<%@ include file="../include/head.jspf"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>首页</title> 
-<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">
+<title>问题详情</title> 
+<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css"> 
 <script language="javascript" src="<%=contextPath%>/script/jquery.js"></script>
 <script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
+
 </head>
 
 <body>
@@ -33,15 +35,37 @@
     </div>
   <!-- end .header --></div>
     
+    
+    
+    
   <div class="content">
-  	
+  
+  	 <div class="tuserarea" > 
+        <img src="<%=contextPath%>/images/background.jpg" width="100px" height="100px" style="float:left; margin:10px 0;" />
+        <div style="float:left; width:550px;padding:0 10px;">
+            <div >
+            	<span class="tusername" >${user.username}</span>
+            	<a href="<%=contextPath%>/follow/1/${user.userid}/${loginuser.userid}" class="attentionlink fltrt">关注</a>
+                <br style="clear:both;"/>
+            </div>
+            <div class="tusertag" style="color:#B1B1B1;">魔兽世界</div>
+            <div class="tsigning">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无序列</div>
+        </div> 
+        <br style="clear:both;"/>
+    </div><!-- end .tuserarea -->
+    
+   
     <div class="subheader">  
         <div id="tabs">
-            <a ${tab== "newest"?"class=\"youarehere\"":""}  href="<%=contextPath%>/doc/tab/newest" title="">最新</a> 
-            <a ${tab== "hot"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/hot" title=" ">最热</a> 
-            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/noanswer" title=" ">等待回复</a> 
+            <a ${tab== "askq"?"class=\"youarehere\"":""}  href="<%=contextPath%>/user/${user.userid}/tab/askq" title="">所提问题</a> 
+            <a ${tab== "answerq"?"class=\"youarehere\"":""} href="<%=contextPath%>/user/${user.userid}/tab/answerq" title=" ">回答的问题</a> 
+            <a ${tab== "followq"?"class=\"youarehere\"":""} href="<%=contextPath%>/user/${user.userid}/tab/followq" title=" ">关注的问题</a> 
+            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/user/${user.userid}/tab/${tab}" title=" ">关注的标签</a>
+            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/user/${user.userid}/tab/${tab}" title=" ">关注的人</a>
+            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/user/${user.userid}/tab/${tab}" title=" ">粉丝</a>
         </div> 
     </div> 
+    
     
     <div id="questions"> 
 <c:forEach items="${doclist}" var="doc">
@@ -49,8 +73,10 @@
             <h3 style=""><a href="<%=contextPath%>/doc/id/${doc.docid}" class="question-hyperlink">${doc.title}</a></h3>
             <div class="qinfo"  >
                 <span class="qcreator"  >${doc.creatername}</span>  
-                <span class="qcreatedate">发表于${doc.createdateStr}</span>
+                <span class="qcreatedate">发表于${doc.createdateStr}</span> 
+                <c:if  test="${loginuser.userid != user.userid}">
                 <span class="guanzhu"><a href="<%=contextPath%>/follow/3/${doc.docid}/${loginuser.userid}" >关注 </a></span>
+                </c:if> 
             </div>
             <div class="excerpt">
                 ${doc.content}
@@ -67,17 +93,22 @@
 </c:if>    
  <input id="nextp" type="button" onclick="nextpage(0,20)" value="更多"/>
     <!-- end #questions --></div>
-  
+    
+
+    
+   
+      
     
     
     <!-- end .content --></div>
+  
     
   <div class="sidebar1">
   
   	<div class="userarea">
     	<div class="user">
         	<a href="" class="headimg">
-        		<img src="<%=contextPath%>/images/background.jpg" width="60px" height="60px" />
+        		<img src="<%=contextPath %>/images/background.jpg" width="60px" height="60px" />
             </a>
             <div class="userinfo">
             	<div class="username">逆天大战士</div>
@@ -89,9 +120,9 @@
                 <a href="#" >关注我的人 </a>
             </div>
         </div><!-- end .user -->
-    </div><!-- end .userarea -->
+    </div><!-- end .userinfo -->
     
-    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:5px;">
+    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:10px;">
         <a href="#" class="invite" >
             我的邀请
         </a>
@@ -137,9 +168,7 @@
     <!-- end .footer --></div>
   <!-- end .container --></div>
   
-  
-  
- 	<!-- template -->
+	<!-- template -->
 	<textarea id="Template-Items" rows="0" cols="0" style="display:none;">
 	<!-- 
 		
@@ -148,8 +177,10 @@
 			<h3 style=""><a href="<%=contextPath%>/doc/id/{$T.doc.docid}" class="question-hyperlink">{$T.doc.title}</a></h3>
 			<div class="qinfo"  >
 				<span class="qcreator"  >{$T.doc.creatername}</span>  
-				<span class="qcreatedate">发表于{$T.doc.createdateStr}</span>
+				<span class="qcreatedate">发表于{$T.doc.createdateStr}</span> 
+				 <c:if  test="${loginuser.userid != user.userid}">
 				<span class="guanzhu"><a href="<%=contextPath%>/follow/3/{$T.doc.docid}/${loginuser.userid}" >关注 </a></span>
+				 </c:if> 
 			</div>
 			<div class="excerpt">
 				{$T.doc.content}
@@ -167,16 +198,16 @@
 	</textarea>
 
 
-  <script language="javascript">
+	<script language="javascript">
   
-  function nextpage(  start,  step){
+	function nextpage(  start,  step){
 	  $("#nextp").remove();
 	  var template = $("#doctemp").html(); 
 	  var container = $("#questions");
 	  var newdiv = $("<div/>");   
 	  $.ajax( {
 			type : "POST",
-			url : "<%=contextPath%>/doc/tab/${tab}/page/"+start+"/"+step,
+			url : "<%=contextPath%>/user/${user.userid}/tab/${tab}/page/"+start+"/"+step,
 			dataType: "json",
 			success : function(data) {  
 				$(newdiv).setTemplateElement("Template-Items").processTemplate(data);
@@ -189,7 +220,7 @@
 			}
 		});
 		  
-  }
+	}
   
   </script>
 </body>

@@ -42,6 +42,12 @@ public class UserService {
 	public User getUserByEmail(String email){
 		return (User)entityDao.getUserByEmail(email);
 	}
+	/**
+	 * 根据email得到user
+	 */
+	public User getUserByID(long userid){
+		return (User)entityDao.getUserByID(userid);
+	}
 	
 	/**
 	 * 检查email是否注册

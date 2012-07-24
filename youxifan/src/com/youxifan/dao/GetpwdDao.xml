@@ -67,7 +67,8 @@ values (#{email} ,#{getpwdstr} ,now(),now())
 <![CDATA[
 
 update getpwd set 
-bs_flag = '0'
+bs_flag = '0',
+modify_date = now()
 where getpwdstr = #{getpwdstr} 
 
 ]]>

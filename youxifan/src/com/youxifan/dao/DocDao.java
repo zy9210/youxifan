@@ -5,10 +5,11 @@ import java.util.Map;
 
 import com.youxifan.pojo.Doc;
 
-public interface DocDao {
-	public List<Object> query( );
-	public List<Object> queryDoc( );
-	public List<Object> newestDoc(Map map);
+public interface DocDao { 
+	public List<Object> queryDoc(Map map);
+	public List<Object> usersQ(Map map);
+	public List<Object> userAnsweredQ(Map map);
+	public List<Object> userFollowedQ(Map map);
 	public Object getDocByID(Long docid);
 	public Object save(final Object model);
 	public void updateViews(final long docid);

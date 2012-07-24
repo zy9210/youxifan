@@ -70,7 +70,7 @@ input[type=submit] {
 
 <div style="width:100%; height:700px; background-color:#f77400;">
 	<div class="content"> 
-	<form method="post" action="<%=contextPath%>/user/login">
+	<form method="post" action="<%=contextPath%>/login">
     	<table style="margin:0 auto;">
     		<tr>
     			<td colspan="2" style="text-align:center;color:blue;" > &nbsp;${msg} </td> 

@@ -20,16 +20,41 @@ public class DocService {
 	@Autowired
 	private DocDao entityDao;
 	
+	
+	 
+	/*
+	 * 根据sort分组 有分页
+	 */
 	@Transactional
-	public List<Object> getDocList(){
-		List<Object> list = entityDao.queryDoc();
+	public List<Object> queryDoc(Map map){
+		List<Object> list = entityDao.queryDoc(map);
+		return list;
+	}
+	/*
+	 * 根据userid取question 有分页
+	 */
+	public List<Object> usersQ(Map map){
+		List<Object> list = entityDao.usersQ(map);
+		return list;
+	} 
+	
+	
+	/*
+	 * 根据userid取回答过的问题 有分页
+	 */
+	public List<Object> userAnsweredQ(Map map){
+		List<Object> list = entityDao.userAnsweredQ(map);
 		return list;
 	}
 	
-	public List<Object> newestDoc(Map map){
-		List<Object> list = entityDao.newestDoc(map);
+	/*
+	 * 根据userid取关注过的问题 有分页
+	 */
+	public List<Object> userFollowedQ(Map map){
+		List<Object> list = entityDao.userFollowedQ(map);
 		return list;
 	}
+	
 	
 	public Doc getDocByID(Long docid){
 		Doc doc = null;

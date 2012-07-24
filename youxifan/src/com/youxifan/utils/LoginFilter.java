@@ -2,6 +2,8 @@ package com.youxifan.utils;
 
 import java.io.IOException;
 import java.util.Enumeration; 
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -80,9 +82,14 @@ public class LoginFilter implements Filter {
 					toUrl = httpRequest.getQueryString();
 				}
 				// ②-4将用户的请求URL保存在session中，用于登录成功之后，跳到目标URL
-				session.setAttribute(CommonUtil.LOGIN_TO_URL, toUrl);
+				session.setAttribute(CommonUtil.LOGIN_TO_URL, toUrl); 
+				Map paraMap = new HashMap(request.getParameterMap());	
+				session.setAttribute(CommonUtil.REQUEST_PARAMETERS, paraMap);
 				// ②-5转发到登录页面
 				log.info("通不过的链接：==="+toUrl);
+				for (Object key : paraMap.keySet()) {
+					log.info(key+"=="+StringUtils.join((String[])paraMap.get(key), ","));
+				}	
 				request.getRequestDispatcher(this.loginJSP).forward(request,
 						response);
 				return;

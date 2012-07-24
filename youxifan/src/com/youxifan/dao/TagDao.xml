@@ -26,34 +26,99 @@
     <select id="queryTag" resultType="Tag"  >
         select 
 		   tag_id as tagid,
+		   father_id as fatherid,
 		   tag_name as tagname,
-		   tag_point as tagpoint
+		   tag_point as tagpoint,
+		   tag_type as tagtype,
+		   tag_follower as followers,
+		   bs_flag as bsflag
 		from tag
-		order by tag.tag_point desc
+		order by tag.tag_follower desc
     </select>
     
     <select id="queryTagLikeName" resultType="Tag"  >
 select 
    tag_id as tagid,
+   father_id as fatherid,
    tag_name as tagname,
-   tag_point as tagpoint
+   tag_point as tagpoint,
+   tag_type as tagtype,
+   tag_follower as followers,
+   bs_flag as bsflag
 from tag
 where tag.tag_name like '%'+#{likename}+'%'
 order by tag.tag_point desc
     </select>
 
-    <select id="queryTagByName" resultType="Tag"  >
+    <select id="findTagByTagStr" resultType="Tag"  >
 select 
    tag_id as tagid,
+   father_id as fatherid,
    tag_name as tagname,
-   tag_point as tagpoint
+   tag_point as tagpoint,
+   tag_type as tagtype,
+   tag_follower as followers,
+   bs_flag as bsflag
 from tag
-where tag.tag_name = #{tagname}
-order by tag.tag_point desc
+where tag.tag_name = #{tagStr}
+order by tag.tag_follower desc
     </select>
     
-    <insert id="insertTag" parameterType="Tag">   
-insert into tag (tag_name,tag_point) values (#{tagname},1);
+    <select id="queryTagByFatherID" parameterType="long" resultType="Tag"  >
+select 
+   tag_id as tagid,
+   father_id as fatherid,
+   tag_name as tagname,
+   tag_point as tagpoint,
+   tag_type as tagtype,
+   tag_follower as followers,
+   bs_flag as bsflag
+from tag
+where tag.father_id = #{fatherid}
+and tag.bs_flag = "1"
+order by tag.tag_follower desc
+    </select>
+    
+    
+    
+    <select id="queryTagByFatherStr"  resultType="Tag"  >
+select 
+   son.tag_id as tagid,
+   son.father_id as fatherid,
+   son.tag_name as tagname,
+   son.tag_point as tagpoint,
+   son.tag_type as tagtype,
+   son.tag_follower as followers,
+   son.bs_flag as bsflag
+from tag son
+inner join tag father on(father.tag_id = son.father_id and father.tag_name =#{fatherStr} )
+where son.bs_flag = "1"
+and father.bs_flag = "1"
+order by father.tag_follower desc
+    </select>
+    
+    
+    <select id="findTagByFatherStr"  resultType="Tag"  >
+select 
+   son.tag_id as tagid,
+   son.father_id as fatherid,
+   son.tag_name as tagname,
+   son.tag_point as tagpoint,
+   son.tag_type as tagtype,
+   son.tag_follower as followers,
+   son.bs_flag as bsflag
+from tag son
+inner join tag father on(father.tag_id = son.father_id and father.tag_name =#{fatherStr} )
+where son.bs_flag = "1"
+and father.bs_flag = "1"
+and son.tag_name = #{tagStr}
+order by father.tag_follower desc
+    </select>
+    
+    
+    <insert id="insertTag" parameterType="Tag" keyProperty="tagid" >   
+insert into tag (father_id,tag_name,tag_point,tag_type,bs_flag) values 
+			(#{fatherid},#{tagname},#{tagpoint},#{tagtype},#{bsflag});
 	</insert>  
     
     

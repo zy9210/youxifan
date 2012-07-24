@@ -452,5 +452,8 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	font-size:12px; 
 	
 	}	
-	
+.excerpt{
+	width:670px;
+	word-break:break-all;
+}
 	

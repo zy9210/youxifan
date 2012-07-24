@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,11 +27,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.apache.commons.lang3.StringUtils;
 
 import com.youxifan.pojo.User;
+import com.youxifan.service.DocService;
 import com.youxifan.service.UserService;
 import com.youxifan.utils.CommonUtil;
 
-@Controller
-@RequestMapping("/user")
+@Controller 
 public class UserController {
 	protected final transient Log log = LogFactory
 	.getLog(UserController.class);
@@ -39,15 +40,8 @@ public class UserController {
 	public UserController(){
 		
 	}
-	
-	
-	@RequestMapping
-	public String load(ModelMap modelMap){
-		List<Object> list = userService.getUserList();
-		modelMap.put("userlist", list);
-		return "userlist";
-	}
-	
+	 
+	 
 	// 注册
 	@RequestMapping(value = "/register",method=RequestMethod.POST)
 	public String save(HttpServletRequest request, ModelMap modelMap ,HttpSession session){
@@ -89,15 +83,18 @@ public class UserController {
 		Cookie[] cookies =request.getCookies(); 
 		boolean cautologin = false;
 		String cemail = null;
-		for (Cookie cookie : cookies) {
-			if ("autologin".equals(cookie.getName())) {
-				if ("1".equals(cookie.getValue())) {
-					cautologin = true;
+		if(cookies!=null){
+			for (Cookie cookie : cookies) {
+				if ("autologin".equals(cookie.getName())) {
+					if ("1".equals(cookie.getValue())) {
+						cautologin = true;
+					}
+				}else if("email".equals(cookie.getName())){
+					cemail = cookie.getValue();
 				}
-			}else if("email".equals(cookie.getName())){
-				cemail = cookie.getValue();
 			}
 		}
+		
 		if (cautologin) {
 			log.debug(cemail+"自动登录，转到："+goto_url);
 			User user = userService.getUserByEmail(cemail);
@@ -175,7 +172,6 @@ public class UserController {
 	}
 	
 	
-	
 	@RequestMapping(value="/headImg" ,method = RequestMethod.POST)
 	public void saveHeadImg(HttpServletRequest request, HttpServletResponse response,PrintWriter writer){
 		User user = (User)request.getSession().getAttribute("loginuser") ;
@@ -198,21 +194,7 @@ public class UserController {
 		}
 		writer.print("true");
 	}
-	
-	
-	@RequestMapping(params = "method=del")
-	public void del(@RequestParam("id") String id, HttpServletResponse response){
-		try{
-			User user = new User();
-			user.setUserid(new Integer(id));
-			userService.delete(user);
-			response.getWriter().print("{\"del\":\"true\"}");
-		}
-		catch(Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-		}
-	}
+	 
 	 
 	// 登录注销 
 	@RequestMapping("/logout") 
@@ -225,4 +207,76 @@ public class UserController {
 
 	  return "redirect:/user/login"; 
 	} 
+	
+	@Autowired
+	private DocService docService;
+	
+	// 登录注销 
+	@RequestMapping("/user/{userid}/tab/{tab}") 
+	public String show(ModelMap modelMap,@PathVariable long userid,@PathVariable String tab ) { 
+		
+		User user = userService.getUserByID(userid);
+		if (user == null) {
+			return "error";
+		}
+		Map map = new HashMap();
+		map.put("start", 0);
+		map.put("end", 30);
+		map.put("userid", userid);
+		List<Object> list = null;
+		
+		if ("askq".equals(tab)) {
+			list = docService.usersQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab);  
+			modelMap.put("doclist", list);
+		}else if ("answerq".equals(tab)) {
+			list = docService.userAnsweredQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab); 
+			modelMap.put("doclist", list);
+		}else if ("followq".equals(tab)) {
+			list = docService.userFollowedQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab);  
+		}
+		  
+		modelMap.put("tab", tab); 
+		modelMap.put("user", user);  
+		
+
+	  return "user"; 
+	}
+	
+	@RequestMapping("/user/{userid}/tab/{tab}/page/{start}/{step}") 
+	@ResponseBody
+	public List showPage(ModelMap modelMap,@PathVariable long userid,@PathVariable String tab,@PathVariable int start, @PathVariable int step) { 
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("end", start+ step);
+		map.put("userid", userid);
+		
+		List<Object> list = null;
+			
+		if ("askq".equals(tab)) {
+			list = docService.usersQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab); 
+			return list;
+		}else if ("answerq".equals(tab)) {
+			list = docService.userAnsweredQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab); 
+			return list;
+		}else if ("followq".equals(tab)) {
+			list = docService.userFollowedQ(map);
+			modelMap.put("doclist", list);
+			modelMap.put("tab", tab); 
+			return list;
+		}
+		
+		
+		
+	  return null; 
+	}
 }

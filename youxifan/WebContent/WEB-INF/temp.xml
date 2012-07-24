@@ -1,0 +1,139 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd"> 
+    
+    <context:component-scan base-package="com.xxx." /> 
+    <aop:aspectj-autoproxy proxy-target-class="true" /> 
+    <context:annotation-config /> 
+    <import resource="classes/DataSource.xml"/> 
+    <import resource="classes/applicationContext.xml"/> 
+    <mvc:interceptors> 
+        <bean class="com.globeway.web.servlet.intercept.JsonGetInterceptor" /> 
+    </mvc:interceptors>
+
+    <bean id="defaultAnnotationHandlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" ></bean> 
+    <!-- 配置多请求数据类型，如json xml-->
+
+    <bean id="annotationMethodHandlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+        <property name="messageConverters">
+            <list>
+
+                <!-- 解析json请求数据，将json转换为java对象-->
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+                <!-- 解析xml请求数据，将xml转换为java对象-->
+
+                <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+                    <constructor-arg> 
+                        <bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+                           <property name="streamDriver" >
+                               <bean class="com.thoughtworks.xstream.io.xml.DomDriver"/>
+                           </property>
+                            
+                           <property name="autodetectAnnotations" ><value>true</value></property>
+                           <!--可以与xml互换的对象，需要使用XStream的注解，注解的使用方法请参XStream官网-->
+
+                           <property name="annotatedClasses">
+                               <list>
+                                   <value>com.xxx.XxxxDTO</value>
+                               </list>
+                           </property>
+                           
+                        </bean>
+                    </constructor-arg>
+                </bean> 
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+
+                <!--可以增加其他数据类型,请参考spring的API-->
+            </list>
+        </property>
+    </bean>     
+   
+         
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+      <!-- .ftl文件存放的根目录-->
+      <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+	  <property name="freemarkerVariables">
+        <map>
+          <entry key="xml_escape" value-ref="fmXmlEscape"/>
+        </map>
+      </property>
+
+      <!--可以增加其他freemarker的配置，详情请参阅FreeMarkerConfigurerAPI-->
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+       
+        
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="defaultContentType" value="application/json" /> 
+        <property name="mediaTypes">
+            <map>
+                <entry key="html" value="text/html" />
+                <entry key="json" value="application/json" />
+                <entry key="xml" value="application/xml" />
+            </map>
+        </property>
+        
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	                <property name="cache" value="true"/>
+	                <property name="prefix" value=""/>
+	                <property name="suffix" value=".ftl"/>
+	                <property name="exposeSpringMacroHelpers" value="true"/>
+                </bean>
+                
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="viewClass"
+                        value="org.springframework.web.servlet.view.JstlView" />
+                    <property name="prefix" value="/WEB-INF/jsp/" />
+                    <property name="suffix" value=".jsp" />
+                </bean>
+                
+				<!-- 可加入其他视图技术如 volacity jstl等-->                        
+            </list>
+        </property>
+        
+        <property name="defaultViews">
+            <list>
+
+                <!-- 输出为JSON数据-->
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+                </bean>
+
+                <!-- 输出为xml数据-->
+                <bean id="marshallingView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller">
+                        <bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller" >                          
+                            <property name="autodetectAnnotations" value="true"/>
+                        </bean>
+                    </property>
+                    <property name="contentType" value="application/xml" />                    
+                </bean>
+                                 
+            </list>
+        </property>
+    </bean>
+
+    <bean id="exceptionResolver"
+        class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        
+        <property name="defaultErrorView" value="/commons/error" />
+        <property name="exceptionMappings">
+            <props>
+            </props>
+        </property>
+    </bean>
+</beans>

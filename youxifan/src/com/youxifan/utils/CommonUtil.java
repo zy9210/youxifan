@@ -16,6 +16,7 @@ public class CommonUtil
     }
 
     public static final String USER_CONTEXT = "loginuser";
+    public static final String REQUEST_PARAMETERS= "paraMap";
     public static final String FILTERED_REQUEST = "@session_context_filtered_request";
     public static final String LOGIN_TO_URL = "login_to_url";
     
