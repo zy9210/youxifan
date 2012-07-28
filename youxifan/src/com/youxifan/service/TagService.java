@@ -29,25 +29,44 @@ public class TagService {
 	private FollowDao followDao;
 	
 	@Transactional
-	public List<Object> getUserList(){
-		List<Object> list = tagDao.queryTag();
+	public List<Tag> getUserList(){
+		List<Tag> list = tagDao.queryTag();
 		return list;
 	}
 	
-	public List<Object> queryByFatherID(long fatherid){
-		List<Object> list = tagDao.queryByFatherID(fatherid);
-		return list;
+	public List<Tag> userFollowedTag(Map map){
+		return tagDao.userFollowedTag(map);
 	}
 	
-	public List<Object> queryByFatherStr(String fatherStr){
-		List<Object> list = tagDao.queryByFatherStr(fatherStr);
+	/*
+	 * 根据父标签id查找子标签
+	 */
+	public List<Tag> queryByFatherID(long fatherid){
+		List<Tag> list = tagDao.queryByFatherID(fatherid);
 		return list;
 	}
 	
 	/*
+	 * 根据父标签字符串查找子标签
+	 */
+	public List<Tag> queryByFatherStr(String fatherStr){
+		List<Tag> list = tagDao.queryByFatherStr(fatherStr);
+		return list;
+	}
+	
+	/*
+	 * 根据docid查找文档的标签
+	 */
+	public List<Tag> queryByDocid(long docid){
+		List<Tag> list = tagDao.queryByDocid(docid);
+		return list;
+	}
+	
+	
+	/*
 	 * map:fatherStr,tagStr
 	 */
-	public Object findTag(String fatherStr ,String tagStr){
+	public Tag findTag(String fatherStr ,String tagStr){
 		Map map = new HashMap();
 		map.put("fatherStr", fatherStr);
 		map.put("tagStr", tagStr);
@@ -58,10 +77,19 @@ public class TagService {
 	/*
 	 * tagStr
 	 */
-	public Tag findTag(String tagStr){ 
+	public Tag findTagbyName(String tagStr){ 
 		
-		return (Tag)tagDao.findTag(tagStr);
+		return (Tag)tagDao.findTagbyName(tagStr);
 	}
+	
+	/*
+	 * tagID
+	 */
+	public Tag findTagbyID(Map map){ 
+		
+		return (Tag)tagDao.findTagbyID(map);
+	}
+	
 	
 	public boolean isExist(String fatherStr ,String tagStr){
 		boolean retVal = false;
@@ -74,16 +102,29 @@ public class TagService {
 
 	public void saveTagStr(long docid,String fatherStr ,String tagListStr ){
 		String[] tagAry = tagListStr.split(",");
-		long fatherID = findTag(fatherStr).getTagid();
+		
+		long fatherID = 0;
+		Tag fatherTag = findTagbyName(fatherStr);
+		if (fatherTag == null) {
+			Tag t = new Tag();
+			t.setFatherid(0);
+			t.setBsflag("1");
+			t.setTagname(fatherStr.trim());
+			save(t);
+			fatherID = t.getTagid();
+		}else {
+			fatherID = fatherTag.getTagid();
+		}
+		
 		for (String tagStr : tagAry) {
-			Tag tag = (Tag)findTag(fatherStr, tagStr);
+			Tag tag = (Tag)findTag(fatherStr, tagStr.trim());
 			if (tag != null) {
 				insertTagFollow(tag.getTagid(),docid);
 			}else {
 				Tag t = new Tag();
 				t.setFatherid(fatherID);
 				t.setBsflag("1");
-				t.setTagname(tagStr);
+				t.setTagname(tagStr.trim());
 				save(t);
 				insertTagFollow(t.getTagid(),docid);
 			}
@@ -108,7 +149,7 @@ public class TagService {
 	}
 	
 	
-	public void delete(Object obj){
+	public void delete(Tag obj){
 		tagDao.delete(obj);
 	}
 }

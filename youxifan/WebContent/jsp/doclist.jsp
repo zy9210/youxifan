@@ -15,23 +15,7 @@
 
 <div class="container">
 
-  <div class="header">
-  	<a href="#" style="float:left; margin-left:10px;">
-    	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
-    </a> 
-    <div style="float:left; padding-top:18px; margin-left:10px;">
-    	<input id="searchinput" type="text" style=" " />
-        <span id="stext" >提交新问题</span>
-    </div> 
-    <div  id="headnav">   
-        <a href="#" style="float:left; margin-left:10px; color:#FFF;">
-            首页
-        </a> 
-        <a href="#" style="float:left; margin-left:50px; color:#FFF;">
-            话题广场
-        </a> 
-    </div>
-  <!-- end .header --></div>
+  <%@ include file="/include/header.jspf"%>
     
   <div class="content">
   	
@@ -48,17 +32,20 @@
         <div class="summary" id="question-summary-${doc.docid}">
             <h3 style=""><a href="<%=contextPath%>/doc/id/${doc.docid}" class="question-hyperlink">${doc.title}</a></h3>
             <div class="qinfo"  >
-                <span class="qcreator"  >${doc.creatername}</span>  
+                <span class="qcreator" onclick="location='<%=contextPath%>/user/${doc.createrid}/tab/askq'" >${doc.creatername}</span>  
                 <span class="qcreatedate">发表于${doc.createdateStr}</span>
-                <span class="guanzhu"><a href="<%=contextPath%>/follow/3/${doc.docid}/${loginuser.userid}" >关注 </a></span>
+ 
+                <span class="guanzhu  ${doc.followed == 1 ? "notdisplay":""}" id="add3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',${doc.docid},${loginuser.userid},3)"  >关注 </a></span>
+                <span class="guanzhu ${doc.followed == 0 ? "notdisplay":""}" id="del3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',${doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
+        
             </div>
             <div class="excerpt">
                 ${doc.content}
             </div>
             <div class="tags" > 
-                <a href="#" class="taglink" title="title" >魔兽世界</a> 
-                <a href="#" class="taglink" title="title" >战士</a> 
-                <a href="#" class="taglink" title="title" >战士</a> 
+	<c:forEach items="${doc.tags}" var="tag">
+                <a href="<%=contextPath %>/tag/${tag.tagid}" class="taglink" title="${tag.tagname}" >${tag.tagname}</a> 
+	</c:forEach>
              </div>
         </div> 
 </c:forEach>
@@ -147,16 +134,19 @@
 		<div class="summary" id="question-summary-{$T.doc.docid}">
 			<h3 style=""><a href="<%=contextPath%>/doc/id/{$T.doc.docid}" class="question-hyperlink">{$T.doc.title}</a></h3>
 			<div class="qinfo"  >
-				<span class="qcreator"  >{$T.doc.creatername}</span>  
+				<span class="qcreator" onclick="location='<%=contextPath%>/user/{$T.doc.createrid}/tab/askq'" >{$T.doc.creatername}</span>  
 				<span class="qcreatedate">发表于{$T.doc.createdateStr}</span>
-				<span class="guanzhu"><a href="<%=contextPath%>/follow/3/{$T.doc.docid}/${loginuser.userid}" >关注 </a></span>
+				
+				<span class="guanzhu {#if $T.doc.followed == 1 }notdisplay{#/if}" id="add3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',{$T.doc.docid},${loginuser.userid},3)"  >关注 </a></span>
+                <span class="guanzhu {#if $T.doc.followed == 0 }notdisplay{#/if}" id="del3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',{$T.doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
+                
 			</div>
 			<div class="excerpt">
 				{$T.doc.content}
 			</div>
 			<div class="tags" > 
 				{#foreach $T.doc.tags as tag}
-				<a href="#" class="taglink" title="title" >{$T.tag.name}</a> 
+				<a href="<%=contextPath %>/tag/{$T.tag.tagid}" class="taglink" title="title" >{$T.tag.tagname}</a> 
 				{#/for}
 			 </div>
 		</div> 
@@ -189,8 +179,10 @@
 			}
 		});
 		  
-  }
+  } 
   
-  </script>
+</script>
+
+<%@ include file="/include/js.jspf"%>
 </body>
 </html>

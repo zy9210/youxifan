@@ -73,7 +73,7 @@
         		/checkEmail/,
         		/getpwd/,
         		/ImageValidServlet,
-        		/tag/,
+        		/tag/search/,
         		/test/,
         		/logout
 			</param-value>

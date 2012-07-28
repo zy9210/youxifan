@@ -15,7 +15,16 @@ public class Tag implements Serializable {
 	private String tagtype;
 	private long  followers;
 	private String bsflag = "1";
+	private int followed;
 	
+	
+	public int getFollowed(){
+		return this.followed;
+	}
+	
+	public void setFollowed(int followed){
+		this.followed = followed;
+	}
 	
 	public long getTagid() {
 		return tagid;

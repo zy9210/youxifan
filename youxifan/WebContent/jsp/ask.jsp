@@ -61,7 +61,7 @@
 	  <label>标签</label><br/>
 	  <ul id="tags" style="width:610px;"></ul> 
 	  
-	  <input type="submit" value="提交"  /><br/>
+	  <input type="submit" value="提交"  onclick="return check();"/ /><br/>
   </form>
   <!-- end .content --></div>
   
@@ -133,14 +133,28 @@
 </body>
 
 <script type="text/javascript">
+
+function check(){ 
+	if($('#post_title').val().trim() == null  ||  $('#post_title').val().trim() == "" ){
+		alert("标题不能为空！");
+		return false;
+	}
+	if($('#gametext').val().trim() == null  ||  $('#gametext').val().trim() == "" ){
+		alert("问题所属游戏必须选择或回车建立标签！");
+		return false;
+	}
+	
+	return true;
+}
 jQuery(document).ready(function(){
 	$('#game').tagHandler({
 		autocomplete: true,
 		maxTags:1,  
-		allowAdd: false,   
+		allowAdd: true,   
 		getURL:'<%=contextPath %>/tag/search/fid/0',  
 		afterAdd: function(tag){
 			var gamestr = $('#gametext').val(); 
+			$('#game .tagInputField').attr("disabled",true); 
 			$('#tags').tagHandler({
 				autocomplete: true,
 				maxTags:5,  
@@ -164,8 +178,10 @@ jQuery(document).ready(function(){
 				
 			});
 		},
-		submitField:'gametext'
-		
+		submitField:'gametext',
+		afterDelete:function(tag){
+			$('#game .tagInputField').removeAttr("disabled"); 
+		}
 	});
 });
 

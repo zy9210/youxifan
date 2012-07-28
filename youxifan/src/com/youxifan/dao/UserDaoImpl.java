@@ -5,22 +5,39 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.youxifan.pojo.User;
+
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 	
 
-	public List<Object> query( ) {
-		List<Object> userList = (List<Object>) getSqlSession()
+	public List<User> query( ) {
+		List<User> userList = (List<User>) getSqlSession()
 			.selectList("User.queryUser");
 		return userList;
 
 	}
 	
-	public Object getUserByEmail(String email) {
-		return getSqlSession().selectOne("User.getUserByEmail",email);
+	public List<User> userFollowedUser(Map  map ) {
+		List<User> userList = (List<User>) getSqlSession()
+			.selectList("User.userFollowedUser",map);
+		return userList;
+
 	}
 	
-	public Object getUserByID(long userid){
-		return getSqlSession().selectOne("User.getUserByID",userid);
+	public List<User> usersFans(Map  map ) {
+		List<User> userList = (List<User>) getSqlSession()
+			.selectList("User.usersFans",map);
+		return userList;
+
+	}
+	
+	
+	public User getUserByEmail(String email) {
+		return (User)getSqlSession().selectOne("User.getUserByEmail",email);
+	}
+	
+	public User getUserByID(Map map){
+		return (User)getSqlSession().selectOne("User.getUserByID",map);
 	}
 	
 	
@@ -29,21 +46,21 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 	}
 	
 	
-	public Object save(Object model) {
+	public User save(User model) {
 		int row = getSqlSession().insert("User.insertUser",model);
 		return model;
 	}
 	
-	public void setUserImageUrl(Object model) {
+	public void setUserImageUrl(User model) {
 		int row = getSqlSession().insert("User.updateHeadUrl",model);
 	}
 
-	public void delete(Object model) {
+	public void delete(User model) {
 		int row = getSqlSession().insert("User.delUser",model);
 	}
 
 
-	public void update(Object model) {
+	public void update(User model) {
 		int row = getSqlSession().update("User.updateUser",model);
 	}
 

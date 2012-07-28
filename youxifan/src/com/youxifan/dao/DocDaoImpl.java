@@ -12,30 +12,38 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 
 	
 	//根据sort分组 有分页
-	public List<Object> queryDoc(Map map) {
-		List<Object> docList = (List<Object>) getSqlSession()
+	public List<Doc> queryDoc(Map map) {
+		List<Doc> docList = (List<Doc>) getSqlSession()
 			.selectList("Doc.queryDoc",map);
 		return docList;
 
 	} 
 	
 	//根据userid去question 有分页
-	public List<Object> usersQ(Map map) {
-		List<Object> docList = (List<Object>) getSqlSession()
+	public List<Doc> usersQ(Map map) {
+		List<Doc> docList = (List<Doc>) getSqlSession()
 			.selectList("Doc.usersQuestion",map);
 		return docList; 
 	} 
 	
+	//根据tagid去question 有分页
+	public List<Doc> tagsQ(Map map) {
+		List<Doc> docList = (List<Doc>) getSqlSession()
+			.selectList("Doc.queryTagDoc",map);
+		return docList; 
+	} 
+	
+	
 	//根据userid去查回答过的问题 有分页
-	public List<Object> userAnsweredQ(Map map) {
-		List<Object> docList = (List<Object>) getSqlSession()
+	public List<Doc> userAnsweredQ(Map map) {
+		List<Doc> docList = (List<Doc>) getSqlSession()
 			.selectList("Doc.userAnsweredQ",map);
 		return docList; 
 	} 
 	
 	//根据userid去查关注过的问题 有分页
-	public List<Object> userFollowedQ(Map map) {
-		List<Object> docList = (List<Object>) getSqlSession()
+	public List<Doc> userFollowedQ(Map map) {
+		List<Doc> docList = (List<Doc>) getSqlSession()
 			.selectList("Doc.userFollowedQ",map);
 		return docList; 
 	} 
@@ -48,7 +56,7 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 
 	} 
 	
-	public Object save(Object model) {
+	public Doc save(Doc model) {
 		int row = getSqlSession().insert("Doc.insertDoc",model);
 		return model;
 	}
@@ -57,17 +65,17 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 		int row = getSqlSession().update("Doc.updateViews",docid);
 	}
 
-	public Object getDocByID(Long docid) {
-		return getSqlSession().selectOne("Doc.selbyid", docid);
+	public Doc getDocByID(Map map) {
+		return (Doc)getSqlSession().selectOne("Doc.selbyid", map);
 	}
 	
 
-	public void delete(Object model) {
+	public void delete(Doc model) {
 		int row = getSqlSession().insert("Doc.delDoc",model);
 	}
 
 
-	public void update(Object model) {
+	public void update(Doc model) {
 		int row = getSqlSession().update("Doc.updateDoc",model);
 	}
 	

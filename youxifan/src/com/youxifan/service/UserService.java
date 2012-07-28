@@ -23,11 +23,18 @@ public class UserService {
 	private UserDao entityDao;
 	
 	@Transactional
-	public List<Object> getUserList(){
-		List<Object> list = entityDao.query();
+	public List<User> getUserList(){
+		List<User> list = entityDao.query();
 		return list;
 	}
 	
+	public List<User> userFollowedUser(Map  map ){
+		return entityDao.userFollowedUser(map);
+	}
+	
+	public List<User> usersFans(Map  map ){
+		return entityDao.usersFans(map);
+	}
 	/**
 	 * 保存user
 	 */
@@ -45,8 +52,8 @@ public class UserService {
 	/**
 	 * 根据email得到user
 	 */
-	public User getUserByID(long userid){
-		return (User)entityDao.getUserByID(userid);
+	public User getUserByID(Map map){
+		return  entityDao.getUserByID(map);
 	}
 	
 	/**
@@ -72,7 +79,7 @@ public class UserService {
 	}
 	
 	
-	public void delete(Object obj){
+	public void delete(User obj){
 		entityDao.delete(obj);
 	}
 	

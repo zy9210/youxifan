@@ -227,7 +227,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                 // caches the container to avoid scope issues.
                 var tagContainer = this;
                 var tagContainerObject = $(tagContainer);
-				submitTextField = $('<input type="hidden" style="display:none;" class="myclassd" value="" name="' + opts.submitField + '" id="' + opts.submitField + '" />')
+				submitTextField = $('<input type="hidden" style="display:none;"  value="" name="' + opts.submitField + '" id="' + opts.submitField + '" />')
 				tagContainerObject.after(submitTextField);
 				
                 // adds an id to the tagContainer in case it doesn't have one

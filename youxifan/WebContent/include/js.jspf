@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ 
+
+<script language="javascript">
+   
+	  function editFollow(action,upper,follower,type){
+			var urlstr; 
+			if("add" == action){ 
+				//$("#del"+type+upper+follower).removeClass("notdisplay");
+				//$("#add"+type+upper+follower).addClass("notdisplay");
+
+				//$("#del"+type+upper+follower).css('display','inline');
+				//$("#add"+type+upper+follower).css('display','none');
+
+				//$("#add"+type+upper+follower).hide();
+				//$("#del"+type+upper+follower).show();
+				urlstr = "<%=contextPath%>/follow/"+type+"/" + upper + "/" + follower;
+			}else if("del" == action){ 
+				//$("#add"+type+upper+follower).removeClass("notdisplay");
+				//$("#del"+type+upper+follower).addClass("notdisplay");
+
+				//$("#add"+type+upper+follower).css('display','inline');
+				//$("#del"+type+upper+follower).css('display','none');
+				
+				//$("#add"+type+upper+follower).show();
+				//$("#del"+type+upper+follower).hide();
+				urlstr = "<%=contextPath%>/follow/cansel/"+type+"/" + upper + "/" + follower;
+			} 
+
+			   
+			//$("#add"+type+upper+follower).toggleClass("notdisplay");
+			//$("#del"+type+upper+follower).toggleClass("notdisplay");
+			
+			$.ajax( {
+				type : "POST",
+				url : urlstr,
+				dataType: "json",
+				success : function(data) { 
+					if(data.state == "success"){ 
+						$.each($('[id=add'+type+upper+follower+']'), function(i, item){      
+							$(item).toggleClass("notdisplay");        
+							}); 
+						$.each($('[id=del'+type+upper+follower+']'), function(i, item){      
+							$(item).toggleClass("notdisplay");  
+							});  
+						//alert("操作成功！");
+						//$("#msg").html("添加关注成功！");  
+					}else{
+						$.each($('[id=add'+type+upper+follower+']'), function(i, item){      
+							$(item).toggleClass("notdisplay");        
+							}); 
+						$.each($('[id=del'+type+upper+follower+']'), function(i, item){      
+							$(item).toggleClass("notdisplay");  
+							});  
+						//alert("操作成功！");
+						//$("#msg").html("");
+					} 
+				},
+				error :function(){
+					alert("网络连接出错！");
+					}
+			});
+		}
+
+
+	  function nextpage(type,  start,  step){
+		  var urlstr; 
+		  if("user" == type){ 
+			  urlstr =  "<%=contextPath%>/user/${user.userid}/tab/${tab}/page/"+start+"/"+step;
+		  }else if("doclist" == type ){
+			  urlstr = "<%=contextPath%>/doc/tab/${tab}/page/"+start+"/"+step;
+		  }else if("tagdoc" == type){
+			  urlstr = "<%=contextPath%>/tag/${tag.tagid}/tab/${tab}/page/"+start+"/"+step;
+		  }
+		  
+		  $("#nextp").remove();
+		  var template = $("#doctemp").html(); 
+		  var container = $("#questions");
+		  var newdiv = $("<div/>");   
+		  $.ajax( {
+				type : "POST",
+				url : urlstr,
+				dataType: "json",
+				success : function(data) {  
+					$(newdiv).setTemplateElement("Template-Items").processTemplate(data);
+					container.append($(newdiv).html());
+				    var startno = parseInt(start)+parseInt(step);
+				    if(data.length == 30){
+				    	container.append($("<input id='nextp' type='button' onclick='nextpage("+startno+","+step+")' value='更多'/>") ); 
+				    }
+				},
+				error :function(){
+					alert("网络连接出错！");
+				}
+			});
+			  
+		}
+ </script>

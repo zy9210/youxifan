@@ -1,6 +1,8 @@
 package com.youxifan.dao;
+
+import com.youxifan.pojo.Follow;
  
 public interface FollowDao { 
-	public Object save(final Object model); 
-	public void delete(final Object model);
+	public Follow save(final Follow model); 
+	public void delete(final Follow model);
 }

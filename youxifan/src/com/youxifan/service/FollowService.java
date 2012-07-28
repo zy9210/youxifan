@@ -15,18 +15,14 @@ public class FollowService {
 	
 	@Autowired
 	private FollowDao followDao;
-	
-	@Transactional
-	public List<Object> getUserList(){ 
-		return null;
-	}
+	 
 	
 	public void save(Follow follow){
 		followDao.save(follow);
 	}
 	
 	
-	public void delete(Object obj){
+	public void delete(Follow obj){
 		followDao.delete(obj);
 	}
 }

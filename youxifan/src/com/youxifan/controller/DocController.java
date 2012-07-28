@@ -46,23 +46,28 @@ public class DocController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET )
-	public String load(ModelMap modelMap){
+	public String load(ModelMap modelMap,HttpSession session){
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", 0);
 		map.put("end", 30);
-		List<Object> list = docService.queryDoc(map);
+		map.put("loginuserid", user.getUserid());
+		
+		List<Doc> list = docService.queryDoc(map);
 		modelMap.put("doclist", list);
 		modelMap.put("tab", "newest");
 		return "doclist";
 	}
 	
 	@RequestMapping(value = "/tab/{tab}" )
-	public String queryTab(ModelMap modelMap,@PathVariable String tab){
+	public String queryTab(ModelMap modelMap,@PathVariable String tab,HttpSession session){
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", 0);
 		map.put("end", 30);
 		map.put("sort", tab);
-		List<Object> list = docService.queryDoc(map);
+		map.put("loginuserid", user.getUserid());
+		List<Doc> list = docService.queryDoc(map);
 		modelMap.put("doclist", list);
 		modelMap.put("tab", tab);
 		return "doclist";
@@ -70,12 +75,14 @@ public class DocController {
 	
 	@RequestMapping(value = "/tab/{tab}/page/{start}/{step}" )
 	@ResponseBody
-	public List queryTabPage(@PathVariable String tab,@PathVariable int start, @PathVariable int step){
+	public List queryTabPage(@PathVariable String tab,@PathVariable int start, @PathVariable int step,HttpSession session){
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", start);
 		map.put("end", start+step);
 		map.put("sort", tab);
-		List<Object> list = docService.queryDoc(map);
+		map.put("loginuserid", user.getUserid());
+		List<Doc> list = docService.queryDoc(map);
 		
 		
 		return list;
@@ -101,11 +108,16 @@ public class DocController {
 
 		Map paraMap =(Map) session.getAttribute(CommonUtil.REQUEST_PARAMETERS);
 		if (paraMap != null) {
-			doc.setTitle(((String[])paraMap.get("post_title"))[0]);
-			doc.setContent(((String[])paraMap.get("post_content"))[0]);
-			doc.setDoctype(((String[])paraMap.get("post_type"))[0]); 
-			gametext = ((String[])paraMap.get("gametext"))[0];
-			subtags = ((String[])paraMap.get("subtags"))[0];
+			if(paraMap.get("post_title")!=null)
+				doc.setTitle(((String[])paraMap.get("post_title"))[0]);
+			if(paraMap.get("post_content")!=null)
+				doc.setContent(((String[])paraMap.get("post_content"))[0]);
+			if(paraMap.get("post_type")!=null)
+				doc.setDoctype(((String[])paraMap.get("post_type"))[0]);
+			if(paraMap.get("gametext")!=null)
+				gametext = ((String[])paraMap.get("gametext"))[0];
+			if(paraMap.get("subtags")!=null)
+				subtags = ((String[])paraMap.get("subtags"))[0];
 			session.removeAttribute(CommonUtil.REQUEST_PARAMETERS);
 		}
 		if (StringUtils.isEmpty(title)) {
@@ -131,7 +143,7 @@ public class DocController {
 	}
 
 	
-	@RequestMapping(value = "/{docid}/answer" ,method=RequestMethod.POST , headers = "Accept=application/json")
+	@RequestMapping(value = "/answer/{docid}" ,method=RequestMethod.POST , headers = "Accept=application/json")
 	//@ResponseBody
 	public void answer(@PathVariable Long docid, HttpServletRequest request, HttpServletResponse response){
 		String retValue ="";
@@ -183,8 +195,12 @@ public class DocController {
 	
 
 	@RequestMapping(value="/id/{docid}" , method=RequestMethod.GET)
-	public String getDocbyId(@PathVariable Long docid, ModelMap modelMap,HttpServletResponse response){
-		Doc doc = docService.getDocByID(docid);
+	public String getDocbyId(@PathVariable Long docid, ModelMap modelMap,HttpServletResponse response,HttpSession session){
+		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT );
+		Map m = new HashMap();
+		m.put("docid", docid);
+		m.put("loginuserid", loginUser.getUserid());
+		Doc doc = docService.getDocByID(m);
 		modelMap.put("doc", doc);
 		return "doc";
 	}

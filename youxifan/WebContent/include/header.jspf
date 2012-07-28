@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ 
+
+   <div class="header">
+  	<a href="<%=contextPath%>/doc" style="float:left; margin-left:10px;">
+    	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
+    </a> 
+    <div style="float:left; padding-top:18px; margin-left:10px;">
+    	<input id="searchinput" type="text" style=" " />
+        <span id="stext" >提交新问题</span>
+    </div> 
+    <div  id="headnav">   
+        <a href="<%=contextPath%>/doc" style="float:left; margin-left:10px; color:#FFF;">
+            首页
+        </a> 
+        <a href="#" style="float:left; margin-left:50px; color:#FFF;">
+            话题广场
+        </a> 
+    </div>
+  <!-- end .header --></div>

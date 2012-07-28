@@ -61,8 +61,24 @@ select
    bs_flag as bsflag
 from tag
 where tag.tag_name = #{tagStr}
-order by tag.tag_follower desc
     </select>
+    
+    <select id="findTagByTagID" resultType="Tag"  >
+select 
+   t.tag_id as tagid,
+   t.father_id as fatherid,
+   t.tag_name as tagname,
+   t.tag_point as tagpoint,
+   t.tag_type as tagtype,
+   t.tag_follower as followers,
+   t.bs_flag as bsflag,
+   if(loginf.upper,1,0) as followed 
+from tag t
+left join follow loginf on(loginf.upper = t.tag_id and loginf.follower = #{loginuserid} and loginf.follow_type = '4')
+where t.tag_id = #{tagid}
+    </select>
+    
+    
     
     <select id="queryTagByFatherID" parameterType="long" resultType="Tag"  >
 select 
@@ -95,6 +111,40 @@ inner join tag father on(father.tag_id = son.father_id and father.tag_name =#{fa
 where son.bs_flag = "1"
 and father.bs_flag = "1"
 order by father.tag_follower desc
+    </select>
+    
+    
+    <select id="queryTagByDocid"  resultType="Tag"  >
+select 
+   t.tag_id as tagid,
+   t.father_id as fatherid,
+   t.tag_name as tagname,
+   t.tag_point as tagpoint,
+   t.tag_type as tagtype,
+   t.tag_follower as followers,
+   t.bs_flag as bsflag
+from tag t
+inner join follow f on(f.upper = t.tag_id and f.follower = #{docid} and f.follow_type = '5') 
+where t.bs_flag = '1' 
+    </select>
+    
+    
+     <select id="queryUserFollowedTag" parameterType="map" resultType="Tag"  >
+select 
+   t.tag_id as tagid,
+   t.father_id as fatherid,
+   t.tag_name as tagname,
+   t.tag_point as tagpoint,
+   t.tag_type as tagtype,
+   t.tag_follower as followers,
+   t.bs_flag as bsflag,
+   if(loginf.upper,1,0) as followed 
+from tag t
+inner join follow f on (f.upper = t.tag_id  and f.follower = #{userid} and f.follow_type = '4')
+left join follow loginf on(loginf.upper = t.tag_id and loginf.follower = #{loginuserid} and loginf.follow_type = '4')
+where t.bs_flag = "1"
+order by f.create_date desc 
+limit #{start}, #{end} ;
     </select>
     
     

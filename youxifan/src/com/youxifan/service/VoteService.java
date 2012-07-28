@@ -16,8 +16,8 @@ public class VoteService {
 	private VoteDao voteDao;
 	
 	
-	public List<Object> getVList(){
-		List<Object> list = voteDao.queryVote();
+	public List<Vote> getVList(){
+		List<Vote> list = voteDao.queryVote();
 		return list;
 	}
 	
@@ -26,7 +26,7 @@ public class VoteService {
 	}
 	
 	
-	public void delete(Object obj){
+	public void delete(Vote obj){
 		voteDao.delete(obj);
 	}
 }

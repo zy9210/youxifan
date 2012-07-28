@@ -6,12 +6,14 @@ import java.util.Map;
 import com.youxifan.pojo.User;
 
 public interface UserDao {
-	public List<Object> query( );
-	public Object save(final Object model);
-	public void update(final Object model);
-	public void setUserImageUrl(final Object model);
-	public void delete(final Object model);
-	public Object getUserByEmail(String email);
-	public Object getUserByID(long userid);
+	public List<User> query( );
+	public User save(final User model);
+	public void update(final User model);
+	public void setUserImageUrl(final User model);
+	public void delete(final User model);
+	public User getUserByEmail(String email);
+	public User getUserByID(Map map);
 	public void changePassword(Map param);
+	public List<User> userFollowedUser(Map  map );
+	public List<User> usersFans(Map  map );
 }

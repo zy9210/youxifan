@@ -42,23 +42,74 @@
 		where user.email = #{email};
     </select>
     
-	<select id="getUserByID" parameterType="long" resultType="User"  >
+	<select id="getUserByID" parameterType="map" resultType="User"  >
         select 
-			user_id as userid,
-			user_name as username,
-			alias as alias,
-			email as email,
-			password as password,
-			signing_message as signing,
-			user_point as userpoint,
-			image_url as imageurl,
-			user_level as userlevel,
-			bs_flag as bsflag,
-			create_date as createdate,
-			modify_date as modifydate
-		from user
-		where user.user_id = #{userid};
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			if(f.upper,1,0) as followed  
+		from user u
+		left join follow f on(f.upper = u.user_id and f.follower = #{loginuserid} and f.follow_type = '1')
+		where u.user_id = #{userid};
     </select>
+    
+    
+    
+    
+    <select id="userFollowedUser" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			if(loginf.upper,1,0) as followed 
+		from user u
+		inner join follow f on (f.upper = u.user_id  and f.follower = #{userid} and f.follow_type = '1')
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
+		where u.bs_flag = '1'
+		order by f.create_date desc
+		limit #{start}, #{end} ;
+    </select>
+    
+    <select id="usersFans" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate
+		from user u
+		inner join follow f on (f.upper = #{userid}  and f.follower = u.user_id and f.follow_type = '1')
+		where u.bs_flag = '1'
+		order by f.create_date desc
+		limit #{start}, #{end} ;
+    </select>
+    
+    
     
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userid" >   
 	    <![CDATA[

@@ -26,8 +26,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.apache.commons.lang3.StringUtils;
 
+import com.youxifan.pojo.Doc;
+import com.youxifan.pojo.Tag;
 import com.youxifan.pojo.User;
 import com.youxifan.service.DocService;
+import com.youxifan.service.TagService;
 import com.youxifan.service.UserService;
 import com.youxifan.utils.CommonUtil;
 
@@ -210,12 +213,16 @@ public class UserController {
 	
 	@Autowired
 	private DocService docService;
-	
-	// 登录注销 
+	@Autowired
+	private TagService tagService;
+	// 个人页面展示
 	@RequestMapping("/user/{userid}/tab/{tab}") 
-	public String show(ModelMap modelMap,@PathVariable long userid,@PathVariable String tab ) { 
-		
-		User user = userService.getUserByID(userid);
+	public String show(ModelMap modelMap,@PathVariable long userid,@PathVariable String tab,HttpSession session ) { 
+		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT );
+		Map paraMap = new HashMap();
+		paraMap.put("userid", userid);
+		paraMap.put("loginuserid", loginUser.getUserid());
+		User user = userService.getUserByID(paraMap);
 		if (user == null) {
 			return "error";
 		}
@@ -223,60 +230,66 @@ public class UserController {
 		map.put("start", 0);
 		map.put("end", 30);
 		map.put("userid", userid);
-		List<Object> list = null;
-		
+		map.put("loginuserid", loginUser.getUserid());
+		List<Doc> docList = null;
+		List<Tag> tagList = null;
+		List<User> userList = null;
 		if ("askq".equals(tab)) {
-			list = docService.usersQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab);  
-			modelMap.put("doclist", list);
+			docList = docService.usersQ(map); 
+			modelMap.put("doclist", docList);
 		}else if ("answerq".equals(tab)) {
-			list = docService.userAnsweredQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab); 
-			modelMap.put("doclist", list);
-		}else if ("followq".equals(tab)) {
-			list = docService.userFollowedQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab);  
+			docList = docService.userAnsweredQ(map);
+			modelMap.put("doclist", docList);
+		}else if ("followedq".equals(tab)) {
+			docList = docService.userFollowedQ(map);
+			modelMap.put("doclist", docList);
+		}else if ("followedtag".equals(tab)) {
+			tagList = tagService.userFollowedTag(map);
+			modelMap.put("tagList", tagList);
+		}else if("followedUser".equals(tab)){
+			userList = userService.userFollowedUser(map);
+			modelMap.put("userList", userList);
+		}else if ("fans".equals(tab)) {
+			userList = userService.usersFans(map);
+			modelMap.put("userList", userList);
 		}
-		  
-		modelMap.put("tab", tab); 
-		modelMap.put("user", user);  
 		
-
+		
+		modelMap.put("tab", tab); 
+		modelMap.put("user", user); 
 	  return "user"; 
 	}
 	
 	@RequestMapping("/user/{userid}/tab/{tab}/page/{start}/{step}") 
 	@ResponseBody
-	public List showPage(ModelMap modelMap,@PathVariable long userid,@PathVariable String tab,@PathVariable int start, @PathVariable int step) { 
+	public List showPage(@PathVariable long userid,@PathVariable String tab,@PathVariable int start, @PathVariable int step,HttpSession session) { 
+		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT );
 		Map map = new HashMap();
 		map.put("start", start);
 		map.put("end", start+ step);
 		map.put("userid", userid);
+		map.put("loginuserid", loginUser.getUserid());
+		List  list = null;
 		
-		List<Object> list = null;
-			
 		if ("askq".equals(tab)) {
-			list = docService.usersQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab); 
-			return list;
+			list = docService.usersQ(map); 
 		}else if ("answerq".equals(tab)) {
-			list = docService.userAnsweredQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab); 
-			return list;
-		}else if ("followq".equals(tab)) {
-			list = docService.userFollowedQ(map);
-			modelMap.put("doclist", list);
-			modelMap.put("tab", tab); 
-			return list;
+			list = docService.userAnsweredQ(map); 
+		}else if ("followedq".equals(tab)) {
+			list = docService.userFollowedQ(map); 
+		}else if ("followedtag".equals(tab)) {
+			list = tagService.userFollowedTag(map); 
+		}else if("followedUser".equals(tab)){
+			list = userService.userFollowedUser(map); 
+		}else if ("fans".equals(tab)) {
+			list = userService.usersFans(map); 
 		}
 		
-		
-		
-	  return null; 
+	    return list; 
 	}
+	
+	
+	
+	
+	
 }

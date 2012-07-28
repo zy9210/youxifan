@@ -29,10 +29,10 @@ public class TagDaoTest {
 	
 	@Test
     public void testQueryUser() {
-		List<Object> list = tagDao.queryTag();
+		List<Tag> list = tagDao.queryTag();
 		Tag tag = null;
 		for (int i = 0; i<list.size(); i++) {
-			tag = (Tag) list.get(i);
+			tag =  list.get(i);
 			System.out.println(tag.getTagname());
 		}
     }

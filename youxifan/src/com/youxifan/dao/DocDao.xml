@@ -36,8 +36,10 @@
 		  d.modify_date as modifydate,
 		  d.views as views,
 		  d.answers as answer,
-		  d.creater_name as creatername
+		  d.creater_name as creatername,
+		  if(f.upper,1,0) as followed  
 		from document d
+		left join follow f on(f.upper = d.doc_id and f.follower = #{loginuserid} and f.follow_type = '3')
 		where d.bs_flag = '1'
 		and d.doc_type = '1'
 		
@@ -46,7 +48,8 @@
 				order by d.views desc
 			</when> 
 			<when test="sort == 'noanswer'"> 
-				order by d.answers desc
+				  and d.answers = 0
+				order by d.create_date  desc
 			</when> 
 			<when test="sort == 'newest'"> 
 				order by  d.create_date desc
@@ -59,6 +62,46 @@
 		limit #{start}, #{end} ;
     </select>
     
+    <select id="queryTagDoc" parameterType="map"  resultType="Doc"  >
+         select 
+		  d.doc_id as docid,
+		  d.upper_doc_id as upperdocid,
+		  d.title as title,
+		  d.content as content,
+		  d.doc_type as doctype,
+		  d.doc_point as docpoint,
+		  d.bs_flag as bsflag,
+		  d.creater_id as createrid,
+		  d.create_date as createdate,
+		  d.modify_date as modifydate,
+		  d.views as views,
+		  d.answers as answer,
+		  d.creater_name as creatername,
+		  if(loginf.upper,1,0) as followed 
+		from document d
+		inner join follow f on (f.upper = #{tagid}  and f.follower = d.doc_id and f.follow_type = '5')
+		left join follow loginf on(loginf.upper = d.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
+		where d.bs_flag = '1'
+		and d.doc_type = '1'
+		
+		<choose> 
+			<when test="sort == 'hot'"> 
+				order by d.views desc
+			</when> 
+			<when test="sort == 'noanswer'"> 
+				  and d.answers = 0
+				order by d.create_date  desc
+			</when> 
+			<when test="sort == 'newest'"> 
+				order by  d.create_date desc
+			</when>
+			<otherwise> 
+				order by d.create_date desc
+			</otherwise> 
+		</choose> 
+		
+		limit #{start}, #{end} ;
+    </select>
     
     <select id="usersQuestion" parameterType="map"  resultType="Doc"  >
         select 
@@ -121,12 +164,14 @@
 		  question.modify_date as modifydate,
 		  question.views as views,
 		  question.answers as answer,
-		  question.creater_name as creatername
+		  question.creater_name as creatername,
+		  if(loginf.upper,1,0) as followed 
 		from document question
 		inner join follow f on(f.upper = question.doc_id and f.follower = #{userid} and f.follow_type = '3')
+		left join follow loginf on(loginf.upper = question.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
 		where question.bs_flag = '1'
 		and question.doc_type = '1' 
-		order by question.create_date desc
+		order by f.create_date desc
 		limit #{start}, #{end} ;
     </select>
 	
@@ -172,16 +217,19 @@ select t.* from (
 	  d.bs_flag as bsflag,
 	  d.creater_id as createrid,
 	  d.create_date as doccreatedate,
-	  d.modify_date as docmodifydate,
+	  d.modify_date as docmodifydate, 
 	  u.user_name as username,
 	  u.alias as alias,
 	  u.email as email,
 	  u.user_point as userpoint,
 	  u.image_url as imageurl,
 	  u.create_date as usercreatedate,
-	  u.modify_date as usermodifydate
+	  u.modify_date as usermodifydate,
+	  d.creater_name as creatername,
+	  if(loginf.upper,1,0) as followed
 	from document d
 	left join user u on(u.user_id = d.creater_id)
+	left join follow loginf on(loginf.upper = d.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
 	where d.bs_flag = '1'
 	and  d.doc_id = #{docid}
     </select>
@@ -223,6 +271,8 @@ select t.* from (
 		<result property="createdate" column="doccreatedate" />
 		<result property="modifydate" column="docmodifydate" />
 		<result property="createrid" column="createrid" />
+		<result property="followed" column="followed" />
+		<result property="creatername" column="creatername" /> 
 		<association property="creater" column="createrid"
 			javaType="User">
 			<id property="userid" column="createrid" /> 

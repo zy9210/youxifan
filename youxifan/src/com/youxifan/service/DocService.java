@@ -3,6 +3,8 @@ package com.youxifan.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.youxifan.dao.StudentDao;
 import com.youxifan.dao.StudentDaoImpl;
 import com.youxifan.dao.DocDao;
+import com.youxifan.dao.TagDao;
 import com.youxifan.pojo.Student;
 import com.youxifan.pojo.Doc;
 import com.youxifan.utils.CommonUtil;
@@ -20,21 +23,44 @@ public class DocService {
 	@Autowired
 	private DocDao entityDao;
 	
+	@Autowired
+	private TagService tagService;
+	
 	
 	 
 	/*
-	 * 根据sort分组 有分页
+	 * doc页面展示  根据tab排序 有分页
 	 */
 	@Transactional
-	public List<Object> queryDoc(Map map){
-		List<Object> list = entityDao.queryDoc(map);
+	public List<Doc> queryDoc(Map map){
+		List<Doc> list = entityDao.queryDoc(map);
+		
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
 		return list;
 	}
+	
+	/*
+	 * 根据tagid取question 有分页
+	 */
+	public List<Doc> tagsQ(Map map){
+		List<Doc> list = entityDao.tagsQ(map);
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
+		return list;
+	} 
+	
+	
 	/*
 	 * 根据userid取question 有分页
 	 */
-	public List<Object> usersQ(Map map){
-		List<Object> list = entityDao.usersQ(map);
+	public List<Doc> usersQ(Map map){
+		List<Doc> list = entityDao.usersQ(map);
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
 		return list;
 	} 
 	
@@ -42,25 +68,35 @@ public class DocService {
 	/*
 	 * 根据userid取回答过的问题 有分页
 	 */
-	public List<Object> userAnsweredQ(Map map){
-		List<Object> list = entityDao.userAnsweredQ(map);
+	public List<Doc> userAnsweredQ(Map map){
+		List<Doc> list = entityDao.userAnsweredQ(map);
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
 		return list;
 	}
 	
 	/*
 	 * 根据userid取关注过的问题 有分页
 	 */
-	public List<Object> userFollowedQ(Map map){
-		List<Object> list = entityDao.userFollowedQ(map);
+	public List<Doc> userFollowedQ(Map map){
+		List<Doc> list = entityDao.userFollowedQ(map);
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
 		return list;
 	}
 	
 	
-	public Doc getDocByID(Long docid){
+	public Doc getDocByID(Map map){
 		Doc doc = null;
-		doc = (Doc) entityDao.getDocByID(docid);
-		doc.setAnswers(entityDao.getAnswers(docid));
-		entityDao.updateViews(docid);
+		doc = (Doc) entityDao.getDocByID(map);
+		if (doc == null) {
+			return null;
+		}
+		doc.setAnswers(entityDao.getAnswers(doc.getDocid()));
+		doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		entityDao.updateViews(doc.getDocid());
 		return doc;
 	}
 	
@@ -69,7 +105,7 @@ public class DocService {
 		entityDao.save(doc);
 	}
 	
-	public void delete(Object obj){
+	public void delete(Doc obj){
 		entityDao.delete(obj);
 	}
 }

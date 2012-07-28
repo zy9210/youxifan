@@ -13,21 +13,13 @@ import com.youxifan.utils.CommonUtil;
 public class Follow implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-
-	private long followId;
-	
+ 
 	private long upper;
 	private long follower;
 	private Date createDate;
 	private Date modifyDate;
 	private String followType;
-	
-	public long getFollowId() {
-		return followId;
-	}
-	public void setFollowId(long followId) {
-		this.followId = followId;
-	}
+	 
 	public long getUpper() {
 		return upper;
 	}

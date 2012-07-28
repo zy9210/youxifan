@@ -23,7 +23,7 @@ public class UserDaoTest {
 	
 	@Test
     public void testQueryUser() {
-		List<Object> list = userDao.query();
+		List<User> list = userDao.query();
 		User user = null;
 		for (int i = 0; i<list.size(); i++) {
 			user = (User) list.get(i);

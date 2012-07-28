@@ -47,33 +47,36 @@ public class FollowController {
 	}
 	
 	@RequestMapping(value="/{followType}/{upper}/{follower}")
-	public void addFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
+	@ResponseBody
+	public String addFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
 		
 		Follow follow = new Follow();
 		follow.setUpper(upper);
 		follow.setFollower(follower);
 		follow.setFollowType(followType);
-		followService.save(follow); 
+		try {
+			followService.save(follow); 
+		} catch (Exception e) {
+			return "{\"state\":\"false\"}";
+		}
+		 
+		return "{\"state\":\"success\"}";
 	}
 	
 	@RequestMapping(value="/cansel/{followType}/{upper}/{follower}")
-	public void canselFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
+	@ResponseBody
+	public String canselFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
 		
 		Follow follow = new Follow();
 		follow.setUpper(upper);
 		follow.setFollower(follower);
 		follow.setFollowType(followType);
 		followService.delete(follow); 
+		
+		return "{\"state\":\"success\"}";
 	}
 	
-	
-	
-	@Resource(name="getpwdhtml")
-	private String  getpwdhtml;
-	
-	
-	
-	
+	 
 
 
 }

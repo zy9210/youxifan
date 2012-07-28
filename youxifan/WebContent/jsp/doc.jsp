@@ -8,30 +8,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>问题详情</title> 
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css"> 
-
+<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="header">
-  	<a href="#" style="float:left; margin-left:10px;">
-    	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
-    </a> 
-    <div style="float:left; padding-top:18px; margin-left:10px;">
-    	<input id="searchinput" type="text" style=" " />
-        <span id="stext" >提交新问题</span>
-    </div> 
-    <div  id="headnav">   
-        <a href="#" style="float:left; margin-left:10px; color:#FFF;">
-            首页
-        </a> 
-        <a href="#" style="float:left; margin-left:50px; color:#FFF;">
-            话题广场
-        </a> 
-    </div>
-  <!-- end .header --></div>
+  <%@ include file="../include/header.jspf"%>
     
     
     
@@ -39,19 +23,22 @@
   <div class="content">
   
     <div class="question" id="question-summary-${doc.docid}"> 
-        <h1 class="fltlft" style="width:580px; color:#ec9902; "  >${doc.title}</h1>
-        <a href="#" class="attentionlink fltrt" style="margin:15px 5px 0 0;">关注</a>
+        <h1 class="fltlft" style="width:570px; color:#ec9902; "  >${doc.title}</h1>
+        
+        <a href="javascript:void(0);" onclick="editFollow('del',${doc.docid},${loginuser.userid},3)"  id="del3${doc.docid}${loginuser.userid}" class="attentionlink fltrt ${doc.followed == 0 ? "notdisplay":""}" >取消关注</a>
+        <a href="javascript:void(0);" onclick="editFollow('add',${doc.docid},${loginuser.userid},3)"  id="add3${doc.docid}${loginuser.userid}" class="attentionlink fltrt ${doc.followed == 1 ? "notdisplay":""}" >关注</a>
+                
         <div class="clboth" style="border-top:10px;" > 
-            <a href="#" class="taglink" title="title" >魔兽世界</a> 
-            <a href="#" class="taglink" title="title" >战士</a> 
-            <a href="#" class="taglink" title="title" >战士</a> 
+	<c:forEach items="${doc.tags}" var="tag">
+                <a href="<%=contextPath %>/tag/${tag.tagid}" class="taglink" title="${tag.tagname}" >${tag.tagname}</a> 
+	</c:forEach>
          </div>
         
         <div class="excerpt" style="margin:10px 0 10px 0;">
             ${doc.content}
         </div>
         <div class="qinfo"  >
-            <span class="qcreator"  >${doc.creater.username}</span>  
+            <span class="qcreator" onclick="location='<%=contextPath%>/user/${doc.createrid}/tab/askq'"  >${doc.creatername}</span>  
             <span class="qcreatedate">发表于${doc.createdateStr}</span>
         </div>
     </div>	 <!-- end #question -->
@@ -155,5 +142,8 @@
     <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
     <!-- end .footer --></div>
   <!-- end .container --></div>
+
+  
+<%@ include file="../include/js.jspf"%>  
 </body>
 </html>

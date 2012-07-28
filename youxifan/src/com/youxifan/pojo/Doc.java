@@ -27,8 +27,26 @@ public class Doc implements Serializable {
 	private Date modifydate;
 	private Date createdate;
 	private User creater;
-	
+	private int followed;
 	private List<Doc> answers;
+	private List<Tag> tags;
+	
+	
+	public int getFollowed(){
+		return this.followed;
+	}
+	
+	public void setFollowed(int followed){
+		this.followed = followed;
+	}
+	
+	public List<Tag> getTags() {
+		return tags;
+	}
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+	
 	
 	
 	public long getAnswer() {

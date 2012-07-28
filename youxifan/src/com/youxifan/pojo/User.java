@@ -23,7 +23,16 @@ public class User implements Serializable {
 	private String password;
 	private Date modifydate;
 	private Date createdate;
+	private int followed;
 	
+	
+	public int getFollowed(){
+		return this.followed;
+	}
+	
+	public void setFollowed(int followed){
+		this.followed = followed;
+	}
 	
 	public long getUserid() {
 		return userid;
