@@ -62,6 +62,32 @@
 		limit #{start}, #{end} ;
     </select>
     
+    
+    <select id="searchDoc" parameterType="map"  resultType="Doc"  >
+        select 
+		  d.doc_id as docid,
+		  d.upper_doc_id as upperdocid,
+		  d.title as title,
+		  d.content as content,
+		  d.doc_type as doctype,
+		  d.doc_point as docpoint,
+		  d.bs_flag as bsflag,
+		  d.creater_id as createrid,
+		  d.create_date as createdate,
+		  d.modify_date as modifydate,
+		  d.views as views,
+		  d.answers as answer,
+		  d.creater_name as creatername
+		from document d 
+		where d.bs_flag = '1'
+		and d.doc_type = '1'
+		and d.title like  #{docStr}
+		order by d.views desc
+		limit #{start}, #{end} ;
+    </select>
+    
+    
+    
     <select id="queryTagDoc" parameterType="map"  resultType="Doc"  >
          select 
 		  d.doc_id as docid,

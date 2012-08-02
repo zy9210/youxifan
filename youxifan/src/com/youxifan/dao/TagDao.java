@@ -17,4 +17,5 @@ public interface TagDao {
 	public Tag findTag(Map map);
 	public Tag findTagbyName(String tagStr);
 	public Tag findTagbyID(Map map);
+	public List<Tag> tagSearch(Map map);
 }

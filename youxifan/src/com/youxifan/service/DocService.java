@@ -54,6 +54,17 @@ public class DocService {
 	
 	
 	/*
+	 * 根据模糊查询doc 有分页
+	 */
+	public List<Doc> docSearch(Map map){
+		List<Doc> list = entityDao.docSearch(map);
+		 
+		return list;
+	}
+	
+	
+	
+	/*
 	 * 根据userid取question 有分页
 	 */
 	public List<Doc> usersQ(Map map){

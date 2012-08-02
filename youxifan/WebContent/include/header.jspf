@@ -1,13 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
  
+<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">
+<script language="javascript" src="<%=contextPath%>/script/jquery.js"></script>
+<script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
+
 
    <div class="header">
   	<a href="<%=contextPath%>/doc" style="float:left; margin-left:10px;">
     	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
     </a> 
     <div style="float:left; padding-top:18px; margin-left:10px;">
+    
     	<input id="searchinput" type="text" style=" " />
+    	
         <span id="stext" >提交新问题</span>
+        
+        <div id="resultcontent" style=" ">
+			
+			
+			<div class="searchiterm"  onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';" >
+        		<a href="<%=contextPath%>/doc/id/${doc.docid}" target= "_BLANK "  style="font-size:25px;">${doc.title}</a> 
+	            <span  >该话题下有${doc.answers}个问题</span>
+	            <span  >所属游戏</span>
+	            
+        	</div> 
+        	
+        	<div class="searchiterm"  onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';" >
+        		<a href="<%=contextPath%>/tag/${tag.tagid}" target= "_BLANK " class="taglink  " style="font-size:25px;">${tag.tagname}xxxxxxxxxx</a> 
+	            <span  >该话题下有${tag.followers}个问题</span>
+	            <span  >asdfasdf</span>
+	             
+        	</div> 
+        
+        </div>
+    
     </div> 
     <div  id="headnav">   
         <a href="<%=contextPath%>/doc" style="float:left; margin-left:10px; color:#FFF;">
@@ -18,3 +44,153 @@
         </a> 
     </div>
   <!-- end .header --></div>
+  
+  
+<!-- template -->
+	<textarea id="Tag-Template" rows="0" cols="0" style="display:none;">
+	<!-- 
+		{#foreach $T as tag}
+		<div class="searchiterm"   onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';">
+			<a href="<%=contextPath%>/tag/{$T.tag.tagid}" target= "_BLANK " class="taglink  " style="font-size:25px;">{$T.tag.tagname} </a> 
+            <span id="asdf"  >该话题下有{$T.tag.followers}个问题</span>
+            <span  >该话题下</span>
+		</div>
+		{#/for}	
+	 -->
+	</textarea> 
+
+<!-- template -->
+	<textarea id="Doc-Template" rows="0" cols="0" style="display:none;">	
+<!-- 
+		{#foreach $T as doc}
+		<div class="searchiterm"   onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';">
+			<a href="<%=contextPath%>/doc/id/{$T.doc.docid}" target= "_BLANK " style="font-size:25px;">{$T.doc.title} </a> 
+            <span id="asdf"  >该问题有{$T.doc.answer}个回答</span>
+            <span  >该话题下</span>
+		</div>
+		{#/for}	
+	 -->
+	</textarea>  
+  
+<script language="javascript">
+
+
+$(document).ready(function(){ 
+	$("#searchinput").focus(function(){
+		var inval = $("#searchinput").val();
+		if(inval != ""){
+			$("#resultcontent").show();
+		}
+		
+	});
+	$("#searchinput").blur(function(){
+		setTimeout( function() {$("#resultcontent").hide();}, 200); 
+		//$("#resultcontent").hide();;
+	});
+	
+	if($.browser.msie)
+    {
+		$("#searchinput").bind("propertychange",show );
+		//$("#searchinput").bind("propertychange", function() { 
+		//	alert($(this).val()); 
+		//	}); 
+    }
+    else
+    {
+    	$("#searchinput").bind("input",show );
+    	//$("#searchinput").bind("input", function() { 
+    	//	alert($(this).val()); 
+    	//	}); 
+    }
+	
+	 
+});
+
+
+function show( ){   
+	var val = $("#searchinput").val();
+	//$("#resultcontent").html(val);
+	//绝对X,Y坐标.offset().top;         获取相对(父元素)位置:.position().top;
+	var container = $("#resultcontent");
+	var sinput =$('#searchinput');
+	var newdiv = $("<div/>");   
+	
+	var X = sinput.offset().top;
+	var Y = sinput.offset().left; 
+	var H =  sinput.height(); 
+	container.css('top',X+H +3);
+	container.css('left',Y);
+
+	var searchStr = sinput.val();
+	$.ajax( {
+		type : "POST",
+		url : "<%=contextPath%>/tag/search/"+searchStr+"/page/0/5",
+		dataType: "json",
+		success : function(data) {  
+			$(newdiv).setTemplateElement("Tag-Template").processTemplate(data);
+			container.html($(newdiv).html());
+			///container.append($(newdiv).html());
+		     
+		} 
+	});
+
+	$.ajax( {
+		type : "POST",
+		url : "<%=contextPath%>/doc/search/"+searchStr+"/page/0/5",
+		dataType: "json",
+		success : function(data) {  
+			$(newdiv).setTemplateElement("Doc-Template").processTemplate(data);
+			//container.html($(newdiv).html());
+			container.append($(newdiv).html());
+		     
+		} 
+	});
+	
+
+
+	
+	$("#resultcontent").show();
+}
+</script>
+  
+<style type="text/css">
+
+#resultcontent
+{
+	zIndex:20; 
+	position:absolute; 
+	top:51px; 
+	left:0px;
+	width:700px; 
+	background:#fff;
+	border: 1px solid #bfbfbf;
+	box-shadow:0 1px 4px rgba(0, 0, 0, .5);
+	-webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .5);
+	border-radius:0 0 5px 5px;
+	-webkit-border-radius:0 0 5px 5px;
+	display:none;
+}
+.searchiterm{
+	
+	
+	display:block;
+/*	
+	cursor:pointer;  
+	margin:10px 0 0 0;  
+	text-align:center;  
+	display:table-cell;  
+	vertical-align:middle;  
+	
+	overflow:hidden;
+	height:40px;
+	*/
+	padding: 5px 0 5px 0 ;
+	
+	 
+}
+
+.searchiterm span{
+	margin:10px 10px 0 0 ;
+}
+
+</style>

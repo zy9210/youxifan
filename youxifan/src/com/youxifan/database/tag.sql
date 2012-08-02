@@ -8,7 +8,7 @@ CREATE TABLE `youxifan`.`tag` (
   `tag_follower` BIGINT UNSIGNED DEFAULT 0 COMMENT 'follower数',
   `tag_point` FLOAT(10,2) DEFAULT 0 COMMENT '评分',
   `tag_type` VARCHAR(2) COMMENT '备用',
-  `bs_blag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '1:有效0:无效',
+  `bs_flag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '1:有效0:无效',
   PRIMARY KEY(`tag_id`)
 )
 ENGINE = InnoDB;

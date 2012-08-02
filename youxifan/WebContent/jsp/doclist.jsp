@@ -50,9 +50,8 @@
         </div> 
 </c:forEach>
 <c:if  test="${fn:length(doclist)== 30}">
-    <input id="nextp" type="button" onclick="nextpage(30,20)" value="更多"/>
-</c:if>    
- <input id="nextp" type="button" onclick="nextpage(0,20)" value="更多"/>
+    <input id="nextp" type="button" onclick="nextpage('doclist',30,20)" value="更多"/>
+</c:if>     
     <!-- end #questions --></div>
   
     
@@ -157,31 +156,7 @@
 	</textarea>
 
 
-  <script language="javascript">
-  
-  function nextpage(  start,  step){
-	  $("#nextp").remove();
-	  var template = $("#doctemp").html(); 
-	  var container = $("#questions");
-	  var newdiv = $("<div/>");   
-	  $.ajax( {
-			type : "POST",
-			url : "<%=contextPath%>/doc/tab/${tab}/page/"+start+"/"+step,
-			dataType: "json",
-			success : function(data) {  
-				$(newdiv).setTemplateElement("Template-Items").processTemplate(data);
-				container.append($(newdiv).html());
-			    var startno = parseInt(start)+parseInt(step);
-			    container.append($("<input id='nextp' type='button' onclick='nextpage("+startno+","+step+")' value='更多'/>") ); 
-			},
-			error :function(){
-				alert("网络连接出错！");
-			}
-		});
-		  
-  } 
-  
-</script>
+
 
 <%@ include file="/include/js.jspf"%>
 </body>

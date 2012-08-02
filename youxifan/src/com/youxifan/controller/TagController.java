@@ -80,11 +80,28 @@ public class TagController {
 		return map;
 	}
 	
+	
+	@RequestMapping(value="/tag/search/{tagStr}/page/{start}/{step}")
+	@ResponseBody
+	public List tagSearch(@PathVariable String tagStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
+		log.debug("tag搜索 :"+tagStr);
+		Map map = new HashMap();
+		map.put("tagStr", "%"+tagStr+"%");
+		map.put("start", start);
+		map.put("end", start+ step);
+		List<Tag> list = tagService.tagSearch(map);
+		 
+		return list;
+	}
+	
 	//  只做测试用
 	@RequestMapping(value="/addTag/{fatherStr}/{tagStr}")
 //	@ResponseBody
 	public void save(@PathVariable String fatherStr,@PathVariable String tagStr){
 		long fatherid = tagService.findTagbyName(fatherStr).getTagid();
+		if (fatherid == 0) {
+			return;
+		}
 		Tag tag = new Tag();
 		tag.setFatherid(fatherid);
 		tag.setTagname(tagStr);

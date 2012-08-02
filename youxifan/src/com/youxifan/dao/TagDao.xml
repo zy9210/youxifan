@@ -36,7 +36,7 @@
 		order by tag.tag_follower desc
     </select>
     
-    <select id="queryTagLikeName" resultType="Tag"  >
+    <select id="queryTagLikeName"  resultType="Tag"  >
 select 
    tag_id as tagid,
    father_id as fatherid,
@@ -46,8 +46,9 @@ select
    tag_follower as followers,
    bs_flag as bsflag
 from tag
-where tag.tag_name like '%'+#{likename}+'%'
+where tag.tag_name like  #{tagStr} 
 order by tag.tag_point desc
+limit #{start}, #{end} ;
     </select>
 
     <select id="findTagByTagStr" resultType="Tag"  >

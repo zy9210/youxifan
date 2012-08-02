@@ -6,10 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>登录</title> 
-<script language="javascript"
-	src="<%=contextPath%>/script/jquery.1.3.2.js"></script>
-<script language="javascript"
-	src="<%=contextPath%>/script/popup_layer.js"></script>
+<script language="javascript" src="<%=contextPath%>/script/jquery.1.3.2.js"></script>
+<script language="javascript" src="<%=contextPath%>/script/popup_layer.js"></script>
 
 <style>  
 

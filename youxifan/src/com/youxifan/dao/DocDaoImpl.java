@@ -19,6 +19,12 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 
 	} 
 	
+	public List<Doc> docSearch(Map map){
+		List<Doc> docList = (List<Doc>) getSqlSession()
+				.selectList("Doc.searchDoc",map);
+		return docList; 
+	}
+	
 	//根据userid去question 有分页
 	public List<Doc> usersQ(Map map) {
 		List<Doc> docList = (List<Doc>) getSqlSession()

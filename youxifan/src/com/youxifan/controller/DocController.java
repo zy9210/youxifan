@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 
 import com.youxifan.pojo.Doc;
+import com.youxifan.pojo.Tag;
 import com.youxifan.pojo.User;
 import com.youxifan.service.DocService;
 import com.youxifan.service.TagService;
@@ -204,6 +205,20 @@ public class DocController {
 		modelMap.put("doc", doc);
 		return "doc";
 	}
+	
+	@RequestMapping(value="/search/{docStr}/page/{start}/{step}")
+	@ResponseBody
+	public List tagSearch(@PathVariable String docStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
+		log.debug("doc搜索 :"+docStr);
+		Map map = new HashMap();
+		map.put("docStr", "%"+docStr+"%");
+		map.put("start", start);
+		map.put("end", start+ step);
+		List<Doc> list = docService.docSearch(map);
+		 
+		return list;
+	}
+	
 	
 	
 	@RequestMapping(params = "method=del")

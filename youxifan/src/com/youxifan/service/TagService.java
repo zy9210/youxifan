@@ -62,6 +62,10 @@ public class TagService {
 		return list;
 	}
 	
+	public List<Tag> tagSearch(Map map){
+		List<Tag> list = tagDao.tagSearch(map);
+		return list;
+	}
 	
 	/*
 	 * map:fatherStr,tagStr

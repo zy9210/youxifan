@@ -20,14 +20,23 @@ public class TagDaoImpl extends SqlSessionDaoSupport implements TagDao{
 	public List<Tag> queryByDocid(long docid){
 		List<Tag> selectList = (List<Tag>) getSqlSession()
 		.selectList("Tag.queryTagByDocid",docid);
-	return selectList;
+		return selectList;
 	}
 	
 	
 	public List<Tag> userFollowedTag(Map map){
 		List<Tag> selectList = (List<Tag>) getSqlSession()
 		.selectList("Tag.queryUserFollowedTag",map);
-	return selectList;
+		return selectList;
+	}
+	/* 
+	 *  模糊tag查询
+	 *  tagStr  start  end 
+	 *  */
+	public List<Tag> tagSearch(Map map){
+		List<Tag> selectList = (List<Tag>) getSqlSession()
+		.selectList("Tag.queryTagLikeName",map);
+		return selectList; 
 	}
 	
 	

@@ -6,9 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>标签内容</title> 
-<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">
-<script language="javascript" src="<%=contextPath%>/script/jquery.js"></script>
-<script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
+
+
 </head>
 
 <body>
