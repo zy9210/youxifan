@@ -24,7 +24,7 @@
   <div class="content">
   
   	 <div class="tuserarea" > 
-        <img src="<%=contextPath%>/images/background.jpg" width="100px" height="100px" style="float:left; margin:10px 0;" />
+        <img src="<%=contextPath%>${user.imageurl}" width="100px" height="100px" style="float:left; margin:10px 0;" />
         <div style="float:left; width:550px;padding:0 10px;">
             <div >
             	<span class="tusername" >${user.username}</span>                
@@ -32,8 +32,8 @@
                 <a href="javascript:void(0);" onclick="editFollow('add',${user.userid},${loginuser.userid},1)"  id="add1${user.userid}${loginuser.userid}" class="attentionlink fltrt ${user.followed == 1 ? "notdisplay":""}" >关注</a>
                 <br style="clear:both;"/>
             </div>
-            <div class="tusertag" style="color:#B1B1B1;">魔兽世界</div>
-            <div class="tsigning">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无序列</div>
+            <div class="tusertag" style="color:#B1B1B1;">${user.game}</div>
+            <div class="tsigning">${user.signing} </div>
         </div> 
         <br style="clear:both;"/>
     </div><!-- end .tuserarea -->
@@ -56,7 +56,7 @@
 	<c:when test="${tab == 'fans' || tab == 'followedUser'}">  
 <c:forEach items="${userList}" var="u">	
 		<div class="fansiterm" style="border-bottom: 1px solid #BFBFBF; padding-bottom:10px; margin-bottom:10px;">
-        	<img src="images/background.jpg" width="60px" height="60px"  style=" float:left;"/>
+        	<img src="<%=contextPath%>${loginuser.imageurl}" width="60px" height="60px"  style=" float:left;"/>
             <div style="float:left; width:590px;padding:0 10px;">
                 <div >
                     <span  style=" font-weight:bold;" >${u.username}</span>
@@ -66,8 +66,8 @@
    </c:if>
                     <br style="clear:both;"/>
                 </div>
-                <div class="fusertag" style="color:#B1B1B1;">魔兽世界</div>
-                <div class="fsigning">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无，该结构使用以 CSS 设置样式的无序列</div>
+                <div class="fusertag" style="color:#B1B1B1;">${user.game}</div>
+                <div class="fsigning">${user.signing}</div>
         	</div> 
         	<br style="clear:both;"/> 
         </div> 
@@ -141,65 +141,9 @@
     <!-- end .content --></div>
   
     
-  <div class="sidebar1">
-  
-  	<div class="userarea">
-    	<div class="user">
-        	<a href="" class="headimg">
-        		<img src="<%=contextPath %>/images/background.jpg" width="60px" height="60px" />
-            </a>
-            <div class="userinfo">
-            	<div class="username">逆天大战士</div>
-                <div class="usertag">魔兽世界</div>
-                <div class="signing">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无序列</div>
-            </div>
-            <div class="shortcut">
-            	<a href="#" >我关注的人 </a> 
-                <a href="#" >关注我的人 </a>
-            </div>
-        </div><!-- end .user -->
-    </div><!-- end .userinfo -->
-    
-    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:10px;">
-        <a href="#" class="invite" >
-            我的邀请
-        </a>
-    </div>
-    
-    <div>
-    	<strong>你可能感兴趣的话题</strong>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        
-    </div>
-    
-    
-    <!-- end .sidebar1 --></div>
+  <div class="sidebar">
+  	<%@ include file="../include/sidebar.jspf"%>
+  <!-- end .sidebar --></div>
     
   <div class="footer">
     <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>

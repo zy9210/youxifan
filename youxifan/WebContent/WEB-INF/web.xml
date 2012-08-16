@@ -68,7 +68,9 @@
         		/css/,
         		/images/,
         		/jsp/,
-        		/script/,
+        		.css,
+        		.js,
+        		/register,
         		/login,
         		/checkEmail/,
         		/getpwd/,
@@ -115,15 +117,15 @@
 	
 	<servlet-mapping> 
 		<servlet-name>default</servlet-name> 
-		<url-pattern>/script/*</url-pattern> 
-	</servlet-mapping>
+		<url-pattern>*.js</url-pattern> 
+	</servlet-mapping> 
 	<servlet-mapping> 
 		<servlet-name>default</servlet-name> 
 		<url-pattern>/images/*</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
 		<servlet-name>default</servlet-name> 
-		<url-pattern>/css/*</url-pattern> 
+		<url-pattern>*.css</url-pattern> 
 	</servlet-mapping>
 	 
 	<!--  -->

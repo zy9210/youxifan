@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
  
 import com.youxifan.pojo.Follow;
+import com.youxifan.pojo.User;
 import com.youxifan.service.FollowService;
 import com.youxifan.service.GetpwdService;
 import com.youxifan.service.UserService;
@@ -48,14 +49,18 @@ public class FollowController {
 	
 	@RequestMapping(value="/{followType}/{upper}/{follower}")
 	@ResponseBody
-	public String addFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
-		
+	public String addFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType,HttpSession session){
+		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Follow follow = new Follow();
 		follow.setUpper(upper);
 		follow.setFollower(follower);
 		follow.setFollowType(followType);
 		try {
 			followService.save(follow); 
+			// 修改session中的我关注的人的数量  
+			if ("1".equals(followType) && loginUser.getUserid() == follower) {
+				loginUser.setMyFollowed(loginUser.getMyFollowed()+1);
+			}
 		} catch (Exception e) {
 			return "{\"state\":\"false\"}";
 		}
@@ -65,14 +70,17 @@ public class FollowController {
 	
 	@RequestMapping(value="/cansel/{followType}/{upper}/{follower}")
 	@ResponseBody
-	public String canselFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType){
-		
+	public String canselFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType,HttpSession session){
+		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Follow follow = new Follow();
 		follow.setUpper(upper);
 		follow.setFollower(follower);
 		follow.setFollowType(followType);
 		followService.delete(follow); 
-		
+		// 修改session中的我关注的人的数量  
+		if ("1".equals(followType) && loginUser.getUserid() == follower) {
+			loginUser.setMyFollowed(loginUser.getMyFollowed()-1);
+		}
 		return "{\"state\":\"success\"}";
 	}
 	

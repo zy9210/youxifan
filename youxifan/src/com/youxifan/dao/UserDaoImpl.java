@@ -17,11 +17,17 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 
 	}
 	
-	public List<User> userFollowedUser(Map  map ) {
+	public List<User> followedUsers(Map  map ) {
 		List<User> userList = (List<User>) getSqlSession()
 			.selectList("User.userFollowedUser",map);
 		return userList;
 
+	}
+	public List<User> userSearch(Map  map ) {
+		List<User> userList = (List<User>) getSqlSession()
+		.selectList("User.userSearch",map);
+		return userList;
+	
 	}
 	
 	public List<User> usersFans(Map  map ) {
@@ -58,7 +64,11 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao{
 	public void delete(User model) {
 		int row = getSqlSession().insert("User.delUser",model);
 	}
-
+	
+	
+	public void updateinfo(User model) {
+		int row = getSqlSession().insert("User.updateinfo",model);
+	}
 
 	public void update(User model) {
 		int row = getSqlSession().update("User.updateUser",model);

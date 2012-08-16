@@ -95,4 +95,13 @@
 			});
 			  
 		}
+ 
+	  $().ready(function(){ 
+	  	//var t = $('.contentarea');
+	  	//$.each($('.contentarea'), function(i, item){    
+	  	//	$(item).height(item.scrollHeight); 
+	  	//	   
+	  	//	}); 
+	  	 
+	  });
  </script>

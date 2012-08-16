@@ -1,0 +1,61 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ 
+
+
+
+	<div class="userarea">
+    	<div class="user">
+        	<a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/askq" class="headimg">
+        		<img src="<%=contextPath %>${loginuser.imageurl}" width="60px" height="60px" />
+            </a>
+            <div class="userinfo">
+            	<div class="username">${loginuser.username}</div>
+                <div class="usertag">${loginuser.game}</div>
+                <div class="signing">${loginuser.signing}</div>
+            </div>
+            <div class="shortcut">
+            	<a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/followedUser" >我关注的人${loginuser.myFollowed} </a> 
+                <a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/fans" >关注我的人${loginuser.myFans} </a>
+            </div>
+        </div><!-- end .user -->
+    </div><!-- end .userinfo -->
+    
+    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:10px;">
+        <a target="set_window" href="<%=contextPath%>/set/invite/" class="invite" >
+            我的邀请
+        </a>
+    </div>
+    
+    <div>
+    	<strong>你可能感兴趣的话题</strong>
+        <div class="interest" >
+        	<a href="#" class="tag" >魔兽世界</a>
+            <a href="#" class="attentionlink fltrt">关注</a>
+            <span class="desc"  >该话题下有333个问题</span>
+        </div>
+        
+        <div class="interest" >
+        	<a href="#" class="tag" >魔兽世界</a>
+            <a href="#" class="attentionlink fltrt">关注</a>
+            <span class="desc"  >该话题下有333个问题</span>
+        </div>
+        <div class="interest" >
+        	<a href="#" class="tag" >魔兽世界</a>
+            <a href="#" class="attentionlink fltrt">关注</a>
+            <span class="desc"  >该话题下有333个问题</span>
+        </div>
+        <div class="interest" >
+        	<a href="#" class="tag" >魔兽世界</a>
+            <a href="#" class="attentionlink fltrt">关注</a>
+            <span class="desc"  >该话题下有333个问题</span>
+        </div>
+        <div class="interest" >
+        	<a href="#" class="tag" >魔兽世界</a>
+            <a href="#" class="attentionlink fltrt">关注</a>
+            <span class="desc"  >该话题下有333个问题</span>
+        </div>
+        
+        
+    </div>
+
+ 

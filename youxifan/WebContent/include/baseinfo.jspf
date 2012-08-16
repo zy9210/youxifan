@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ 
+ 
+	<link rel="stylesheet" href="<%=contextPath%>/css/jquery.taghandler.css" type="text/css">  
+	<link rel="stylesheet" type="text/css" href="<%=contextPath%>/css/jquery-ui-1.8.7.custom.css" /> 
+	
+	<script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>  
+    <script language="javascript" src="<%=contextPath%>/script/jquery-ui-1.8.20.custom.js"></script>
+    <script language="javascript" src="<%=contextPath%>/script/jquery.taghandler.js"></script>
+
+<div id="baseinfo"> 
+	<table style="margin:40px 0 40px 40px;"  cellpadding="10">
+		<tr>
+               <td class="cell lable">注册邮箱</td>
+               <td class=" cell">${user.email}</td>  
+           </tr>
+           <tr>
+               <td class="cell lable">昵称</td>
+               <td class="cell  "><input id="uname" name="uname" type="text" value="${user.username}"></input> </td>  
+           </tr>
+           <tr>
+               <td class="cell lable">常玩游戏</td>
+               <td class="cell  "><ul id="game" style="width:400px;"></ul> </td>  
+           </tr>
+           <tr>
+               <td class="cell lable">个性签名</td>
+               <td class="cell  ">
+               	<textarea id="signing" name="signing" rows="5" cols="50"  >${user.signing}</textarea>
+               </td>  
+           </tr>
+           <tr>
+               <td></td>
+               <td class="cell  "><input type="button" value="保存" onclick="savebaseinfo();"/></td>  
+           </tr>
+           
+	</table> 
+</div>
+  
+  
+<script language="javascript">
+ 
+function savebaseinfo(){
+	var uname = $("#uname").val();
+	var gametext = $("#gametext").val();
+	var signing = $("#signing").val();
+
+	if(uname == ""){
+		$("#retMsg").html("昵称不能为空！");
+		$("#retMsg").show();
+		setTimeout( function() {$("#retMsg").hide();}, 15000);
+		return;
+	}
+	if(signing.length > 60){
+		$("#retMsg").html("签名不能超过60个字。");
+		$("#retMsg").show();
+		setTimeout( function() {$("#retMsg").hide();}, 10000);
+		return;
+	}
+	$.ajax({type:"POST", 
+        url:"<%=contextPath%>/user/set/baseinfo/", 
+        data:"uname="+uname+"&gametext="+gametext+"&signing="+signing, 
+        dataType:"json",
+        success:function (data) {
+        	if(data.ret=="OK"){ 
+        		$("#retMsg").html("保存成功！");
+        		$("#retMsg").show();
+        		setTimeout( function() {$("#retMsg").hide();}, 15000);
+        	}
+        }
+	});
+}
+
+
+
+jQuery(document).ready(function(){
+	$('#game').tagHandler({
+		autocomplete: true,
+		assignedTags: [ ${user.gameTagStr}],  
+		getURL:'<%=contextPath %>/tag/search/fid/0',  
+		afterAdd: function(tag){ 
+			 
+		},
+		submitField:'gametext',
+		afterDelete:function(tag){ 
+		}
+	});
+});
+
+
+
+</script>
+  
+<style type="text/css">
+ 
+
+</style>

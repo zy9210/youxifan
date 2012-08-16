@@ -19,6 +19,7 @@
 			image_url as imageurl,
 			user_level as userlevel,
 			bs_flag as bsflag,
+			game as game,
 			create_date as createdate,
 			modify_date as modifydate
 		from user;
@@ -36,10 +37,12 @@
 			image_url as imageurl,
 			user_level as userlevel,
 			bs_flag as bsflag,
+			game as game,
 			create_date as createdate,
 			modify_date as modifydate
-		from user
-		where user.email = #{email};
+		from user 
+		where user.email = #{email}
+		  and bs_flag = '1'
     </select>
     
 	<select id="getUserByID" parameterType="map" resultType="User"  >
@@ -56,6 +59,7 @@
 			u.bs_flag as bsflag,
 			u.create_date as createdate,
 			u.modify_date as modifydate,
+			u.game as game,
 			if(f.upper,1,0) as followed  
 		from user u
 		left join follow f on(f.upper = u.user_id and f.follower = #{loginuserid} and f.follow_type = '1')
@@ -63,7 +67,28 @@
     </select>
     
     
-    
+    <select id="userSearch" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			u.game as game,
+			if(loginf.upper,1,0) as followed 
+		from user u
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
+		where u.bs_flag = '1'
+		and  u.user_name  like #{nameStr}
+		limit #{start}, #{end} ;
+    </select>
     
     <select id="userFollowedUser" parameterType="map" resultType="User"  >
         select 
@@ -79,6 +104,7 @@
 			u.bs_flag as bsflag,
 			u.create_date as createdate,
 			u.modify_date as modifydate,
+			u.game as game,
 			if(loginf.upper,1,0) as followed 
 		from user u
 		inner join follow f on (f.upper = u.user_id  and f.follower = #{userid} and f.follow_type = '1')
@@ -101,6 +127,7 @@
 			u.user_level as userlevel,
 			u.bs_flag as bsflag,
 			u.create_date as createdate,
+			u.game as game,
 			u.modify_date as modifydate
 		from user u
 		inner join follow f on (f.upper = #{userid}  and f.follower = u.user_id and f.follow_type = '1')
@@ -122,6 +149,7 @@
 		   user_point,
 		   user_level, 
 		   bs_flag,
+		   game,
 		   create_date, 
 		   modify_date)
 		values
@@ -133,6 +161,7 @@
 		  	#{userpoint},
 		  	#{userlevel}, 
 		  	'1',
+		  	#{game},
 		  	now(),
 		  	now());
 		  	]]> 
@@ -156,6 +185,17 @@
 		password = #{password}
 		where email = #{email} 
 	</update>
+	
+	
+	<update id="updateinfo" parameterType="User"> 
+		update User set 
+		user_name = #{username}
+		,signing_message = #{signing}
+		,modify_date = now()
+		,game = #{game}
+		where email = #{email} 
+	</update>
+	
 
     <delete id="delUser" parameterType="User" > 
 		delete from User where id = #{id} 

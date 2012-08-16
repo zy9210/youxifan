@@ -101,6 +101,9 @@
 	<bean id="followDao" class="com.youxifan.dao.FollowDaoImpl"> 
 		<property name="sqlSessionTemplate" ref="sqlSession" /> 
 	</bean>
+	<bean id="inviteDao" class="com.youxifan.dao.InviteDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean>
 
 
 	<!--  -->

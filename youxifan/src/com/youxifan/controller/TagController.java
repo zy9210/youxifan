@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
  
+import com.sun.jmx.snmp.daemon.CommunicationException;
 import com.youxifan.pojo.Doc;
 import com.youxifan.pojo.Getpwd; 
 import com.youxifan.pojo.Tag;
@@ -97,15 +98,17 @@ public class TagController {
 	//  只做测试用
 	@RequestMapping(value="/addTag/{fatherStr}/{tagStr}")
 //	@ResponseBody
-	public void save(@PathVariable String fatherStr,@PathVariable String tagStr){
+	public void save(@PathVariable String fatherStr,@PathVariable String tagStr,HttpSession session){
 		long fatherid = tagService.findTagbyName(fatherStr).getTagid();
 		if (fatherid == 0) {
 			return;
 		}
+		User user = (User) session.getAttribute(CommonUtil.USER_CONTEXT);
 		Tag tag = new Tag();
 		tag.setFatherid(fatherid);
 		tag.setTagname(tagStr);
 		tag.setBsflag("1");
+		tag.setCreator(user.getUserid());
 		tagService.save(tag);
 		System.out.println(tag.getTagid());
 		

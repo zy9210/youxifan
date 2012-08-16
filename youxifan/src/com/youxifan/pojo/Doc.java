@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.youxifan.utils.CommonUtil;
 
 
@@ -27,11 +29,19 @@ public class Doc implements Serializable {
 	private Date modifydate;
 	private Date createdate;
 	private User creater;
-	private int followed;
+	private int followed;  //登陆用户是否follow该问题
 	private List<Doc> answers;
 	private List<Tag> tags;
+	private String game;
 	
-	
+	public String getGame() {
+		return game;
+	}
+
+	public void setGame(String game) {
+		this.game = game;
+	}
+
 	public int getFollowed(){
 		return this.followed;
 	}
@@ -88,6 +98,13 @@ public class Doc implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+//	public String getEscapeHtmlContent() {
+//		return StringEscapeUtils.escapeHtml4(content);
+//	}
+//	public String getUnEscapeHtmlContent() {
+//		return StringEscapeUtils.unescapeHtml4(content);
+//	}
+//	
 	public long getCreaterid() {
 		return createrid;
 	}

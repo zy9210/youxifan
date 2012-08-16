@@ -2,14 +2,14 @@ package com.youxifan.controller;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.PrintWriter; 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession; 
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,12 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 
-import com.youxifan.pojo.Doc;
-import com.youxifan.pojo.Tag;
+import com.youxifan.pojo.Doc; 
 import com.youxifan.pojo.User;
 import com.youxifan.service.DocService;
-import com.youxifan.service.TagService;
-import com.youxifan.service.UserService;
+import com.youxifan.service.TagService; 
 import com.youxifan.utils.CommonUtil;
 
 @Controller
@@ -129,10 +127,11 @@ public class DocController {
 		doc.setCreatername(user.getUsername());
 		doc.setCreater(user);
 		doc.setCreaterid(user.getUserid());
+		doc.setGame(gametext);
 		try{
 			docService.save(doc);
 			modelMap.put("addstate", "添加成功");
-			tagService.saveTagStr(doc.getDocid(),gametext,subtags);
+			tagService.saveTagStr(doc.getDocid(),gametext,subtags,user.getUserid());
 			return "redirect:/user/"+user.getUserid()+"/tab/askq";
 		}
 		catch(Exception e){
@@ -179,6 +178,7 @@ public class DocController {
 		doc.setUpperdocid(upperdocid);
 		doc.setCreater(user);
 		doc.setCreaterid(user.getUserid());
+		doc.setCreatername(user.getUsername());
 		try{
 			docService.save(doc);
 			retValue = "{\"success\":\"true\",\"msg\":\"提交成功\"}";
@@ -190,6 +190,48 @@ public class DocController {
 			retValue = "{\"success\":\"false\",\"msg\":\"保存失败\"}";
 			out.print(retValue);
 			return;
+		}
+		
+	}
+	
+	/*
+	 * type: title , content
+	 */
+	@RequestMapping(value = "/update/{docid}/{type}" ,method=RequestMethod.POST)
+	@ResponseBody
+	public String update(@PathVariable long docid,@RequestParam("post-text") String content,  @PathVariable String type, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String retValue ="";
+//		request.setCharacterEncoding("utf8");
+//		response.setCharacterEncoding("utf8");
+//		response.setContentType("application/json;charset=UTF-8");
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("loginuser");
+		if (user == null) {
+			retValue = "{\"success\":\"false\",\"msg\":\"请登录。\"}";
+			return retValue;
+		} 
+//		String content =post-text;// request.getParameter("post-text");
+		if (StringUtils.isEmpty(content)) {
+			return retValue = "{\"success\":\"false\",\"msg\":\"提交内容不能为空。\"}";
+		}
+		Map map = new HashMap();
+		map.put("docid", docid);
+		if ("title".equals(type)) {
+			map.put("title", content);
+		}else if ("content".equals(type)) {
+			map.put("content", content);
+		}
+		
+		
+		try{
+			docService.update(map);
+			retValue = "{\"success\":\"true\",\"msg\":\"提交成功！\"}";
+			return retValue;
+		}
+		catch(Exception e){
+			log.error(e.getMessage());
+			retValue = "{\"success\":\"false\",\"msg\":\"保存失败,稍后再提交。\"}"; 
+			return retValue;
 		}
 		
 	}
@@ -208,7 +250,7 @@ public class DocController {
 	
 	@RequestMapping(value="/search/{docStr}/page/{start}/{step}")
 	@ResponseBody
-	public List tagSearch(@PathVariable String docStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
+	public List docSearch(@PathVariable String docStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
 		log.debug("doc搜索 :"+docStr);
 		Map map = new HashMap();
 		map.put("docStr", "%"+docStr+"%");

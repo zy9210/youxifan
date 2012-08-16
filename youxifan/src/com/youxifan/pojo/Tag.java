@@ -2,6 +2,7 @@ package com.youxifan.pojo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 public class Tag implements Serializable {
@@ -16,8 +17,45 @@ public class Tag implements Serializable {
 	private long  followers;
 	private String bsflag = "1";
 	private int followed;
+
+	private Date modifydate;
+	private Date createdate;
+	private long creator;
+	private String alias;
 	
 	
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	public Date getModifydate() {
+		return modifydate;
+	}
+
+	public void setModifydate(Date modifydate) {
+		this.modifydate = modifydate;
+	}
+
+	public Date getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(Date createdate) {
+		this.createdate = createdate;
+	}
+
+	public long getCreator() {
+		return creator;
+	}
+
+	public void setCreator(long creator) {
+		this.creator = creator;
+	}
+
 	public int getFollowed(){
 		return this.followed;
 	}

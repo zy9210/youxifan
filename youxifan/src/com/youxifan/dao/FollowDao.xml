@@ -26,7 +26,15 @@
     <select id="queryFollow" resultType="Follow"  > 
     </select>
      
- 
+	<select id="countFollower" parameterType="map" resultType="int"  >
+	select count(*) as countFollower   
+	from follow f where f.upper = #{upper} and f.follow_type = #{type}
+	</select>
+	
+	<select id="countUpper" parameterType="map" resultType="int"  >
+	select count(*) as countUpper   
+	from follow f where f.follower = #{follower} and f.follow_type = #{type}
+	</select>
     
     <insert id="insertFollow" parameterType="Follow">   
     

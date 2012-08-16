@@ -166,10 +166,12 @@ and son.tag_name = #{tagStr}
 order by father.tag_follower desc
     </select>
     
+   
+    
     
     <insert id="insertTag" parameterType="Tag" keyProperty="tagid" >   
-insert into tag (father_id,tag_name,tag_point,tag_type,bs_flag) values 
-			(#{fatherid},#{tagname},#{tagpoint},#{tagtype},#{bsflag});
+insert into tag (father_id,tag_name,tag_point,tag_type,bs_flag,creator,create_date,modify_date) values 
+			(#{fatherid},#{tagname},#{tagpoint},#{tagtype},#{bsflag},#{creator},now(),now());
 	</insert>  
     
     

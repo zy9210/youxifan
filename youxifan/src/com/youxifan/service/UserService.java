@@ -28,13 +28,21 @@ public class UserService {
 		return list;
 	}
 	
-	public List<User> userFollowedUser(Map  map ){
-		return entityDao.userFollowedUser(map);
+	public List<User> followedUsers(Map  map ){
+		return entityDao.followedUsers(map);
 	}
 	
 	public List<User> usersFans(Map  map ){
 		return entityDao.usersFans(map);
 	}
+	
+	/*
+	 * 用户的搜索
+	 */
+	public List<User> userSearch(Map  map ){
+		return entityDao.userSearch(map);
+	}
+	
 	/**
 	 * 保存user
 	 */
@@ -78,6 +86,18 @@ public class UserService {
 		return false;
 	}
 	
+	
+	/**
+	 *更新用户信息
+	 */
+	public boolean updateinfo(User user){
+		try {
+			entityDao.updateinfo(user); 
+			return true;
+		} catch (Exception e) {
+			return false;
+		} 
+	}
 	
 	public void delete(User obj){
 		entityDao.delete(obj);

@@ -9,6 +9,10 @@ CREATE TABLE `youxifan`.`tag` (
   `tag_point` FLOAT(10,2) DEFAULT 0 COMMENT '评分',
   `tag_type` VARCHAR(2) COMMENT '备用',
   `bs_flag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '1:有效0:无效',
+  `creator` BIGINT UNSIGNED  DEFAULT 0 COMMENT '创建标签的人',,
+  `create_date` DATETIME NOT NULL COMMENT '创建时间',
+  `modify_date` DATETIME NOT NULL  COMMENT '更新时间',
+  `alias` VARCHAR(120)  COMMENT 'tag别名' ,
   PRIMARY KEY(`tag_id`)
 )
 ENGINE = InnoDB;

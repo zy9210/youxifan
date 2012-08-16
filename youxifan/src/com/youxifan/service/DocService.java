@@ -58,7 +58,9 @@ public class DocService {
 	 */
 	public List<Doc> docSearch(Map map){
 		List<Doc> list = entityDao.docSearch(map);
-		 
+		for (Doc doc : list) {
+			doc.setTags(tagService.queryByDocid(doc.getDocid()));
+		}
 		return list;
 	}
 	
@@ -112,8 +114,12 @@ public class DocService {
 	}
 	
 	
-	public void save(Doc doc){
+	public void save(Doc doc){ 
 		entityDao.save(doc);
+	}
+	
+	public void update(Map map){ 
+		entityDao.update(map);
 	}
 	
 	public void delete(Doc obj){

@@ -3,7 +3,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 } 
 
 .tagHandler {
-    width: 100%;
+    width: 100%; 
     position: relative;
 }
 .tagHandler ul.tagHandlerContainer {
@@ -17,6 +17,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     font-family: arial, helvetica, sans-serif;
     padding: 0px 5px;
     margin: 10px 0px;
+    height:auto;
 }
 .tagHandler ul.tagHandlerContainer li {
     -webkit-border-radius: 5px;
@@ -27,7 +28,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     display: block;
     float: left;
     font-size: 14px;
-    margin: 5px 5px 5px 0;
+    margin: 3px 5px 3px 0;
     white-space: nowrap;
 }
 .tagHandler ul.tagHandlerContainer li.tagItem {
@@ -40,7 +41,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     background-color: #202020;
 }
 .tagHandler ul.tagHandlerContainer li.tagInput {
-    padding: 3px 4px;
+    padding: 0px 4px;
 }
 .tagHandler ul.tagHandlerContainer input.tagInputField {
     -webkit-box-sizing: border-box;

@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +27,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.apache.commons.lang3.StringUtils;
 
+import com.sun.org.apache.bcel.internal.generic.INVOKESTATIC;
+import com.sun.org.apache.bcel.internal.generic.INVOKEVIRTUAL;
 import com.youxifan.pojo.Doc;
+import com.youxifan.pojo.Invite;
 import com.youxifan.pojo.Tag;
 import com.youxifan.pojo.User;
 import com.youxifan.service.DocService;
+import com.youxifan.service.FollowService;
+import com.youxifan.service.InviteService;
 import com.youxifan.service.TagService;
 import com.youxifan.service.UserService;
 import com.youxifan.utils.CommonUtil;
+import com.youxifan.utils.PropertiesUtil;
 
 @Controller 
 public class UserController {
@@ -40,6 +47,10 @@ public class UserController {
 	.getLog(UserController.class);
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private FollowService followService;
+	 
 	public UserController(){
 		
 	}
@@ -49,31 +60,66 @@ public class UserController {
 	@RequestMapping(value = "/register",method=RequestMethod.POST)
 	public String save(HttpServletRequest request, ModelMap modelMap ,HttpSession session){
 		String email = request.getParameter("email");
-		String psw = request.getParameter("psw");
+		String psw = request.getParameter("pwd");
 		String name = request.getParameter("name");
 		String signing = request.getParameter("signing");
+		String gametext = request.getParameter("gametext");
+		String invitecode = request.getParameter("invitecode");
 		User user = new User();
 		user.setEmail(email);
 		user.setUsername(name);
 		user.setPassword(psw);
 		user.setSigning(signing);
+		user.setGame(gametext);
+		int defaultImgTotle = 1 + Integer.parseInt(PropertiesUtil.getProperty("defaultImgTotle"));
+		user.setImageurl("/uploads/0/"+(1+new Random().nextInt(defaultImgTotle))+".jpg");
 		if (!userService.checkEmail(user.getEmail())) {
 			modelMap.put("addstate", "该邮箱已经被注册！");
+			modelMap.put("email", email);
+			modelMap.put("psw", psw);
+			modelMap.put("name", name);
+			modelMap.put("signing", signing);
+			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
+			modelMap.put("invitecode", invitecode); 
+			return "register";
+		}	
+		Invite invite = inviteService.findInviteByCode(invitecode) ;
+		if (invite == null) {
+			modelMap.put("addstate", "邀请码错误或已被使用！"); 
+			modelMap.put("email", email);
+			modelMap.put("psw", psw);
+			modelMap.put("name", name);
+			modelMap.put("signing", signing);
+			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
+			modelMap.put("invitecode", invitecode); 
 			return "register";
 		}
 		try{
-			userService.save(user);
-			if(user.getUserid() == 0){
-				System.out.println("user.getUserid=="+user.getUserid());				
-			}				
+			userService.save(user);  
 			modelMap.put("addstate", "添加成功");
 //			userService.getUserByEmail(user.getEmail())
 			session.setAttribute(CommonUtil.USER_CONTEXT, user);
 		}
 		catch(Exception e){
 			log.error(e.getMessage());
-			modelMap.put("addstate", "添加失败");
+			modelMap.put("addstate", "添加失败,请稍后重试。"); 
+			modelMap.put("email", email);
+			modelMap.put("psw", psw);
+			modelMap.put("name", name);
+			modelMap.put("signing", signing);
+			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
+			modelMap.put("invitecode", invitecode); 
+			return "register";
 		}
+		//保存信息完成后   配置相关信息：gametag的保存和follow，invite
+		try {
+			tagService.saveGameTag(gametext,user.getUserid());
+		} catch (Exception e) {
+			log.debug("注册个人信息保存常完成，保存游戏tag报错！");
+		}
+		
+		inviteService.createInvitetoUser(Integer.parseInt(PropertiesUtil.getProperty("initInvitNum")), user.getUserid()); 
+		inviteService.useInvite(invitecode,user.getUserid());
 		
 		return "redirect:/doc";
 	}
@@ -97,7 +143,7 @@ public class UserController {
 				}
 			}
 		}
-		
+		//cookie记录是否自动登录   
 		if (cautologin) {
 			log.debug(cemail+"自动登录，转到："+goto_url);
 			User user = userService.getUserByEmail(cemail);
@@ -112,7 +158,7 @@ public class UserController {
 		String autologin  = request.getParameter("remlginstate"); 
 		
 		boolean login = false;
-		
+		//验证码 判断部分
 //		String code = request.getParameter("validcode");
 //		if (!StringUtils.isEmpty(code)) {
 //			code = code.toLowerCase();
@@ -140,6 +186,8 @@ public class UserController {
 			modelMap.put("loginemail", email);
 			login = false;
 		}else { 
+			user.setMyFans(followService.countUserFans(user.getUserid()));
+			user.setMyFollowed(followService.countUserFollowed(user.getUserid()));
 			session.setAttribute(CommonUtil.USER_CONTEXT, user);
 			login = true;
 		}
@@ -163,7 +211,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/checkEmail/{email}/")
-	public void checkEmail(@PathVariable String email,PrintWriter writer){
+	@ResponseBody
+	public String checkEmail(@PathVariable String email ){
 
 		String retValue = "";
 		if (userService.checkEmail(email)) {
@@ -171,7 +220,7 @@ public class UserController {
 		}else {
 			retValue = "{\"check\":\"False\"}";
 		}
-		writer.print(retValue); 
+		return retValue;
 	}
 	
 	
@@ -202,14 +251,74 @@ public class UserController {
 	// 登录注销 
 	@RequestMapping("/logout") 
 	public String logout(HttpSession session,HttpServletResponse response ) { 
-	  session.removeAttribute(CommonUtil.USER_CONTEXT); 
-	  Cookie cookie = new Cookie("autologin", null); 
-	  cookie.setMaxAge(0);
-	  cookie.setPath("/");
-	  response.addCookie(cookie);
+		session.removeAttribute(CommonUtil.USER_CONTEXT); 
+		Cookie cookie = new Cookie("autologin", null); 
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
 
-	  return "redirect:/user/login"; 
+		return "redirect:/login"; 
 	} 
+	
+	
+	//设置  处理ajax提交修改内容
+	@RequestMapping("/user/set/{tab}/") 
+	@ResponseBody
+	public String changepwd(HttpSession session,@PathVariable String tab,HttpServletRequest request ,ModelMap modelMap) { 
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT); 
+		String retValue = "";
+		if("changepwd".equals(tab)){
+			String oldpwd = request.getParameter("oldpwd");
+			String newpwd = request.getParameter("newpwd");
+			if (StringUtils.isEmpty(oldpwd) || !oldpwd.equals(CommonUtil.decoderStr(user.getPassword()))) {
+				retValue = "{\"ret\":\"wrongpwd\"}";
+			}else {
+				userService.changePassword(user.getEmail(), newpwd);
+				user.setPassword(CommonUtil.encoderStr(newpwd));
+				session.setAttribute(CommonUtil.USER_CONTEXT,user);
+				retValue = "{\"ret\":\"OK\"}";
+			}
+		}else if ("baseinfo".equals(tab)) {
+			String uname = request.getParameter("uname");
+			String gametext = request.getParameter("gametext");
+			String signing = request.getParameter("signing");
+  
+			user.setUsername(uname);
+			user.setSigning(signing);
+			user.setGame(gametext);
+			try {
+				tagService.saveGameTag(gametext,user.getUserid());
+			} catch (Exception e) {
+				log.debug("修改个人信息保存常玩游戏报错！");
+			}
+ 
+			userService.updateinfo(user);
+//		  session.setAttribute(CommonUtil.USER_CONTEXT,user);
+			retValue = "{\"ret\":\"OK\"}";
+		} 
+		  
+		return retValue;
+	} 
+	
+	@Autowired
+	private InviteService inviteService;
+	//设置  跳转显示页面
+	@RequestMapping("/set/{tab}/")  
+	public String setting(HttpSession session,@PathVariable String tab,HttpServletRequest request ,ModelMap modelMap) { 
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT); 
+		modelMap.put("user", user);
+		modelMap.put("tab", tab);
+		if ("invite".equals(tab)) {
+			Map map = new HashMap();
+			map.put("ownerid", user.getUserid());
+			modelMap.put("invitelist", inviteService.getOwnerInvite(map));
+		}
+		return "setting";
+	} 
+	
+	
+	
+	
 	
 	@Autowired
 	private DocService docService;
@@ -247,7 +356,7 @@ public class UserController {
 			tagList = tagService.userFollowedTag(map);
 			modelMap.put("tagList", tagList);
 		}else if("followedUser".equals(tab)){
-			userList = userService.userFollowedUser(map);
+			userList = userService.followedUsers(map);
 			modelMap.put("userList", userList);
 		}else if ("fans".equals(tab)) {
 			userList = userService.usersFans(map);
@@ -280,7 +389,7 @@ public class UserController {
 		}else if ("followedtag".equals(tab)) {
 			list = tagService.userFollowedTag(map); 
 		}else if("followedUser".equals(tab)){
-			list = userService.userFollowedUser(map); 
+			list = userService.followedUsers(map); 
 		}else if ("fans".equals(tab)) {
 			list = userService.usersFans(map); 
 		}
@@ -289,7 +398,20 @@ public class UserController {
 	}
 	
 	
-	
+	@RequestMapping(value="user/search/{searchStr}/page/{start}/{step}")
+	@ResponseBody
+	public List userSearch(@PathVariable String searchStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, HttpSession session){
+		log.debug("doc搜索 :"+searchStr);
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
+		Map map = new HashMap();
+		map.put("nameStr", "%"+searchStr.replace(" ", "%")+"%");
+		map.put("start", start);
+		map.put("loginuserid", user.getUserid());
+		map.put("end", start+ step);
+		List<User> list = userService.userSearch(map);
+		 
+		return list;
+	}
 	
 	
 }

@@ -275,5 +275,8 @@ public class CommonUtil
         System.out.println(uniqueNum());
         System.out.println(uniqueNum());
         System.out.println(generateGUID());
+        System.out.println(decoderStr("ZW5rNU1qRXlNVEE9"));
+        System.out.println(System.currentTimeMillis());
+         
     }
 }

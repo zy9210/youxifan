@@ -81,8 +81,8 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 	}
 
 
-	public void update(Doc model) {
-		int row = getSqlSession().update("Doc.updateDoc",model);
+	public void update(Map map) {
+		int row = getSqlSession().update("Doc.updateDoc",map);
 	}
 	
 

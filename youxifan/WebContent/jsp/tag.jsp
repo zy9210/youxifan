@@ -68,65 +68,10 @@
     
     <!-- end .content --></div>
     
-  <div class="sidebar1">
-  
-  	<div class="userarea">
-    	<div class="user">
-        	<a href="<%=contextPath%>/user/${loginuser.userid}/tab/askq" class="headimg">
-        		<img src="<%=contextPath%>/images/background.jpg" width="60px" height="60px" />
-            </a>
-            <div class="userinfo">
-            	<div class="username"  onclick="location='<%=contextPath%>/user/${loginuser.userid}/tab/askq'" >逆天大战士</div>
-                <div class="usertag">魔兽世界</div>
-                <div class="signing">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无序列</div>
-            </div>
-            <div class="shortcut">
-            	<a href="#" >我关注的人 </a> 
-                <a href="#" >关注我的人 </a>
-            </div>
-        </div><!-- end .user -->
-    </div><!-- end .userarea -->
+  <div class="sidebar">
+  	<%@ include file="../include/sidebar.jspf"%> 
     
-    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:5px;">
-        <a href="#" class="invite" >
-            我的邀请
-        </a>
-    </div>
-    
-    <div>
-    	<strong>你可能感兴趣的话题</strong>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        
-    </div>
-    
-    
-    <!-- end .sidebar1 --></div>
+  <!-- end .sidebar --></div>
     
   <div class="footer">
     <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>

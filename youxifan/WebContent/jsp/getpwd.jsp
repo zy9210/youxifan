@@ -5,26 +5,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>登录</title> 
+<title>密码重置</title> 
 <script language="javascript"
-	src="<%=contextPath%>/script/jquery.1.3.2.js"></script>
-<script language="javascript"
-	src="<%=contextPath%>/script/popup_layer.js"></script>
+	src="<%=contextPath%>/script/jquery.1.3.2.js"></script> 
 <%
 String email = request.getParameter("email");
 String pwdstr = request.getParameter("pwdstr"); 
 %>
 <style>  
-
+body{
+	position: absolute;
+	width:100%; 
+	height:100%; 
+	margin:0px;
+	padding:0px;
+}
 input[type=text] {
+	 text-indent:3px;
 	 height:30px; 
 	 font: 20px Georgia, 'Times New Roman', Times, serif; 
 	 border-radius: 5px; 
 	 -webkit-border-radius: 5px; 
 	 -moz-border-radius: 5px;
+	 background:#fff;
+	 background-color:#fff; 
+	 outline: none;
+	 
 }
 input[type=password] {
+	 text-indent:3px;
 	 height:30px; 
+	 background:#fff;
 	 font: 20px Georgia, 'Times New Roman', Times, serif; 
 	 border-radius: 5px; 
 	 -webkit-border-radius: 5px; 
@@ -37,46 +48,40 @@ input[type=submit] {
 	 -moz-border-radius: 5px;  
 	 height:33px;
 }
+.centerdiv{
+	width:100%; 
+	height:100%; 
+	/*   */
+	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(19)%>.jpg) no-repeat center;
+	
+}
+
 .content{
 	font: bold 14px/18px 宋体,sans-serif;
+	width:1000px;
+	height:100%;
 	margin:0 auto; 
-	width:960px; 
-	background:url(<%=contextPath%>/images/background.jpg) no-repeat top ;  
-	padding-top:400px;
+	padding:1px 0px 1px 0px;
+	background:#D3D1CE;  
+	
+	filter:alpha(opacity=90);
+	-moz-opacity:0.9;
+	-khtml-opacity: 0.9;
+	opacity: 0.9;
 	}
-.head{
-	width:100%;
-	height:40px;
-	background-color:#242424;
-	color:white;
-	font-style:italic;
-	font-size:36px;
-	font-weight: 900;
-	text-indent:50px
-}
-#blk9{
-	width:400px; 
-	height:200px;
-	background-color:#fff;
-	border:solid 1px;
-	border-radius: 5px;
-	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;  
-}
+  
 </style>
 </head>
 <body>
 
-<div class="head">
-	youxifan.com         
-</div> 
-
-<div style="width:100%; height:700px; background-color:#f77400;">
+<div class="centerdiv">
 	<div class="content"> 
+	</div>
+	<div style="position: absolute;left:0px; top:0px; width:100%;height:100%; z-index:11">
 	<form method="post" action="<%=contextPath%>/getpwd/changepwd">
 		<input type="hidden" id="email" name="email" value="<%=email%>"/>  
 		<input type="hidden" id="pwdstr" name="pwdstr" value="<%=pwdstr%>"/>  
-    	<table style="margin:0 auto;">
+    	<table style="margin:300px auto 0; ">
     		<tr >
                 <td colspan="2" style="text-align:center;color:blue;" > &nbsp;${msg} </td> 
             </tr>
@@ -92,12 +97,9 @@ input[type=submit] {
                 <td colspan="2" style="text-align:center" ><input type="submit" value="提交" onclick="return checkpwd()" /></td> 
             </tr>
         </table>
-        </form>
+    </form>
+	
     </div> 
-</div>
-
-<div style="width:100%;height:90px;background-color:#2a2823; border-top:solid; border-top-width:5px; border-top-color:#afafaf">
-	 
 </div>
 
 <script language="javascript">

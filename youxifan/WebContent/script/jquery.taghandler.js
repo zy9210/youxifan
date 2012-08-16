@@ -335,6 +335,14 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                         $(inputField).autocomplete("option", "source", tags.availableTags);
                     }
                 } 
+                if (opts.assignedTags.length) {
+                    tags.assignedTags = opts.assignedTags.slice();
+                    if (opts.sortTags) {
+                        tags = sortTags(tags);
+                    }
+
+                    tags = addAssignedTags(opts, tags, inputField, tagContainer);
+                }
                 // all tag editing functionality only activated if set in options
                 if (opts.allowEdit) {
                     // delegates a click event function to all future <li> elements with

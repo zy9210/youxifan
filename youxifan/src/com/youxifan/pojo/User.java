@@ -3,6 +3,8 @@ package com.youxifan.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.youxifan.utils.CommonUtil;
 
 
@@ -12,6 +14,7 @@ public class User implements Serializable {
 
 
 	private long userid;
+	
 	private String userlevel;
 	private String username;
 	private String signing;
@@ -23,9 +26,40 @@ public class User implements Serializable {
 	private String password;
 	private Date modifydate;
 	private Date createdate;
+	//查看他人页面时   是否关注该人  1：关注   0：未关注
 	private int followed;
+	 
+	private String game;
+	 
+	private int myFollowed;
+	private int myFans;
 	
-	
+	public int getMyFollowed() {
+		return myFollowed;
+	}
+	public void setMyFollowed(int myFollowed) {
+		this.myFollowed = myFollowed;
+	}
+	public int getMyFans() {
+		return myFans;
+	}
+	public void setMyFans(int myFans) {
+		this.myFans = myFans;
+	}
+	public String getGameTagStr() {
+		if (StringUtils.isEmpty(this.game)) {
+			return "";
+		}
+		return  "'"+ game.replace(",", "','")+"'"; 
+	} 
+	public String getGame() {
+		return game;
+	}
+
+	public void setGame(String game) {
+		this.game = game;
+	}
+
 	public int getFollowed(){
 		return this.followed;
 	}

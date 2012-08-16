@@ -37,6 +37,7 @@
 		  d.views as views,
 		  d.answers as answer,
 		  d.creater_name as creatername,
+		  d.game as game,
 		  if(f.upper,1,0) as followed  
 		from document d
 		left join follow f on(f.upper = d.doc_id and f.follower = #{loginuserid} and f.follow_type = '3')
@@ -76,7 +77,8 @@
 		  d.create_date as createdate,
 		  d.modify_date as modifydate,
 		  d.views as views,
-		  d.answers as answer,
+		  d.answers as answer, 
+		  d.game as game,
 		  d.creater_name as creatername
 		from document d 
 		where d.bs_flag = '1'
@@ -102,6 +104,7 @@
 		  d.modify_date as modifydate,
 		  d.views as views,
 		  d.answers as answer,
+		  d.game as game,
 		  d.creater_name as creatername,
 		  if(loginf.upper,1,0) as followed 
 		from document d
@@ -143,6 +146,7 @@
 		  d.modify_date as modifydate,
 		  d.views as views,
 		  d.answers as answer,
+		  d.game as game,
 		  d.creater_name as creatername
 		from document d
 		where d.bs_flag = '1'
@@ -167,6 +171,7 @@
 		  question.modify_date as modifydate,
 		  question.views as views,
 		  question.answers as answer,
+		  question.game as game,
 		  question.creater_name as creatername
 		from document question
 		inner join document answer on(answer.upper_doc_id = question.doc_id and answer.creater_id = #{userid} and answer.doc_type = '3' and answer.bs_flag = '1')
@@ -190,6 +195,7 @@
 		  question.modify_date as modifydate,
 		  question.views as views,
 		  question.answers as answer,
+		  question.game as game,
 		  question.creater_name as creatername,
 		  if(loginf.upper,1,0) as followed 
 		from document question
@@ -215,6 +221,7 @@ select t.* from (
 	  d.doc_point as docpoint,
 	  d.bs_flag as bsflag,
 	  d.creater_id as createrid,
+	  d.game as game,
 	  d.create_date as doccreatedate,
 	  d.modify_date as docmodifydate,
 	  u.user_name as username,
@@ -244,6 +251,7 @@ select t.* from (
 	  d.creater_id as createrid,
 	  d.create_date as doccreatedate,
 	  d.modify_date as docmodifydate, 
+	  d.game as game,
 	  u.user_name as username,
 	  u.alias as alias,
 	  u.email as email,
@@ -270,6 +278,7 @@ select t.* from (
 	  d.doc_type as doctype,
 	  d.doc_point as docpoint,
 	  d.bs_flag as bsflag,
+	  d.game as game,
 	  d.creater_id as createrid,
 	  d.create_date as doccreatedate,
 	  d.modify_date as docmodifydate,
@@ -299,6 +308,7 @@ select t.* from (
 		<result property="createrid" column="createrid" />
 		<result property="followed" column="followed" />
 		<result property="creatername" column="creatername" /> 
+		<result property="game" column="game" /> 
 		<association property="creater" column="createrid"
 			javaType="User">
 			<id property="userid" column="createrid" /> 
@@ -315,19 +325,26 @@ select t.* from (
     <insert id="insertDoc" parameterType="Doc" keyProperty="docid" >   
 	    insert into document 
 		(upper_doc_id,title,content,doc_type,doc_point,
-		bs_flag,creater_id,create_date,modify_date,creater_name) 
+		bs_flag,creater_id,create_date,modify_date,creater_name,game) 
 		values
 		(#{upperdocid},#{title},#{content},#{doctype},#{docpoint},
-		'1',#{createrid},now(),now(),#{creatername});
+		'1',#{createrid},now(),now(),#{creatername},#{game});
 	</insert>  
     
     
     
-    <update id="updateDoc" parameterType="Doc"> 
-		update document set 
-		name = #{user}, 
-		psw = #{psw}
-		where id = #{id} 
+    <update id="updateDoc" parameterType="map"> 
+ 
+
+update document 
+	<set>
+	modify_date = now(),
+	<if test="title != null">title=#{title},</if> 
+	<if test="content != null">content=#{content}</if> 
+	</set>
+where doc_id=#{docid} 
+
+ 
 	</update> 
 
 	<update id="updateViews" parameterType="long"> 

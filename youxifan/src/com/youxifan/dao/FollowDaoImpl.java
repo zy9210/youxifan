@@ -1,6 +1,7 @@
 package com.youxifan.dao;
 
 import java.util.List;
+import java.util.Map;
 
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -21,7 +22,14 @@ public class FollowDaoImpl extends SqlSessionDaoSupport implements FollowDao{
 	}
  
 	
+	public int countFollower(Map map){
+		return  (Integer) getSqlSession().selectOne("Follow.countFollower",map);
+		 
+	}
 	
+	public int countUpper(Map map){
+		return  (Integer) getSqlSession().selectOne("Follow.countUpper",map);
+	}
 	
 	
 }

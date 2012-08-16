@@ -15,7 +15,7 @@ public interface DocDao {
 	public Doc getDocByID(Map map);
 	public Doc save(final Doc model);
 	public void updateViews(final long docid);
-	public void update(final Doc model);
+	public void update(Map map);
 	public void delete(final Doc model);
 	public List<Doc> getAnswers(Long upperdocid);
 }

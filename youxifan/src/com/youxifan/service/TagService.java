@@ -104,7 +104,7 @@ public class TagService {
 		return retVal;
 	}
 
-	public void saveTagStr(long docid,String fatherStr ,String tagListStr ){
+	public void saveTagStr(long docid,String fatherStr ,String tagListStr,long creator ){
 		String[] tagAry = tagListStr.split(",");
 		
 		long fatherID = 0;
@@ -114,35 +114,58 @@ public class TagService {
 			t.setFatherid(0);
 			t.setBsflag("1");
 			t.setTagname(fatherStr.trim());
+			t.setCreator(creator);
 			save(t);
 			fatherID = t.getTagid();
 		}else {
 			fatherID = fatherTag.getTagid();
 		}
-		
+		insertTagFollow(fatherID,docid,"5");
 		for (String tagStr : tagAry) {
 			Tag tag = (Tag)findTag(fatherStr, tagStr.trim());
 			if (tag != null) {
-				insertTagFollow(tag.getTagid(),docid);
+				insertTagFollow(tag.getTagid(),docid,"5");
 			}else {
 				Tag t = new Tag();
 				t.setFatherid(fatherID);
 				t.setBsflag("1");
 				t.setTagname(tagStr.trim());
+				t.setCreator(creator);
 				save(t);
-				insertTagFollow(t.getTagid(),docid);
+				insertTagFollow(t.getTagid(),docid,"5");
 			}
 		}
 	}
 	
-	public void insertTagFollow(long tagid, long docid){
+	
+	public void saveGameTag( String gameStr,long creator ){
+		String[] tagAry = gameStr.split(",");
+		for (String game : tagAry) {
+			Tag gameTag = findTagbyName(game.trim());
+			if (gameTag == null) {
+				Tag t = new Tag();
+				t.setFatherid(0);
+				t.setBsflag("1");
+				t.setTagname(game.trim());
+				t.setCreator(creator);
+				save(t);
+				insertTagFollow(t.getTagid(),creator,"4");
+			}else {
+				insertTagFollow(gameTag.getTagid(),creator,"4");
+			}
+		} 
+		
+	}
+	public void insertTagFollow(long upper , long follower, String followType){
 		Follow follow = new Follow();
-		follow.setUpper(tagid);
-		follow.setFollower(docid);
-		follow.setFollowType("5");
+		follow.setUpper(upper);
+		follow.setFollower(follower);
+		follow.setFollowType(followType);
 		
 		followDao.save(follow);
 	}
+	
+	 
 	
 	public void save(Tag tag){
 		if (StringUtils.isEmpty(tag.getTagname())) {

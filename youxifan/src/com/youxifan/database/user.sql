@@ -13,6 +13,7 @@ CREATE TABLE `youxifan`.`user` (
   `bs_flag` VARCHAR(2) NOT NULL DEFAULT 1 COMMENT '0:无效 1:有效',
   `create_date` DATETIME NOT NULL COMMENT '创建时间',
   `modify_date` DATETIME NOT NULL COMMENT '修改时间',
+  `game` VARCHAR(120)    COMMENT '常玩游戏',
   PRIMARY KEY(`user_id`)
 )ENGINE = InnoDB DEFAULT CHARSET=UTF8;
 
