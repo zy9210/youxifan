@@ -48,6 +48,7 @@ public class UserService {
 	 */
 	public void save(User user){
 		user.setPassword(CommonUtil.encoderStr(user.getPassword()));
+		user.setUsername(user.getUsername().trim());
 		entityDao.save(user);
 	}
 	
@@ -92,6 +93,7 @@ public class UserService {
 	 */
 	public boolean updateinfo(User user){
 		try {
+			user.setUsername(user.getUsername().trim());
 			entityDao.updateinfo(user); 
 			return true;
 		} catch (Exception e) {

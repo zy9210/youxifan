@@ -52,7 +52,7 @@ input[type=submit] {
 	width:100%; 
 	height:100%; 
 	/*   */
-	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(19)%>.jpg) no-repeat center;
+	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(5)%>.jpg) no-repeat center;
 	
 }
 
@@ -87,11 +87,11 @@ input[type=submit] {
             </tr>
             <tr>
                 <td>密码</td>
-                <td><input type="password" id="psw" name="psw"/><span id="pswmsg" style="color:blue"></span></td>
+                <td style="width:370px"><input type="password" id="psw" name="psw"/><span id="pswmsg" style="color:red"></span></td>
             </tr>
             <tr>
             	<td>确认密码</td>
-                <td><input type="password" id="repsw" name="repsw"/><span id="repswmsg" style="color:blue"></span></td> 
+                <td style="width:370px" ><input type="password" id="repsw" name="repsw"/><span id="repswmsg" style="color:red"></span></td> 
             </tr> 
             <tr >
                 <td colspan="2" style="text-align:center" ><input type="submit" value="提交" onclick="return checkpwd()" /></td> 

@@ -227,7 +227,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                 // caches the container to avoid scope issues.
                 var tagContainer = this;
                 var tagContainerObject = $(tagContainer);
-				submitTextField = $('<input type="hidden" style="display:none;"  value="" name="' + opts.submitField + '" id="' + opts.submitField + '" />')
+                var submitTextField = $('<input type="hidden" style="display:none;"  value="" name="' + opts.submitField + '" id="' + opts.submitField + '" />')
 				tagContainerObject.after(submitTextField);
 				
                 // adds an id to the tagContainer in case it doesn't have one
@@ -288,7 +288,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                                     tags = sortTags(tags);
                                 }
 
-                                tags = addAssignedTags(opts, tags, inputField, tagContainer);
+                                tags = addAssignedTags(opts, tags, inputField, tagContainer,submitTextField);
 
                             } 
                             if (opts.autocomplete && typeof($.fn.autocomplete) == 'function' && opts.allowEdit) { 
@@ -310,7 +310,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                         tags = sortTags(tags);
                     }
 
-                    tags = addAssignedTags(opts, tags, inputField, tagContainer);
+                    tags = addAssignedTags(opts, tags, inputField, tagContainer,submitTextField);
 
                     // or load the lists of tags   
                 }
@@ -329,7 +329,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                             tags = sortTags(tags);
                         }
 
-                        tags = addAssignedTags(opts, tags, inputField, tagContainer);
+                        tags = addAssignedTags(opts, tags, inputField, tagContainer,submitTextField);
                     }
                     if (opts.autocomplete && typeof($.fn.autocomplete) == 'function' && opts.allowEdit && opts.initLoad) {
                         $(inputField).autocomplete("option", "source", tags.availableTags);
@@ -341,7 +341,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                         tags = sortTags(tags);
                     }
 
-                    tags = addAssignedTags(opts, tags, inputField, tagContainer);
+                    tags = addAssignedTags(opts, tags, inputField, tagContainer, submitTextField);
                 }
                 // all tag editing functionality only activated if set in options
                 if (opts.allowEdit) {
@@ -356,7 +356,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                         }
 
                         if (rc) {
-                            tags = removeTag($el, tags, opts.sortTags);
+                            tags = removeTag($el, tags, opts.sortTags,submitTextField);
                             if (opts.updateURL !== '' && opts.autoUpdate) {
                                 saveTags(tags, opts, tagContainer.id);
                             }
@@ -401,7 +401,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                                     }
 
                                     if (rc || typeof(rc) == "undefined") {
-                                        tags = addTag(this, newTag, tags, opts.sorttags);
+                                        tags = addTag(this, newTag, tags, opts.sorttags,submitTextField);
                                         if (opts.updateurl !== '' && opts.autoupdate) {
                                             saveTags(tags, opts, tagContainer.id);
                                         }
@@ -428,7 +428,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                             if (typeof(opts.onDelete) == "function") {
                                 opts.onDelete.call(this, $.trim(deleted_tag));
                             }
-                            tags = removeTag(tagContainerObject.find(".tagItem:last"), tags, opts.sortTags);
+                            tags = removeTag(tagContainerObject.find(".tagItem:last"), tags, opts.sortTags,submitTextField);
                             if (opts.updateURL !== '' && opts.autoUpdate) {
                                 saveTags(tags, opts, tagContainer.id);
                             }
@@ -459,7 +459,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                                             rc = opts.onAdd.call(this, newTag);
                                         }
                                         if (rc || typeof(rc) == "undefined") {
-                                            tags = addTag(this, newTag, tags, opts.sortTags);
+                                            tags = addTag(this, newTag, tags, opts.sortTags,submitTextField);
                                             if (opts.updateURL !== '' && opts.autoUpdate) {
                                                 saveTags(tags, opts, tagContainer.id);
                                             }
@@ -499,7 +499,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
                                             opts.onAdd.call(this, newTag);
                                         }
                                         if (rc || typeof(rc) == "undefined") {
-                                            tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags);
+                                            tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags,submitTextField);
                                             if (opts.updateURL !== '' && opts.autoUpdate) {
                                                 saveTags(tags, opts, tagContainer.id);
                                             }
@@ -573,7 +573,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 		submitField: 'subtags'
     };
 	
-	var submitTextField;
+
     // checks to to see if a tag is already found in a list of tags
     function checkTag(value, tags) {
         var check = false;
@@ -593,13 +593,12 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
             if (e === value) {
                 tags.splice(i, 1);
             }
-        });
-
+        }); 
         return tags;
     }
 
     // adds a tag to the tag box and the assignedTags list
-    function addTag(tagField, value, tags, sort) {
+    function addTag(tagField, value, tags, sort,submitTextField) {
         tags.assignedTags.push(value);
         tags.availableTags = removeTagFromList(value, tags.availableTags);
         $("<li />").addClass("tagItem").text(value).insertBefore($(tagField).parent());
@@ -612,7 +611,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
     }
 
     // removes a tag from the tag box and the assignedTags list
-    function removeTag(tag, tags, sort) {
+    function removeTag(tag, tags, sort,submitTextField) {
         var value = $(tag).text();
         tags.assignedTags = removeTagFromList(value, tags.assignedTags);
         if (checkTag(value, tags.originalTags)) {
@@ -631,8 +630,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
     function sortTags(tags) {
         tags.availableTags = tags.availableTags.sort();
         tags.assignedTags = tags.assignedTags.sort();
-        tags.originalTags = tags.originalTags.sort();
-
+        tags.originalTags = tags.originalTags.sort(); 
         return tags;
     }
 
@@ -671,7 +669,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
     }
 
     // adds any already assigned tags to the tag box  初始化时添加tagItem
-    function addAssignedTags(opts, tags, inputField, tagContainer) {
+    function addAssignedTags(opts, tags, inputField, tagContainer,submitTextField) {
         $(tags.assignedTags).each(function (i, e) {
             if (opts.allowEdit) {
                 $("<li />").addClass("tagItem").text(e).insertBefore($(inputField).parent());

@@ -11,7 +11,7 @@ public class Vote implements Serializable {
 	private long voteid;
 	private long voterid;
 	private long bevotedid;
-	private String vote_type;
+	private String vote_type = "1";
 	
 	public long getVoteid() {
 		return voteid;

@@ -25,35 +25,20 @@
 
     <select id="queryVote" resultType="Vote"  >
         select 
-		   Vote_id as Voteid,
-		   Vote_name as Votename,
-		   Vote_point as Votepoint
+		   vote_id as voteid,
+		   vote_name as votename,
+		   vote_point as votepoint
 		from Vote
 		order by Vote.Vote_point desc
     </select>
     
-    <select id="queryVoteLikeName" resultType="Vote"  >
-select 
-   Vote_id as Voteid,
-   Vote_name as Votename,
-   Vote_point as Votepoint
-from Vote
-where Vote.Vote_name like '%'+#{likename}+'%'
-order by Vote.Vote_point desc
-    </select>
-
-    <select id="queryVoteByName" resultType="Vote"  >
-select 
-   Vote_id as Voteid,
-   Vote_name as Votename,
-   Vote_point as Votepoint
-from Vote
-where Vote.Vote_name = #{Votename}
-order by Vote.Vote_point desc
+    <select id="getVoteNum" parameterType="map"   resultType="int">
+    	select group(v.vote_id) from vote v where v.be_voted_id = #{bevotedid} 
     </select>
     
     <insert id="insertVote" parameterType="Vote">   
-insert into Vote (Vote_name,Vote_point) values (#{Votename},1);
+insert into Vote (voter_id,be_voted_id,vote_type) 
+		values (#{voterid},#{bevotedid},#{vote_type});
 	</insert>  
     
     
@@ -65,7 +50,7 @@ update Vote set Vote.Vote_point=Vote_point+1 where Vote.Vote_id = #{Voteid}
 
 
     <delete id="delVote" parameterType="Vote" > 
-		delete from student where id = #{id} 
+		delete from vote where voter_id = #{voterid} and be_voted_id = #{bevotedid} 
 	</delete>
 	
 </mapper>

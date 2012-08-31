@@ -13,46 +13,75 @@ body{
 	width:100%; 
 	height:100%; 
 	margin:0px;
-	padding:0px;
+	padding:0px; 
+	font-size: 14px ;
+	color:#393939;
+	font-family: 微软雅黑, Microsoft YaHei, Helvetica, Tahoma, StSun, 宋体, SimSun, sans-serif !important; 
+	background:#000  
+	/*   
+	url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(5)%>.jpg) no-repeat center;
+	
+	*/
 }
-input[type=text] {
-	 text-indent:3px;
-	 height:30px; 
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
+
+
+input[type=text] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;   
+	 border: 1px solid silver;  
+	 background-color: #E6F3FA;
 	 border-radius: 5px; 
 	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-	 background:#fff;
-	 background-color:#fff; 
-	 outline: none;
+	 -moz-border-radius: 5px;   
+	  
+}
+input[type=password] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;   
+	 border: 1px solid silver; 
+	 background-color: #E6F3FA;
 	 
-}
-input[type=password] {
-	 text-indent:3px;
-	 height:30px; 
-	 background:#fff;
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
 	 border-radius: 5px; 
-	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-}
-input[type=submit] {
-	 font: bold 20px Georgia, 'Times New Roman', Times, serif; 
-	 border-radius: 5px;
 	 -webkit-border-radius: 5px; 
 	 -moz-border-radius: 5px;  
-	 height:33px;
+	 
+	  
 }
+input[type=submit] {
+	 height: 32px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:60px;  
+	 color:#EEE; 
+	 border: 1px solid silver; 
+	 background-color: #0070A1;
+	 
+	 border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;  
+}
+
+
+
+.label{
+	padding:3px 4px;
+	font-size: 14px ;
+	color:#393939;
+} 
 .centerdiv{
 	width:100%; 
 	height:100%; 
+	float:left;
 	/*   */
-	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(5)%>.jpg) no-repeat center;
+	
 	
 }
 
-.content{
-	font: bold 14px/18px 宋体,sans-serif;
+.content{ 
 	width:1000px;
 	height:100%;
 	margin:0 auto; 
@@ -64,27 +93,35 @@ input[type=submit] {
 	-khtml-opacity: 0.9;
 	opacity: 0.9;
 	}
-  
+a:hover, a:focus {
+color: #00C0FF;
+}
+
+a { 
+color: #0072A3;
+text-decoration: none;  
+outline: none;
+}
 </style>
 </head>
-<body> 
-
-<div class="centerdiv">
-	<div class="content"> 
+<body > 
+ 
+	<div class="content" style="overflow:hidden;">  
 	</div>
-	<div style="position: absolute;left:0px; top:0px; width:100%;height:100%; z-index:11">
-	<form method="post" action="<%=contextPath%>/login">
-    	<table style="margin:300px auto 0; ">
+	<div style="position: absolute;left:0px; top:0px; width:100%;height:100%; z-index:11; TEXT-ALIGN: center; ">
+	<div style="height:30%;" ></div>
+	<form method="post" action="<%=contextPath%>/login" >
+    	<table style="margin:0 auto ;  ">
     		<tr>
     			<td colspan="2" style="text-align:center;color:blue;" > &nbsp;${msg} </td> 
     		</tr>
             <tr>
-                <td>邮箱</td>
-                <td>密码</td> 
+                <td class="label" >邮箱</td>
+                <td class="label" >密码</td> 
             </tr>
             <tr>
-            	<td><input type="text"  id="email" name="email" value="${loginemail!=null?loginemail:''}"/></td>
-                <td><input type="password" id="psw" name="psw"/></td>
+            	<td><input class="input" type="text"  id="email" name="email" value="${loginemail!=null?loginemail:''}"/></td>
+                <td><input class="input" type="password" id="psw" name="psw"/></td>
                 <td><input type="submit" value="登录" /></td>
             </tr>
             <tr>
@@ -96,10 +133,11 @@ input[type=submit] {
             </tr>
         </table>
         </form>
-    </div> 
-</div>
-
- 
- 
+        <div style=" width:440px; margin:0 auto ; ">
+        	<img alt="" src="<%=contextPath%>/images/des1.png"  style="float:left;" >
+        	<img alt="" src="<%=contextPath%>/images/des2.png"  style="float:left;margin-left:40px;" >
+        </div>
+        <div style="clear:both;height:0px ;" ></div>
+    </div>  
 </body>
 </html>

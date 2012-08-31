@@ -198,8 +198,8 @@ System.out.println(savePath+fileName);
         zoomImage.cut();
  
 		Image image = ImageIO.read(new File(userPath+"/temp/"+user_id+".jpg"));  
-		int width2 = 100;  //可以设置图片宽度
-		int height3 = 100; //可以设置图片高度
+		int width2 = Integer.parseInt(PropertiesUtil.getProperty("headImgHeight")) ;  //可以设置图片宽度
+		int height3 = Integer.parseInt(PropertiesUtil.getProperty("headImgHeight")) ; //可以设置图片高度
 		AreaAveragingScaleFilter areaAveragingScaleFilter = new AreaAveragingScaleFilter(width2,height3);  
 		FilteredImageSource filteredImageSource = new FilteredImageSource(image.getSource(),areaAveragingScaleFilter);  
 		BufferedImage bufferedImage = new BufferedImage(width2,height3,BufferedImage.TYPE_3BYTE_BGR);  

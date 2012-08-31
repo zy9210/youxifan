@@ -24,7 +24,7 @@
 				
 				//$("#add"+type+upper+follower).show();
 				//$("#del"+type+upper+follower).hide();
-				urlstr = "<%=contextPath%>/follow/cansel/"+type+"/" + upper + "/" + follower;
+				urlstr = "<%=contextPath%>/follow/cancel/"+type+"/" + upper + "/" + follower;
 			} 
 
 			   
@@ -84,9 +84,10 @@
 				success : function(data) {  
 					$(newdiv).setTemplateElement("Template-Items").processTemplate(data);
 					container.append($(newdiv).html());
-				    var startno = parseInt(start)+parseInt(step);
-				    if(data.length == 30){
-				    	container.append($("<input id='nextp' type='button' onclick='nextpage("+startno+","+step+")' value='更多'/>") ); 
+					var stepint = parseInt(step)
+				    var startnext = parseInt(start)+stepint;
+				    if(data.length == stepint){
+				    	container.append($("<input id='nextp' type='button' class='more'  onclick='nextpage('"+type+"',"+startnext+","+step+")' value='更多'/>") ); 
 				    }
 				},
 				error :function(){

@@ -8,37 +8,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>问题详情</title>  
 
-  	<script type="text/javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
+  	<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
     <script language="javascript" src="<%=contextPath%>/script/jquery-ui-1.8.20.custom.js"></script>
-    <script language="javascript" src="<%=contextPath%>/script/jquery.taghandler.js"></script>
+    <script language="javascript" src="<%=contextPath%>/script/jquery.taghandler.js"></script> 
+
     
     
     <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/all.css"> 
  	<link rel="stylesheet" href="<%=contextPath%>/css/jquery.taghandler.css" type="text/css">  
-	<link rel="stylesheet" type="text/css" href="<%=contextPath%>/css/jquery-ui-1.8.7.custom.css" /> 
+	<link rel="stylesheet" type="text/css" href="<%=contextPath%>/css/jquery-ui-1.8.7.custom.css" />
+	
+	<script charset="utf-8" src="<%=contextPath%>/script/kindeditor/kindeditor-min.js"></script>
+	<script charset="utf-8" src="<%=contextPath%>/script/kindeditor/lang/zh_CN.js"></script> 
+	<link rel="stylesheet" href="<%=contextPath%>/script/kindeditor/themes/default/default.css" />
+ 
 </head>
 
 <body>
-
+<%@ include file="../include/header.jspf"%>
 <div class="container">
-
-  <div class="header">
-  	<a href="#" style="float:left; margin-left:10px;">
-    	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
-    </a> 
-    <div style="float:left; padding-top:18px; margin-left:10px;">
-    	<input id="searchinput" type="text" style=" " />
-        <span id="stext" >提交新问题</span>
-    </div> 
-    <div  id="headnav">   
-        <a href="#" style="float:left; margin-left:10px; color:#FFF;">
-            首页
-        </a> 
-        <a href="#" style="float:left; margin-left:50px; color:#FFF;">
-            话题广场
-        </a> 
-    </div>
-  <!-- end .header --></div>
     
     
     
@@ -66,87 +54,39 @@
   <!-- end .content --></div>
   
     
-  <div class="sidebar1">
+   <div class="sidebar">
   
-  	<div class="userarea">
-    	<div class="user">
-        	<a href="" class="headimg">
-        		<img src="<%=contextPath %>/images/background.jpg" width="60px" height="60px" />
-            </a>
-            <div class="userinfo">
-            	<div class="username">逆天大战士</div>
-                <div class="usertag">魔兽世界</div>
-                <div class="signing">接说明了一种基本导航结构，该结构使用以 CSS 设置样式的无序列</div>
-            </div>
-            <div class="shortcut">
-            	<a href="#" >我关注的人 </a> 
-                <a href="#" >关注我的人 </a>
-            </div>
-        </div><!-- end .user -->
-    </div><!-- end .userinfo -->
+  	<%@ include file="../include/sidebar.jspf"%>
     
-    <div style="border-bottom:1px solid #BFBFBF; margin-bottom:10px; padding-bottom:10px;">
-        <a href="#" class="invite" >
-            我的邀请
-        </a>
-    </div>
-    
-    <div>
-    	<strong>你可能感兴趣的话题</strong>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        <div class="interest" >
-        	<a href="#" class="tag" >魔兽世界</a>
-            <a href="#" class="attentionlink fltrt">关注</a>
-            <span class="desc"  >该话题下有333个问题</span>
-        </div>
-        
-        
-    </div>
-    
-    
-    <!-- end .sidebar1 --></div>
+  <!-- end .sidebar --></div>
     
   <div class="footer">
-    <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
+    <%@ include file="../include/footer.jspf"%> 
     <!-- end .footer --></div>
   <!-- end .container --></div>
-</body>
-
+</body> 
 <script type="text/javascript">
-
+ 
 function check(){ 
-	if($('#post_title').val().trim() == null  ||  $('#post_title').val().trim() == "" ){
+	var titletext = $.trim($('#post_title').val());
+	
+	if( titletext.length == 0  ){
 		alert("标题不能为空！");
 		return false;
 	}
+	if( titletext.length > 200 ){
+		alert("标题过长！");
+		return false;
+	}
 	if($('#gametext').val().trim() == null  ||  $('#gametext').val().trim() == "" ){
-		alert("问题所属游戏必须选择或回车建立标签！");
+		alert("问题所属游戏必须选择,回车建立标签！");
 		return false;
 	}
 	
 	return true;
 }
 jQuery(document).ready(function(){
+	//初始化游戏标签
 	$('#game').tagHandler({
 		autocomplete: true,
 		maxTags:1,  
@@ -154,12 +94,13 @@ jQuery(document).ready(function(){
 		getURL:'<%=contextPath %>/tag/search/fid/0',  
 		afterAdd: function(tag){
 			var gamestr = $('#gametext').val(); 
-			$('#game .tagInputField').attr("disabled",true); 
+			$('#game .tagInput').hide(); 
+			//初始化   tag标签
 			$('#tags').tagHandler({
 				autocomplete: true,
 				maxTags:5,  
 				allowAdd: true,   
-				getURL:'<%=contextPath %>/tag/search/fstr/'+gamestr,  
+				getURL:'<%=contextPath %>/tag/search/fstr/'+encodeURIComponent(gamestr),  
 				onAdd: function(tag){
 					var addflag = true,tags = $('#tags').tagHandler("getTags");
 			        jQuery.each(tags, function (i, e) {
@@ -180,11 +121,22 @@ jQuery(document).ready(function(){
 		},
 		submitField:'gametext',
 		afterDelete:function(tag){
-			$('#game .tagInputField').removeAttr("disabled"); 
+			$('#game .tagInput').show();  
 		}
 	});
+
+
+	var editor = KindEditor.create('#post_content',
+			{resizeType : 1,
+			allowPreviewEmoticons : true,
+			allowImageUpload : false,
+			newlineTag : 'br',
+			pasteType : 1,
+			items : []
+			});  
 });
 
+ 
 </script>
 
 </html>

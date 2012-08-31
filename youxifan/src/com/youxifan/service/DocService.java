@@ -1,10 +1,12 @@
 package com.youxifan.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,8 @@ public class DocService {
 	@Autowired
 	private TagService tagService;
 	
-	
+	@Autowired
+	private VoteService voteService;
 	 
 	/*
 	 * doc页面展示  根据tab排序 有分页
@@ -107,14 +110,29 @@ public class DocService {
 		if (doc == null) {
 			return null;
 		}
-		doc.setAnswers(entityDao.getAnswers(doc.getDocid()));
+		doc.setAnswers(entityDao.getAnswers(map));
+		
 		doc.setTags(tagService.queryByDocid(doc.getDocid()));
 		entityDao.updateViews(doc.getDocid());
 		return doc;
 	}
 	
+	public void updateVotes(int addend,long docid){
+		Map map = new HashMap();
+		map.put("addend", addend);
+		map.put("docid",docid);
+		entityDao.updateVotes(map);
+	}
+	
+	public void updateAnswers(int addend,long docid){
+		Map map = new HashMap();
+		map.put("addend", addend);
+		map.put("docid",docid);
+		entityDao.updateAnswers(map);
+	}
 	
 	public void save(Doc doc){ 
+		doc.setTitle(StringEscapeUtils.escapeHtml4(doc.getTitle()));
 		entityDao.save(doc);
 	}
 	

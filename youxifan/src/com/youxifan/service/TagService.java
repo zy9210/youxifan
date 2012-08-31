@@ -148,9 +148,9 @@ public class TagService {
 				t.setBsflag("1");
 				t.setTagname(game.trim());
 				t.setCreator(creator);
-				save(t);
+				save(t); 
 				insertTagFollow(t.getTagid(),creator,"4");
-			}else {
+			}else { 
 				insertTagFollow(gameTag.getTagid(),creator,"4");
 			}
 		} 
@@ -161,8 +161,13 @@ public class TagService {
 		follow.setUpper(upper);
 		follow.setFollower(follower);
 		follow.setFollowType(followType);
+		try {
+			followDao.save(follow);
+		} catch (Exception e) {
+			// TODO: 已经follow该标签
+			log.debug("已经有此follow：upper="+upper+";follower="+follower+";followType="+followType);
+		}
 		
-		followDao.save(follow);
 	}
 	
 	 

@@ -25,14 +25,37 @@ public class Doc implements Serializable {
 	private String doctype;
 	private BigDecimal docpoint;	
 	private long views;
-	private long answer;
+	private long answer;//该问题的答案数
 	private Date modifydate;
 	private Date createdate;
 	private User creater;
-	private int followed;  //登陆用户是否follow该问题
-	private List<Doc> answers;
-	private List<Tag> tags;
+	private int isFollowed;  //登陆用户是否follow该问题
+	private List<Doc> answers; //答案list
+	private List<Tag> tags; //  问题tag  list
 	private String game;
+	private int votes;  //对回答的投票数
+	private int isVoted;  //登陆用户是否对该答案投过票
+	
+	
+	
+	public int getIsVoted() {
+		return isVoted;
+	}
+
+	public void setIsVoted(int isVoted) {
+		this.isVoted = isVoted;
+	}
+	
+	
+	
+	public int getVotes() {
+		return votes;
+	}
+
+	public void setVotes(int votes) {
+		this.votes = votes;
+	}
+	
 	
 	public String getGame() {
 		return game;
@@ -42,12 +65,12 @@ public class Doc implements Serializable {
 		this.game = game;
 	}
 
-	public int getFollowed(){
-		return this.followed;
+	public int getIsFollowed(){
+		return this.isFollowed;
 	}
 	
-	public void setFollowed(int followed){
-		this.followed = followed;
+	public void setIsFollowed(int isFollowed){
+		this.isFollowed = isFollowed;
 	}
 	
 	public List<Tag> getTags() {

@@ -89,7 +89,7 @@ public class TagController {
 		Map map = new HashMap();
 		map.put("tagStr", "%"+tagStr+"%");
 		map.put("start", start);
-		map.put("end", start+ step);
+		map.put("step", step);
 		List<Tag> list = tagService.tagSearch(map);
 		 
 		return list;
@@ -128,7 +128,7 @@ public class TagController {
 		}
 		Map map = new HashMap();
 		map.put("start", 0);
-		map.put("end", 30);
+		map.put("step", 30);
 		map.put("tagid", tagid);
 		map.put("sort", "newest");
 		map.put("loginuserid", loginUser.getUserid());
@@ -156,7 +156,7 @@ public class TagController {
 		}
 		Map map = new HashMap();
 		map.put("start", 0);
-		map.put("end", 30);
+		map.put("step", 30);
 		map.put("tagid", tagid);
 		map.put("sort", tab);
 		map.put("loginuserid", loginUser.getUserid());
@@ -177,7 +177,7 @@ public class TagController {
 		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT ); 
 		Map map = new HashMap();
 		map.put("start", start);
-		map.put("end", start+ step);
+		map.put("step", step);
 		map.put("tagid", tagid);
 		map.put("sort", tab);
 		map.put("loginuserid", loginUser.getUserid());

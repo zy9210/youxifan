@@ -29,14 +29,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
  
 import com.sun.jmx.snmp.daemon.CommunicationException;
+import com.youxifan.dao.VoteDao;
 import com.youxifan.pojo.Doc;
 import com.youxifan.pojo.Getpwd; 
 import com.youxifan.pojo.Invite;
 import com.youxifan.pojo.Tag;
 import com.youxifan.pojo.User;
+import com.youxifan.pojo.Vote;
 import com.youxifan.service.DocService;
 import com.youxifan.service.InviteService;
 import com.youxifan.service.TagService; 
+import com.youxifan.service.VoteService;
 import com.youxifan.utils.CommonUtil;
 import com.youxifan.utils.EMail;
 
@@ -52,6 +55,11 @@ public class InviteController {
 	@Autowired
 	private InviteService inviteService; 
 	
+	@Autowired
+	private VoteService voteService; 
+	
+	@Autowired
+	private DocService docService;
 	
 	public InviteController(){
 		 
@@ -123,13 +131,44 @@ public class InviteController {
 	
 	@RequestMapping(value="/search/{tab}/{searchstr}") 
 	public String search(@PathVariable String tab,@PathVariable String searchstr,HttpServletRequest request, ModelMap modelMap){
-		String p = request.getParameter("p");
-		System.out.println(searchstr);
 		modelMap.put("tab", tab);
+		modelMap.put("searchstr", searchstr);
 		return "search";
 	}
 	
 	
+	
+	@RequestMapping(value="/vote/{voterid}/{bevotedid}") 
+	@ResponseBody
+	public String vote(@PathVariable long voterid,@PathVariable long bevotedid,HttpServletRequest request, ModelMap modelMap){
+		Vote v = new Vote();
+		v.setVoterid(voterid);
+		v.setBevotedid(bevotedid);
+		
+		try {
+			voteService.save(v);  
+			docService.updateVotes(1, bevotedid);
+		} catch (Exception e) {
+			return "{\"success\":\"false\"}";
+		}
+		return "{\"success\":\"true\"}";
+	}
+	
+	@RequestMapping(value="/cancelvote/{voterid}/{bevotedid}") 
+	@ResponseBody
+	public String cancelVote(@PathVariable long voterid,@PathVariable long bevotedid,HttpServletRequest request, ModelMap modelMap){
+		Vote v = new Vote();
+		v.setVoterid(voterid);
+		v.setBevotedid(bevotedid);
+		
+		try {
+			voteService.delete(v); 
+			docService.updateVotes(-1, bevotedid);
+		} catch (Exception e) {
+			return "{\"success\":\"false\"}";
+		}
+		return "{\"success\":\"true\"}";
+	}
 	
 	
 }

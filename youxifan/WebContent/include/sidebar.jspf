@@ -12,10 +12,12 @@
             	<div class="username">${loginuser.username}</div>
                 <div class="usertag">${loginuser.game}</div>
                 <div class="signing">${loginuser.signing}</div>
+                <br style="clear:both; display:none;"/>
             </div>
+            
             <div class="shortcut">
-            	<a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/followedUser" >我关注的人${loginuser.myFollowed} </a> 
-                <a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/fans" >关注我的人${loginuser.myFans} </a>
+            	<a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/followedUser" >我关注的人    ${loginuser.myFollowed} </a> 
+                <a target="my_window" href="<%=contextPath%>/user/${loginuser.userid}/tab/fans" >关注我的人    ${loginuser.myFans} </a>
             </div>
         </div><!-- end .user -->
     </div><!-- end .userinfo -->

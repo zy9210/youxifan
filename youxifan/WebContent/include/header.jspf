@@ -1,65 +1,64 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
  
-<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css"> 
-<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
+<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
 <script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
 
 
-   <div class="header">
-  	<a href="<%=contextPath%>/doc" style="float:left; margin-left:10px;">
-    	<img src="<%=contextPath %>/images/logo.jpg" alt="游戏烦" name="Insert_logo" width="116" height="56" id="Insert_logo" style=" padding-top:5px; " />
-    </a> 
-    <div style="float:left; padding-top:18px; margin-left:10px;">
-    
-    	<input id="searchinput" type="text" style=" " />
-    	
-        <span id="stext" >提交新问题</span>
-        
-        <div id="resultcontent" style=" ">
+<div class="header">
+	<div class="headercenter">
+		<a href="<%=contextPath%>/doc"   id="headlogo">wan181</a>
+		
+		<div style="float:left; margin: 7px 0 0 12px;"> 
+		
+		 	<input id="searchinput" type="text"  placeholder="搜索标签、问题或人" />   
+		     
+			<a href="<%=contextPath%>/jsp/ask.jsp" target="_blank"  id="askbut">提问</a> 
 			
-			
-			<div class="searchiterm"  onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';" >
-        		<a href="<%=contextPath%>/doc/id/${doc.docid}" target= "_BLANK "  style="font-size:25px;">${doc.title}</a> 
-	            <span  >该话题下有${doc.answers}个问题</span>
-	            <span  >所属游戏</span>
-	            
-        	</div> 
-        	
-        	<div class="searchiterm"  onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';" >
-        		<a href="<%=contextPath%>/tag/${tag.tagid}" target= "_BLANK " class="taglink  " style="font-size:25px;">${tag.tagname}xxxxxxxxxx</a> 
-	            <span  >该话题下有${tag.followers}个问题</span>
-	            <span  >asdfasdf</span>
-	             
-        	</div> 
-        
-        </div>
-    
-    </div> 
-    <div  id="headnav">   
-        <a href="<%=contextPath%>/doc" style="float:left; margin-left:10px; color:#FFF;">
-            首页
-        </a> 
-        <a href="#" style="float:left; margin-left:50px; color:#FFF;">
-            话题广场
-        </a>
- 		<a href="<%=contextPath%>/set/userinfo/" style="float:left; margin-left:50px; color:#FFF;">
-           设置 
-        </a> 
-         <a href="<%=contextPath%>/logout/" style="float:left; margin-left:50px; color:#FFF;">
-            退出
-        </a> 
-    </div>
-  <!-- end .header --></div>
+		</div> 
+		
+		<div  id="headnav">   
+		    <a href="<%=contextPath%>/doc/" style="float:left; margin-left:50px; color:#FFF;">
+			首页
+			</a> 
+			<a href="<%=contextPath%>/set/userinfo/" style="float:left; margin-left:50px; color:#FFF;">
+			   设置 
+			</a> 
+			<a href="<%=contextPath%>/logout/" style="float:left; margin-left:50px; color:#FFF;">
+			        退出
+			</a> 
+		</div>
+		<div style="clear:both;  width:0; height:0;" >  
+		</div>
+		
+	</div><!-- end .headercenter -->
+	<div class="headercenter">
+		<div id="resultcontent" >  
+		</div>
+	</div>
+<!-- end .header --></div>
   
+  
+<div id="toolBackTo" class="back-to"  >
+	<a   class="backtotop" href="javascript:scroll(0,0)" onclick="window.scrollTo(0,0);return false;">返回顶部 
+	</a>
+</div>
+
+<style type="text/css"> 
+
+</style>  
+  
+  
+ 
+ 
   
 <!-- template -->
 	<textarea id="Tag-Template" rows="0" cols="0" style="display:none;">
 	<!-- 
 		{#foreach $T as tag}
 		<div class="searchiterm"   onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';">
-			<a href="<%=contextPath%>/tag/{$T.tag.tagid}" target= "_BLANK " class="taglink  " style="font-size:25px;">{$T.tag.tagname} </a> 
-            <span id="asdf"  >该话题下有{$T.tag.followers}个问题</span>
-            <span  >该话题下</span>
+			<a href="<%=contextPath%>/tag/{$T.tag.tagid}" target= "_BLANK " class="taglink  "  >{$T.tag.tagname} </a> 
+            <span id="asdf"  > </span>
+            <span  > </span>
 		</div>
 		{#/for}	
 	 -->
@@ -70,9 +69,9 @@
 <!-- 
 		{#foreach $T as doc}
 		<div class="searchiterm"   onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';">
-			<a href="<%=contextPath%>/doc/id/{$T.doc.docid}" target= "_BLANK " style="font-size:25px;">{$T.doc.title} </a> 
+			<a href="<%=contextPath%>/doc/id/{$T.doc.docid}" target= "_BLANK "  >{$T.doc.title} </a> 
             <span id="asdf"  >该问题有{$T.doc.answer}个回答</span>
-            <span  >该话题下</span>
+            <span  > </span>
 		</div>
 		{#/for}	
 	 -->
@@ -84,11 +83,11 @@
 		{#foreach $T as user}
 		<div class="searchiterm" style="clear:both;"   onmouseover="this.style.backgroundColor='#F3F3F3';" onmouseout="this.style.backgroundColor='';">
 			<a href="<%=contextPath%>/user/{$T.user.userid}/tab/askq" target= "_BLANK " style="float:left;">
-				<img src="<%=contextPath%>{$T.user.imageurl}" width="50px" height="50px"> 
+				<img src="<%=contextPath%>{$T.user.imageurl}" width="35px" height="35px"> 
 			</a>
 			<div style="float:left;width:640px;">
 	            <div  >{$T.user.username}</div> 
-	            <div >{$T.user.signing==null?"":$T.user.signing}</div>
+	            <div style="font-size:10px;" >{$T.user.signing==null?"":$T.user.signing}</div>
             </div>
 		</div>
 		{#/for}	
@@ -131,20 +130,14 @@ $(document).ready(function(){
 
 
 function show( ){   
-	var val = $("#searchinput").val();
-	//$("#resultcontent").html(val);
-	//绝对X,Y坐标.offset().top;         获取相对(父元素)位置:.position().top;
+	var val = $("#searchinput").val(); 
 	var container = $("#resultcontent");
+	container.html("");
 	var sinput =$('#searchinput');
-	var newdiv = $("<div/>");   
-	
-	var X = sinput.offset().top;
-	var Y = sinput.offset().left; 
-	var H =  sinput.height(); 
-	container.css('top',X+H +3);
-	container.css('left',Y);
+	var newdiv = $("<div></div>");   
+	 
 
-	var searchStr = sinput.val();
+	var searchStr = $.trim(sinput.val());
 	if(searchStr == ""){
 		return;
 	}
@@ -172,7 +165,8 @@ function show( ){
 												$(newdiv).setTemplateElement("User-Template").processTemplate(data);
 												//container.html($(newdiv).html());
 												container.append($(newdiv).html());
-											     
+												container.append('<div class="searchiterm" style="clear:both;"   onmouseover="this.style.backgroundColor=\'#F3F3F3\';" onmouseout="this.style.backgroundColor=\'\';">' 
+														+  '<a href="<%=contextPath%>/search/doc/'+searchStr+'" target= "_BLANK "  >点击查看更多搜索 : '+searchStr+'</a>  </div>');
 											} 
 										});
 							
@@ -183,12 +177,7 @@ function show( ){
 		} 
 	});
 
-	
-
-	
-
-
-	
+	  
 	$("#resultcontent").show();
 }
 </script>
@@ -197,18 +186,25 @@ function show( ){
 
 #resultcontent
 {
-	zIndex:9999; 
-	position:absolute; 
-	top:51px; 
-	left:0px;
+	z-index:9999;  
+	position:relative; 
+	float:left;
+	top:1px; 
+	left:160px;
 	width:700px; 
-	background:#fff;
+	background-color:#D3D1CE;
 	border: 1px solid #bfbfbf;
 	box-shadow:0 1px 4px rgba(0, 0, 0, .5);
 	-webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .5);
 	border-radius:0 0 5px 5px;
 	-webkit-border-radius:0 0 5px 5px;
 	display:none;
+	padding-left:10px;
+	/*
+	top:40px; 
+	left:160px;
+	display:none;
+	*/
 }
 .searchiterm{
 	
@@ -216,6 +212,7 @@ function show( ){
 	display:block;
 	width:700px; 
 	float:left;
+	padding: 5px 0 5px 0 ;
 /*	
 	cursor:pointer;  
 	margin:10px 0 0 0;  
@@ -226,7 +223,6 @@ function show( ){
 	overflow:hidden;
 	height:40px;
 	*/
-	padding: 5px 0 5px 0 ;
 	
 	 
 }

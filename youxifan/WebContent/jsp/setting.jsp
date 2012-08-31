@@ -5,27 +5,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>设置</title>
-	
+	<title>设置</title> 
+	<script language="javascript"   src="<%=contextPath %>/jcrop/js/jquery.min.js"></script>
+	<script language="javascript"  src="<%=contextPath %>/jcrop/js/swfobject.js"></script> 
+	<script language="javascript"  src="<%=contextPath %>/jcrop/js/jquery.uploadify.v2.1.4.js"></script>
+	<script language="javascript"   src="<%=contextPath %>/jcrop/js/jquery.Jcrop.js"></script>
+
+
 	<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
 	
 </head>
 
 <body>
-
-<div class="container">
+<%@ include file="/include/header.jspf"%>
+<div class="container"> 
 	
-	<%@ include file="/include/header.jspf"%>
 	<!-- class="content"    因为头像设置要更宽的宽度  所以没有办法用centent的class -->
 	
 	<div style="min-height:600px;">
 	
 		<div class="subheader">
 			<div id="tabs">
-				<a ${tab== "userinfo"?"class=\"youarehere\"":""}  href="<%=contextPath%>/set/userinfo/" title="">基础信息</a>
-				<a ${tab== "changepwd"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/changepwd/" title=" ">修改密码</a>
-				<a ${tab== "headimg"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/headimg/" title=" ">设置头像</a>
-				<a ${tab== "invite"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/invite/" title=" ">我的邀请</a>
+				<a ${tab== "userinfo"?"class=\"youarehere\"":""}  href="<%=contextPath%>/set/userinfo/"  >基础信息</a>
+				<a ${tab== "changepwd"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/changepwd/"  >修改密码</a>
+				<a ${tab== "headimg"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/headimg/"  >设置头像</a>
+				<a ${tab== "invite"?"class=\"youarehere\"":""} href="<%=contextPath%>/set/invite/"  >我的邀请</a>
 			</div>
 		</div>
 		
@@ -72,11 +76,15 @@
 
 
 <c:if  test="${tab == 'invite'}">
-	<c:forEach items="${invitelist}" var="invite">
+	<div> 您所有拥有的邀请码：</div> <br/>
+	<c:forEach items="${invitelist}" var="invite" varStatus="status" >
         <div >
             <span>${invite.invitestr}</span>
             <span></span>
         </div> 
+        <c:if  test="${status.count % 5 == 0}">
+        	<br/>
+        </c:if>	
 	</c:forEach>
 </c:if>	
 		
@@ -89,8 +97,7 @@
 
 
 	<div class="footer">
-		<p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer
-		6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
+		<%@ include file="../include/footer.jspf"%> 
 	<!-- end .footer --></div>
 <!-- end .container --></div>
 

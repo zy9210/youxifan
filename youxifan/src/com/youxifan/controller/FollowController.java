@@ -68,9 +68,9 @@ public class FollowController {
 		return "{\"state\":\"success\"}";
 	}
 	
-	@RequestMapping(value="/cansel/{followType}/{upper}/{follower}")
+	@RequestMapping(value="/cancel/{followType}/{upper}/{follower}")
 	@ResponseBody
-	public String canselFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType,HttpSession session){
+	public String cancelFollow(HttpServletRequest request,@PathVariable long upper,@PathVariable long follower,@PathVariable String followType,HttpSession session){
 		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Follow follow = new Follow();
 		follow.setUpper(upper);

@@ -48,7 +48,7 @@ select
 from tag
 where tag.tag_name like  #{tagStr} 
 order by tag.tag_point desc
-limit #{start}, #{end} ;
+limit #{start}, #{step} ;
     </select>
 
     <select id="findTagByTagStr" resultType="Tag"  >
@@ -73,7 +73,7 @@ select
    t.tag_type as tagtype,
    t.tag_follower as followers,
    t.bs_flag as bsflag,
-   if(loginf.upper,1,0) as followed 
+   if(loginf.upper,1,0) as isFollowed 
 from tag t
 left join follow loginf on(loginf.upper = t.tag_id and loginf.follower = #{loginuserid} and loginf.follow_type = '4')
 where t.tag_id = #{tagid}
@@ -139,13 +139,13 @@ select
    t.tag_type as tagtype,
    t.tag_follower as followers,
    t.bs_flag as bsflag,
-   if(loginf.upper,1,0) as followed 
+   if(loginf.upper,1,0) as isFollowed 
 from tag t
 inner join follow f on (f.upper = t.tag_id  and f.follower = #{userid} and f.follow_type = '4')
 left join follow loginf on(loginf.upper = t.tag_id and loginf.follower = #{loginuserid} and loginf.follow_type = '4')
 where t.bs_flag = "1"
 order by f.create_date desc 
-limit #{start}, #{end} ;
+limit #{start}, #{step} ;
     </select>
     
     

@@ -14,6 +14,7 @@ CREATE TABLE `youxifan`.`user` (
   `create_date` DATETIME NOT NULL COMMENT '创建时间',
   `modify_date` DATETIME NOT NULL COMMENT '修改时间',
   `game` VARCHAR(120)    COMMENT '常玩游戏',
+  `gender` VARCHAR(1) DEFAULT 1 COMMENT '1:男 0:女',
   PRIMARY KEY(`user_id`)
 )ENGINE = InnoDB DEFAULT CHARSET=UTF8;
 

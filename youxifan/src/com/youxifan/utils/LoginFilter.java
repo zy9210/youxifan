@@ -41,7 +41,7 @@ public class LoginFilter implements Filter {
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-		
+//		log.info("sessionid：==="+session.getId());
 		// ②-1 保证该过滤器在一次请求中只被调用一次
 		if (request != null && httpRequest.getAttribute(CommonUtil.FILTERED_REQUEST) != null) {
 			chain.doFilter(request, response);

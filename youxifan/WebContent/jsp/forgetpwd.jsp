@@ -19,45 +19,59 @@ body{
 	height:100%; 
 	margin:0px;
 	padding:0px;
+	font-family: 微软雅黑, Microsoft YaHei, Helvetica, Tahoma, StSun, 宋体, SimSun, sans-serif !important; 
 }
-input[type=text] {
-	 text-indent:3px;
-	 height:30px; 
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
+
+
+input[type=text] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;   
+	 border: 1px solid silver;  
+	 background-color: #E6F3FA;
 	 border-radius: 5px; 
 	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-	 background:#fff;
-	 background-color:#fff; 
-	 outline: none;
+	 -moz-border-radius: 5px;   
+	  
+}
+input[type=password] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;   
+	 border: 1px solid silver; 
+	 background-color: #E6F3FA;
 	 
-}
-input[type=password] {
-	 text-indent:3px;
-	 height:30px; 
-	 background:#fff;
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
 	 border-radius: 5px; 
-	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-}
-input[type=submit] {
-	 font: bold 20px Georgia, 'Times New Roman', Times, serif; 
-	 border-radius: 5px;
 	 -webkit-border-radius: 5px; 
 	 -moz-border-radius: 5px;  
-	 height:33px;
+	 
+	  
 }
+input[type=button] {
+	 height: 32px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:60px;  
+	 color:#EEE; 
+	 border: 1px solid silver; 
+	 background-color: #0070A1;
+	 
+	 border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;  
+}
+
 .centerdiv{
 	width:100%; 
 	height:100%; 
 	/*   */
-	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(19)%>.jpg) no-repeat center;
+	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(6)%>.jpg) no-repeat center;
 	
 }
 
-.content{
-	font: bold 14px/18px 宋体,sans-serif;
+.content{ 
 	width:1000px;
 	height:100%;
 	margin:0 auto; 
@@ -84,7 +98,7 @@ input[type=submit] {
 		   <input type="text" id="getpwdemail"  />
 			<div id="msg" style="color:red"></div>
 		   <div>
-		   		<input type="button" value="发送" id="sendemail" onclick="getpwd()" style="margin-top:10px; padding:5px 10px;font: bold 20px 宋体;" />
+		   		<input type="button" value="发送" id="sendemail" onclick="getpwd()" style="margin-top:10px; padding:5px 10px; " />
 
 		   </div>
 		     

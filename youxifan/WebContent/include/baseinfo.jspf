@@ -19,6 +19,13 @@
                <td class="cell  "><input id="uname" name="uname" type="text" value="${user.username}"></input> </td>  
            </tr>
            <tr>
+               <td class="cell lable">性别</td>
+               <td class="cell  ">
+					<input type="radio" name="gender" value="1" ${gender == null || gender == '1' ? "checked" : ""}> 男     
+					<input type="radio" name="gender" value="0" ${ gender == '0' ? "checked" : ""}> 女  
+				</td>  
+           </tr>
+           <tr>
                <td class="cell lable">常玩游戏</td>
                <td class="cell  "><ul id="game" style="width:400px;"></ul> </td>  
            </tr>
@@ -44,12 +51,21 @@ function savebaseinfo(){
 	var gametext = $("#gametext").val();
 	var signing = $("#signing").val();
 
-	if(uname == ""){
+ 
+	if($.trim(uname) == ""){
 		$("#retMsg").html("昵称不能为空！");
 		$("#retMsg").show();
 		setTimeout( function() {$("#retMsg").hide();}, 15000);
 		return;
 	}
+	
+	if($.trim(uname).length > 60){ 
+		$("#retMsg").html("昵称过长！");
+		$("#retMsg").show();
+		setTimeout( function() {$("#retMsg").hide();}, 15000);
+		return;
+	} 
+	 
 	if(signing.length > 60){
 		$("#retMsg").html("签名不能超过60个字。");
 		$("#retMsg").show();

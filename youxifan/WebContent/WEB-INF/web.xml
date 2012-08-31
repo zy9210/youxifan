@@ -70,12 +70,14 @@
         		/jsp/,
         		.css,
         		.js,
+        		.ico,
         		/register,
         		/login,
         		/checkEmail/,
         		/getpwd/,
         		/ImageValidServlet,
         		/tag/search/,
+        		/fileupload,
         		/test/,
         		/logout
 			</param-value>

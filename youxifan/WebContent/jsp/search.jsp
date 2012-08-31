@@ -8,29 +8,27 @@
 	<title>搜索</title>
 	
 	<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
-<%
-String q = request.getParameter("q"); 
-%>
+ 	<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
 </head>
 
 <body>
 
+<%@ include file="/include/header.jspf"%> 
 <div class="container">
 	
-	<%@ include file="/include/header.jspf"%> 
+	
 	
 	<div style="min-height:600px;" >
 	
 		<div>
-			<input type="text" id="searchstr" value="<%=q %>"/>
+			<input type="text" id="searchstr" value="${searchstr}"/>
 			<input type="button" id="searchbutton" value="搜索" onclick="search()" />
 		</div>
 		<div class="subheader">
 			<div id="tabs">
-				<a id="doctab" class="youarehere" href="javascript:void(0);" onclick="changeTab('doc')">问题</a>
-				<a id="tagtab"  href="javascript:void(0);" onclick="changeTab('tag')"  >标签</a>
-				<a id="usertab"  href="javascript:void(0);" onclick="changeTab('user')"  >用户</a>
-				
+				<a id="doctab" ${tab== "doc"?"class=\"youarehere\"":""} href="javascript:void(0);" onclick="changeTab('doc')">问题</a>
+				<a id="tagtab" ${tab== "tag"?"class=\"youarehere\"":""} href="javascript:void(0);" onclick="changeTab('tag')"  >标签</a>
+				<a id="usertab" ${tab== "user"?"class=\"youarehere\"":""} href="javascript:void(0);" onclick="changeTab('user')"  >用户</a>
 			</div>
 		</div>
 		
@@ -45,8 +43,7 @@ String q = request.getParameter("q");
 
 
 	<div class="footer">
-		<p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer
-		6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
+		<%@ include file="../include/footer.jspf"%> 
 	<!-- end .footer --></div>
 <!-- end .container --></div>
 
@@ -98,6 +95,30 @@ String q = request.getParameter("q");
 </textarea>
 
 
+<%-- 本地user显示循环单元模板 --%>
+<textarea id="user-Template" rows="0" cols="0" style="display:none;">
+	<!-- 
+{#foreach $T as user}	
+ 		<div class="fansiterm" style="border-bottom: 1px solid #BFBFBF; padding-bottom:10px; margin-bottom:10px;">
+ 			<a href="<%=contextPath%>/user/{$T.user.userid}/tab/askq" style=" float:left;">
+        		<img src="<%=contextPath%>{$T.user.imageurl}" width="60px" height="60px"  />
+            </a>
+            <div style="float:left; width:590px;padding:0 10px;">
+                <div >
+                    <span  style=" font-weight:bold;" >{$T.user.username}</span>             
+                    <a href="javascript:void(0);" onclick="editFollow('del',{$T.user.userid},${loginuser.userid},1)"  id="del1{$T.user.userid}${loginuser.userid}" class="attentionlink fltrt {$T.user.followed == 0 ? "notdisplay":""}" >取消关注</a>
+                    <a href="javascript:void(0);" onclick="editFollow('add',{$T.user.userid},${loginuser.userid},1)"  id="add1{$T.user.userid}${loginuser.userid}" class="attentionlink fltrt {$T.user.followed == 1 ? "notdisplay":""}" >关注</a>
+                    <br style="clear:both;"/>
+                </div>
+                <div class="fusertag" style="color:#B1B1B1;">{$T.user.game}</div>
+                <div class="fsigning">{$T.user.signing == null ? "" : $T.user.signing}</div>
+        	</div> 
+        	<br style="clear:both;"/> 
+        </div> 
+{#/for}
+	  -->
+</textarea>
+
 <%@ include file="/include/js.jspf"%>
 </body>
 
@@ -105,8 +126,8 @@ String q = request.getParameter("q");
 
 <script type="text/javascript">
 
-var tab = "doc";
-var searchStr = "<%=q %>";
+var tab = "${tab}";
+var searchStr = "${searchstr}";
 
 
 
@@ -123,13 +144,47 @@ function showPage(){
 		url : url,
 		dataType: "json",
 		success : function(data) {  
-			$(newdiv).setTemplateElement(tab+"-Template").processTemplate(data);
+			$(newdiv).setTemplateElement(tab+"-Template",null, {filter_data: false}).processTemplate(data);
 			container.html($(newdiv).html());
+			if(data.length == 20){
+		    	container.append($("<input id='nextp' type='button' onclick='nextSearchPage(20,20)' value='更多'/>") ); 
+		    }
 			//container.append($(newdiv).html());
 		     
-		} 
+		},
+		error :function(){
+			alert("请登录重试！");
+		}
 	}); 
 }
+
+function nextSearchPage(start,step){
+	var container = $("#sresultContainer");
+	var newdiv = $("<div></div>");
+	var end =  start+ step;
+	var url = "<%=contextPath%>/"+tab+"/search/"+searchStr+"/page/"+start+"/"+step; 
+	
+	$.ajax( {
+		type : "POST",
+		url : url,
+		dataType: "json",
+		success : function(data) {  
+			$("#nextp").remove();
+			$(newdiv).setTemplateElement(tab+"-Template",null, {filter_data: false}).processTemplate(data);
+			container.append($(newdiv).html());
+			var startnext = parseInt(start)+parseInt(step);
+			if(data.length == 20){
+		    	container.append($("<input id='nextp' type='button' onclick='nextSearchPage("+startnext+",20)' value='更多'/>") ); 
+		    }
+			//container.append($(newdiv).html()); 
+		} ,
+		error :function(){
+			alert("请登录重试！");
+		}
+	}); 
+}
+
+
 function changeTab(tabs){
 	$(".youarehere").removeClass("youarehere");
 	tab = tabs;

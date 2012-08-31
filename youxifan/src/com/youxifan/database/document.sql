@@ -16,6 +16,7 @@ CREATE TABLE `youxifan`.`document` (
   `modify_date` DATETIME NOT NULL COMMENT '修改时间',
   `answers` INTEGER UNSIGNED DEFAULT 0 COMMENT '回答数',
   `game` VARCHAR(120)    COMMENT '常玩游戏',
+  `votes` INTEGER ZEROFILL DEFAULT 0 COMMENT '答案的投票数',
   PRIMARY KEY(`doc_id`)
 )
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;

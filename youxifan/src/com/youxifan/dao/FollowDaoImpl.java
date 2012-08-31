@@ -17,7 +17,12 @@ public class FollowDaoImpl extends SqlSessionDaoSupport implements FollowDao{
 
 
 	public Follow save(Follow model) {
-		int row = getSqlSession().insert("Follow.insertFollow",model);
+		try {
+			 int row = getSqlSession().insert("Follow.insertFollow",model);
+		} catch (Exception e) {
+			// TODO: 已经follow该标签 
+		}
+		
 		return model;
 	}
  

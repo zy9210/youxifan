@@ -26,12 +26,15 @@ public class User implements Serializable {
 	private String password;
 	private Date modifydate;
 	private Date createdate;
+	private String gender;
 	//查看他人页面时   是否关注该人  1：关注   0：未关注
-	private int followed;
+	private int isFollowed;
 	 
 	private String game;
-	 
+	
+	//我关注的人的个数
 	private int myFollowed;
+	//我的fans个数
 	private int myFans;
 	
 	public int getMyFollowed() {
@@ -52,6 +55,14 @@ public class User implements Serializable {
 		}
 		return  "'"+ game.replace(",", "','")+"'"; 
 	} 
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getGame() {
 		return game;
 	}
@@ -60,12 +71,12 @@ public class User implements Serializable {
 		this.game = game;
 	}
 
-	public int getFollowed(){
-		return this.followed;
+	public int getIsFollowed(){
+		return this.isFollowed;
 	}
 	
-	public void setFollowed(int followed){
-		this.followed = followed;
+	public void setIsFollowed(int isFollowed){
+		this.isFollowed = isFollowed;
 	}
 	
 	public long getUserid() {

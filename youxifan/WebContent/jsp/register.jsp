@@ -21,36 +21,65 @@ body{
 	width:100%; 
 	height:100%; 
 	margin:0px;
-	padding:0px;
+	padding:0px; 
+	font-size: 14px ;
+	color:#393939;
+	font-family: 微软雅黑, Microsoft YaHei, Helvetica, Tahoma, StSun, 宋体, SimSun, sans-serif !important;
+	text-transform: none !important;
+	letter-spacing: 0 !important;
 }
-input[type=text] {
-	 text-indent:3px;
-	 height:30px; 
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
+
+
+input[type=text] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;  
+	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 border: 1px solid silver;  
+	 background-color: #E6F3FA;
 	 border-radius: 5px; 
 	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-	 background:#fff;
-	 background-color:#fff; 
-	 outline: none;
+	 -moz-border-radius: 5px;   
+	  
+}
+input[type=password] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;  
+	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 border: 1px solid silver; 
+	 background-color: #E6F3FA;
 	 
-}
-input[type=password] {
-	 text-indent:3px;
-	 height:30px; 
-	 background:#fff;
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
 	 border-radius: 5px; 
-	 -webkit-border-radius: 5px; 
-	 -moz-border-radius: 5px;
-}
-input[type=submit] {
-	 font: bold 20px Georgia, 'Times New Roman', Times, serif; 
-	 border-radius: 5px;
 	 -webkit-border-radius: 5px; 
 	 -moz-border-radius: 5px;  
-	 height:33px;
+	 
+	  
 }
+input[type=submit] {
+	 height: 32px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:60px;  
+	 color:#EEE;
+	 font: bold 14px Georgia, 'Times New Roman', Times, serif; 
+	 border: 1px solid silver; 
+	 background-color: #0070A1;
+	 
+	 border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;  
+}
+
+
+
+.label{
+	padding:3px 4px;
+	font-size: 14px ;
+	color:#393939;
+} 
 .centerdiv{
 	width:100%; 
 	height:100%; 
@@ -71,9 +100,18 @@ input[type=submit] {
 	-moz-opacity:0.9;
 	-khtml-opacity: 0.9;
 	opacity: 0.9;
+	}
+a:hover, a:focus {
+color: #00C0FF;
 }
 
+a { 
+color: #0072A3;
+text-decoration: none;  
+outline: none;
+}
 .warnning{
+	width:150px;
 	color:red;
 }	
 	
@@ -121,6 +159,10 @@ function checkPwd(){
 		$("#pwdmsg").html("密码长度不得少于6位");
 		return false;
 	}
+	if(pwdstr.length > 20){
+		$("#pwdmsg").html("密码长度不得大于20位");
+		return false;
+	}
 	$("#pwdmsg").html("");
 	return true;
 }
@@ -138,7 +180,7 @@ function checkRepwd(){
 
 function checkInvite(){
 	var invitestr = $("#invitecode").val();
-	if(invitestr.trim().length == 0){
+	if($.trim(invitestr) == ""){
 		$("#invitemsg").html("请输入邀请码");
 		return false;
 	}
@@ -148,11 +190,27 @@ function checkInvite(){
 
 function checkGame(){
 	var gametext = $("#gametext").val();
-	if(gametext.trim().length == 0){
+	if($.trim(gametext) == ""){
 		$("#gamemsg").html("常玩游戏不能为空");
 		return false;
 	}
 	$("#gamemsg").html("");
+	return true;
+}
+
+function checkName(){
+	var gametext = $("#name").val();
+	
+	if($.trim(gametext) == ""){
+		$("#namemsg").html("昵称不能为空");
+		return false;
+	}
+	
+	if($.trim(gametext).length > 60){
+		$("#namemsg").html("昵称过长");
+		return false;
+	}
+	$("#namemsg").html("");
 	return true;
 }
 
@@ -175,6 +233,9 @@ function submitCheck(){
 		return false;
 	}
 	if(!checkGame()){
+		return false;
+	} 
+	if(!checkName()){
 		return false;
 	} 
 	return true;
@@ -210,12 +271,20 @@ function submitCheck(){
 	            </tr>
 	            <tr>
 	                <td>昵称</td>
-	                <td><input type="text" id="name" name="name" value="${name}"/></td>
+	                <td><input type="text" id="name" name="name" value="${name}" onBlur="checkName()"/></td>
 	                <td class="warnning" id="namemsg" ></td>
 	            </tr>
+	            <tr>
+	                <td>性别</td>
+	                <td>
+						<input type="radio" name="gender" value="1" ${gender == null || gender == '1' ? "checked" : ""}> 男     
+						<input type="radio" name="gender" value="0" ${ gender == '0' ? "checked" : ""}> 女  
+					</td>
+	                <td class="warnning" id="gendermsg" ></td>
+	            </tr> 
 	            <tr >
 	                <td>常玩游戏 </td> 
-	                <td><ul id="game" style="max-width:400px;" ></td> 
+	                <td><ul id="game" style="width:175px;" ></td> 
 	                <td class="warnning" id="gamemsg"> </td> 
 	            </tr>
 	            <tr >

@@ -60,7 +60,7 @@
 			u.create_date as createdate,
 			u.modify_date as modifydate,
 			u.game as game,
-			if(f.upper,1,0) as followed  
+			if(f.upper,1,0) as isFollowed  
 		from user u
 		left join follow f on(f.upper = u.user_id and f.follower = #{loginuserid} and f.follow_type = '1')
 		where u.user_id = #{userid};
@@ -82,12 +82,12 @@
 			u.create_date as createdate,
 			u.modify_date as modifydate,
 			u.game as game,
-			if(loginf.upper,1,0) as followed 
+			if(loginf.upper,1,0) as isFollowed 
 		from user u
 		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
 		where u.bs_flag = '1'
 		and  u.user_name  like #{nameStr}
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     <select id="userFollowedUser" parameterType="map" resultType="User"  >
@@ -105,13 +105,13 @@
 			u.create_date as createdate,
 			u.modify_date as modifydate,
 			u.game as game,
-			if(loginf.upper,1,0) as followed 
+			if(loginf.upper,1,0) as isFollowed 
 		from user u
 		inner join follow f on (f.upper = u.user_id  and f.follower = #{userid} and f.follow_type = '1')
 		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
 		where u.bs_flag = '1'
 		order by f.create_date desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     <select id="usersFans" parameterType="map" resultType="User"  >
@@ -133,7 +133,7 @@
 		inner join follow f on (f.upper = #{userid}  and f.follower = u.user_id and f.follow_type = '1')
 		where u.bs_flag = '1'
 		order by f.create_date desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     
@@ -150,6 +150,8 @@
 		   user_level, 
 		   bs_flag,
 		   game,
+		   image_url,
+		   gender,
 		   create_date, 
 		   modify_date)
 		values
@@ -162,6 +164,8 @@
 		  	#{userlevel}, 
 		  	'1',
 		  	#{game},
+		  	#{imageurl},
+		  	#{gender},
 		  	now(),
 		  	now());
 		  	]]> 
@@ -193,6 +197,7 @@
 		,signing_message = #{signing}
 		,modify_date = now()
 		,game = #{game}
+		,gender= #{gender}
 		where email = #{email} 
 	</update>
 	

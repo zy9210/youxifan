@@ -38,7 +38,7 @@
 		  d.answers as answer,
 		  d.creater_name as creatername,
 		  d.game as game,
-		  if(f.upper,1,0) as followed  
+		  if(f.upper,1,0) as isFollowed  
 		from document d
 		left join follow f on(f.upper = d.doc_id and f.follower = #{loginuserid} and f.follow_type = '3')
 		where d.bs_flag = '1'
@@ -60,7 +60,7 @@
 			</otherwise> 
 		</choose> 
 		
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     
@@ -85,7 +85,7 @@
 		and d.doc_type = '1'
 		and d.title like  #{docStr}
 		order by d.views desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     
@@ -106,7 +106,7 @@
 		  d.answers as answer,
 		  d.game as game,
 		  d.creater_name as creatername,
-		  if(loginf.upper,1,0) as followed 
+		  if(loginf.upper,1,0) as isFollowed 
 		from document d
 		inner join follow f on (f.upper = #{tagid}  and f.follower = d.doc_id and f.follow_type = '5')
 		left join follow loginf on(loginf.upper = d.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
@@ -129,7 +129,7 @@
 			</otherwise> 
 		</choose> 
 		
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     <select id="usersQuestion" parameterType="map"  resultType="Doc"  >
@@ -153,7 +153,7 @@
 		and d.doc_type = '1'
 		and d.creater_id = #{userid}
 		order by d.create_date desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
 	
 	
@@ -178,7 +178,7 @@
 		where question.bs_flag = '1'
 		and question.doc_type = '1' 
 		order by question.create_date desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
     
     <select id="userFollowedQ" parameterType="map"  resultType="Doc"  >
@@ -197,48 +197,17 @@
 		  question.answers as answer,
 		  question.game as game,
 		  question.creater_name as creatername,
-		  if(loginf.upper,1,0) as followed 
+		  if(loginf.upper,1,0) as isFollowed 
 		from document question
 		inner join follow f on(f.upper = question.doc_id and f.follower = #{userid} and f.follow_type = '3')
 		left join follow loginf on(loginf.upper = question.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
 		where question.bs_flag = '1'
 		and question.doc_type = '1' 
 		order by f.create_date desc
-		limit #{start}, #{end} ;
+		limit #{start}, #{step} ;
     </select>
 	
-    
-    
-    
-    <select id="queryDocq" resultMap="docResult" > 
-select t.* from (
-	select 
-	  d.doc_id as docid,
-	  d.upper_doc_id as upperdocid,
-	  d.title as title,
-	  d.content as content,
-	  d.doc_type as doctype,
-	  d.doc_point as docpoint,
-	  d.bs_flag as bsflag,
-	  d.creater_id as createrid,
-	  d.game as game,
-	  d.create_date as doccreatedate,
-	  d.modify_date as docmodifydate,
-	  u.user_name as username,
-	  u.alias as alias,
-	  u.email as email,
-	  u.user_point as userpoint,
-	  u.image_url as imageurl,
-	  u.create_date as usercreatedate,
-	  u.modify_date as usermodifydate
-	from document d
-	left join user u on(u.user_id = d.creater_id)
-	where d.bs_flag = '1'
-	and d.doc_type = '1'
-	order by d.create_date desc
-) t limit 0, 10
-    </select>
-    
+     
     <select id="selbyid" parameterType="long" resultMap="docResult" > 
 	select 
 	  d.doc_id as docid,
@@ -260,7 +229,7 @@ select t.* from (
 	  u.create_date as usercreatedate,
 	  u.modify_date as usermodifydate,
 	  d.creater_name as creatername,
-	  if(loginf.upper,1,0) as followed
+	  if(loginf.upper,1,0) as isFollowed
 	from document d
 	left join user u on(u.user_id = d.creater_id)
 	left join follow loginf on(loginf.upper = d.doc_id and loginf.follower = #{loginuserid} and loginf.follow_type = '3')
@@ -269,8 +238,8 @@ select t.* from (
     </select>
     
     
-    <select id="getAnswers" parameterType="long" resultMap="docResult" > 
-	select 
+    <select id="getAnswers" parameterType="map" resultType="Doc" > 
+	select distinct
 	  d.doc_id as docid,
 	  d.upper_doc_id as upperdocid,
 	  d.title as title,
@@ -279,20 +248,17 @@ select t.* from (
 	  d.doc_point as docpoint,
 	  d.bs_flag as bsflag,
 	  d.game as game,
+	  d.votes as votes,
 	  d.creater_id as createrid,
-	  d.create_date as doccreatedate,
-	  d.modify_date as docmodifydate,
-	  u.user_name as username,
-	  u.alias as alias,
-	  u.email as email,
-	  u.user_point as userpoint,
-	  u.image_url as imageurl,
-	  u.create_date as usercreatedate,
-	  u.modify_date as usermodifydate
-	from document d
-	left join user u on(u.user_id = d.creater_id)
+	  d.create_date as createdate,
+	  d.modify_date as modifydate,
+	  d.creater_name as creatername,
+	  if(v.vote_id,1,0) as isVoted
+	from document d 
+	left join vote v on(v.be_voted_id = d.doc_id and v.voter_id = #{loginuserid})
 	where d.bs_flag = '1'
 	and  d.upper_doc_id = #{docid}
+	order by d.votes desc
     </select>
     
     <resultMap id="docResult" type="Doc"> 
@@ -306,9 +272,11 @@ select t.* from (
 		<result property="createdate" column="doccreatedate" />
 		<result property="modifydate" column="docmodifydate" />
 		<result property="createrid" column="createrid" />
-		<result property="followed" column="followed" />
+		<result property="isFollowed" column="isFollowed" />
 		<result property="creatername" column="creatername" /> 
 		<result property="game" column="game" /> 
+		<result property="votes" column="votes" />
+		<result property="isVoted" column="isVoted" />
 		<association property="creater" column="createrid"
 			javaType="User">
 			<id property="userid" column="createrid" /> 
@@ -334,8 +302,6 @@ select t.* from (
     
     
     <update id="updateDoc" parameterType="map"> 
- 
-
 update document 
 	<set>
 	modify_date = now(),
@@ -353,6 +319,20 @@ where doc_id=#{docid}
 		where doc_id = #{id} 
 	</update> 
 
+
+	<update id="updateVotes" parameterType="map"> 
+		update document set 
+		votes = votes + #{addend} 
+		where doc_id = #{docid} 
+	</update> 
+	
+	<update id="updateAnswers" parameterType="map"> 
+		update document set 
+		answers = answers + #{addend} 
+		where doc_id = #{docid} 
+	</update> 
+	
+	
     <delete id="delDoc" parameterType="Doc" > 
 		delete from document where id = #{id} 
 	</delete>

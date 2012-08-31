@@ -55,9 +55,9 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 	} 
 	
 	
-	public List<Doc> getAnswers(Long upperdocid ) {
+	public List<Doc> getAnswers(Map map ) {
 		List<Doc> docList = (List<Doc>) getSqlSession()
-			.selectList("Doc.getAnswers",upperdocid);
+			.selectList("Doc.getAnswers",map);
 		return docList;
 
 	} 
@@ -71,6 +71,14 @@ public class DocDaoImpl extends SqlSessionDaoSupport implements DocDao{
 		int row = getSqlSession().update("Doc.updateViews",docid);
 	}
 
+	public void updateVotes(Map map){
+		int row = getSqlSession().update("Doc.updateVotes",map);
+	}
+	
+	public void updateAnswers(Map map){
+		int row = getSqlSession().update("Doc.updateAnswers",map);
+	}
+	
 	public Doc getDocByID(Map map) {
 		return (Doc)getSqlSession().selectOne("Doc.selbyid", map);
 	}

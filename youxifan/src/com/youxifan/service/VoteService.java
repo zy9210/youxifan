@@ -1,6 +1,7 @@
 package com.youxifan.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class VoteService {
 	private VoteDao voteDao;
 	
 	
+	public int getVoteNum(Map map){
+		return voteDao.getVoteNum(map);
+	}
 	public List<Vote> getVList(){
 		List<Vote> list = voteDao.queryVote();
 		return list;

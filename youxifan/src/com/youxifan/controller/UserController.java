@@ -62,15 +62,17 @@ public class UserController {
 		String email = request.getParameter("email");
 		String psw = request.getParameter("pwd");
 		String name = request.getParameter("name");
-		String signing = request.getParameter("signing");
+		String signing = "这个家伙很懒，什么也没留下。";
 		String gametext = request.getParameter("gametext");
 		String invitecode = request.getParameter("invitecode");
+		String gender =  request.getParameter("gender");
 		User user = new User();
 		user.setEmail(email);
 		user.setUsername(name);
 		user.setPassword(psw);
 		user.setSigning(signing);
 		user.setGame(gametext);
+		user.setGender(gender);
 		int defaultImgTotle = 1 + Integer.parseInt(PropertiesUtil.getProperty("defaultImgTotle"));
 		user.setImageurl("/uploads/0/"+(1+new Random().nextInt(defaultImgTotle))+".jpg");
 		if (!userService.checkEmail(user.getEmail())) {
@@ -79,6 +81,7 @@ public class UserController {
 			modelMap.put("psw", psw);
 			modelMap.put("name", name);
 			modelMap.put("signing", signing);
+			modelMap.put("gender", gender);
 			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
 			modelMap.put("invitecode", invitecode); 
 			return "register";
@@ -90,6 +93,7 @@ public class UserController {
 			modelMap.put("psw", psw);
 			modelMap.put("name", name);
 			modelMap.put("signing", signing);
+			modelMap.put("gender", gender);
 			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
 			modelMap.put("invitecode", invitecode); 
 			return "register";
@@ -107,6 +111,7 @@ public class UserController {
 			modelMap.put("psw", psw);
 			modelMap.put("name", name);
 			modelMap.put("signing", signing);
+			modelMap.put("gender", gender);
 			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
 			modelMap.put("invitecode", invitecode); 
 			return "register";
@@ -195,10 +200,10 @@ public class UserController {
 			
 			if("on".equals(autologin)){     
                 Cookie emailcookie = new Cookie("email", email); 
-                emailcookie.setMaxAge(999999); 
+                emailcookie.setMaxAge(30*24*3600); 
                 emailcookie.setPath("/"); 
                 Cookie loginCookie = new Cookie("autologin", "1"); 
-                loginCookie.setMaxAge(999999);
+                loginCookie.setMaxAge(30*24*3600);
                 loginCookie.setPath("/"); 
                 response.addCookie(emailcookie); 
                 response.addCookie(loginCookie);
@@ -238,7 +243,7 @@ public class UserController {
 			String filename = request.getParameter("filename"); 
 			String savePath = request.getSession().getServletContext().getRealPath("");
 			boolean rs=userService.saveHeadImg(x,y,w,h,filename,savePath+"/uploads/",user);
-			
+			user.setImageurl("/uploads/"+user.getUserid()+"/"+user.getUserid()+".jpg");
 		}
 		catch(Exception e){
 			writer.print("false");
@@ -282,10 +287,12 @@ public class UserController {
 			String uname = request.getParameter("uname");
 			String gametext = request.getParameter("gametext");
 			String signing = request.getParameter("signing");
+			String gender = request.getParameter("gender");
   
 			user.setUsername(uname);
 			user.setSigning(signing);
 			user.setGame(gametext);
+			user.setGender(gender);
 			try {
 				tagService.saveGameTag(gametext,user.getUserid());
 			} catch (Exception e) {
@@ -337,7 +344,7 @@ public class UserController {
 		}
 		Map map = new HashMap();
 		map.put("start", 0);
-		map.put("end", 30);
+		map.put("step", 30);
 		map.put("userid", userid);
 		map.put("loginuserid", loginUser.getUserid());
 		List<Doc> docList = null;
@@ -375,7 +382,7 @@ public class UserController {
 		User loginUser = (User)session.getAttribute(CommonUtil.USER_CONTEXT );
 		Map map = new HashMap();
 		map.put("start", start);
-		map.put("end", start+ step);
+		map.put("step",  step);
 		map.put("userid", userid);
 		map.put("loginuserid", loginUser.getUserid());
 		List  list = null;
@@ -407,7 +414,7 @@ public class UserController {
 		map.put("nameStr", "%"+searchStr.replace(" ", "%")+"%");
 		map.put("start", start);
 		map.put("loginuserid", user.getUserid());
-		map.put("end", start+ step);
+		map.put("step",  step);
 		List<User> list = userService.userSearch(map);
 		 
 		return list;

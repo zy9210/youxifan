@@ -1,11 +1,17 @@
 /* CSS Document */
 
-body {
-	font: 100%/1.4 'Times New Roman',宋体， Times, serif;
-	background:#f0f0f0;
-	margin: 0;
-	padding: 0;
-	color: #000;
+body { 
+	background:#D3D1CE;  
+	position: absolute;
+	width:100%; 
+	height:100%; 
+	margin:0px;
+	padding:0px; 
+	font-size: 14px ;
+	color:#4A4A4A;
+	font-family: 微软雅黑, Microsoft YaHei, Helvetica, Tahoma, StSun, 宋体, SimSun, sans-serif !important;
+	text-transform: none !important;
+	letter-spacing: 0 !important;
 }
 
 /* ~~ 元素/标签选择器 ~~ */
@@ -23,42 +29,61 @@ a img { /* 此选择器将删除某些浏览器中显示在图像周围的默认
 
 /* ~~ 站点链接的样式必须保持此顺序，包括用于创建悬停效果的选择器组在内。 ~~ */
 a:link { 
+	color: #0072A3;
 	text-decoration: none; /* color: #42413C; 除非将链接设置成极为独特的外观样式，否则最好提供下划线，以便可从视觉上快速识别 */
 }
 a:visited { 
+	color: #0072A3;
 	text-decoration: none;
-}
-a:hover, a:active, a:focus { /* color: #6E6C64; 此组选择器将为键盘导航者提供与鼠标使用者相同的悬停体验。 */
-	text-decoration: none;
+} 
+a:hover, a:focus {
+color: #00C0FF;
+text-decoration: none;
 }
 
+a { 
+color: #0072A3;
+text-decoration: none;  
+outline: none;
+}
 
-input[type=text] {
-	 height:30px; 
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
-	 border-radius: 3px; 
-	 -webkit-border-radius: 3px; 
-	 -moz-border-radius: 3px;
-	 border: 1px solid #bfbfbf;
-	 padding-left:3px;
+input[type=text] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;  
+	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 border: 1px solid silver;  
+	 background-color: #E6F3FA;
+	 border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;   
+	 
 	 /*   
 	 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 	 -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 	 -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset; 
 	 */
 }
-input[type=password] {
-	 height:30px; 
-	 border: 1px solid #bfbfbf;
-	 font: 20px Georgia, 'Times New Roman', Times, serif; 
-	 border-radius: 3px; 
-	 -webkit-border-radius: 3px; 
-	 -moz-border-radius: 3px;
-	 padding-left:3px;
+input[type=password] { 
+	 height: 30px;
+	 line-height: 32px;
+	 text-indent:3px; 
+	 width:170px;  
+	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 border: 1px solid silver; 
+	 background-color: #E6F3FA;
 	 
+	 border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;  
+	 
+	 
+	  /* 
 	 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 	 -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 	 -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset;
+	 */
 }
 input[type=submit] {
 	 border: 1px solid #bfbfbf;
@@ -73,9 +98,41 @@ input[type=submit] {
 	 -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset;
 }
 
-textarea{
-	font: bold 20px Georgia, 'Times New Roman', Times, serif;
+input[type=button] {
+	 
+	background-color:#0070A1;
+	/*background: url(http://static.zhihu.com/static/img/sticky_header/add-button.png) no-repeat;   */
+	color: #EEE;
+	font-size: 14px; 
+	height: 32px;
+	line-height: 32px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	border: 0;
+	text-decoration: none!important;
+	cursor: pointer; 
+	border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px;
+	padding:0 15px;
+	/*  
+	 border: 1px solid #bfbfbf;
+	 font: bold 20px Georgia, 'Times New Roman', Times, serif; 
+	 border-radius: 3px;
+	 -webkit-border-radius: 3px; 
+	 -moz-border-radius: 3px;  
+	 height:33px;
+	 
+	 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+	 -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+	 -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset;
+	 
+	 */
+}
 
+textarea{ 
+	background-color: #E6F3FA;
 	 border-radius: 5px;
 	 -webkit-border-radius: 5px; 
 	 -moz-border-radius: 5px;   
@@ -88,16 +145,26 @@ textarea{
 }
 /* ~~ 此固定宽度容器包含其它 div ~~ */
 .container {
-	width: 960px;
-	background:#f0f0f0;;
+	width: 980px;
+	background:#D3D1CE;
 	margin: 0 auto; /* 侧边的自动值与宽度结合使用，可以将布局居中对齐 */
+	margin-top:60px;
 }
 
 /* ~~ 标题未指定宽度。它将扩展到布局的完整宽度。标题包含一个图像占位符，该占位符应替换为您自己的链接徽标 ~~ */
 .header {
-	height:83px;
+	position:fixed;
+	top:0;
+	width:100%;
+	height:58px;
+	background-color:#101012;
 	background:url(../images/head_bg.jpg) repeat-x ; 
 	margin-bottom:10px;
+}
+
+.headercenter{
+	width: 980px;
+	margin:0 auto;
 }
 
 /* ~~ 以下是此布局的列。 ~~ 
@@ -114,13 +181,13 @@ textarea{
 .sidebar {
 	float: right;
 	width: 250px; 
-	padding-bottom: 10px;
-	padding-right:10px
+	padding-bottom: 10px; 
 }
 .content {
-	padding: 10px 15px;
-	width: 670px;
+	padding: 10px 0px 10px 0px;
+	width: 700px;
 	float: left; 
+	min-height:600px
 }
 
 /* ~~ 此分组的选择器为 .content 区域中的列表提供了空间 ~~ */
@@ -151,9 +218,10 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 
 /* ~~ 脚注 ~~ */
 .footer {
-	padding: 10px 0;
-	background: #CCC49F;
-	/*position: relative; 这可以使 IE6 hasLayout 以正确方式进行清除 */
+	height:50px;
+	border-top:1px solid #BFBFBF;
+	padding: 10px 0; 
+	position: relative;/* 这可以使 IE6 hasLayout 以正确方式进行清除 */
 	clear: both; /* 此清除属性强制 .container 了解列的结束位置以及包含列的位置 */
 }
 
@@ -195,7 +263,7 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 
 #tabs a {
 	background: inherit;
-	border: 1px solid #fff;
+	border: 1px solid #D3D1CE;
 	color: #777;
 	display: block;
 	float: left;
@@ -215,18 +283,18 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 }
 
 #tabs a:hover {
-	background: #fff;
+	background: #D3D1CE;
 	border: 1px solid #bfbfbf;
-	border-bottom-color: #fff;
+	border-bottom-color: #D3D1CE;
 	line-height: 20px;
 	margin-top: 9px;
 }
 
 #tabs a.youarehere {
-	background: #fff;
+	background: #D3D1CE;
 	border: 1px solid #bfbfbf;
-	border-bottom-color: #ffffff;
-	color: black;
+	border-bottom-color: #D3D1CE;
+	color: #4A4A4A;
 	font-size: 120%;
 	height: 30px;
 	line-height: 28px;
@@ -237,55 +305,84 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 
 
 /*  - --------head --- ---*/
+ 
+ /* logo */
+#headlogo {
+	/*
+	background: url(/static/img/sticky_header/logo.png) no-repeat; */
+	color: white;
+	display: block;
+	height: 45px;
+	float: left;
+	outline: 0;
+	font-size:40px;
+	/* text-indent: -9999px;
+	width: 67px; */
+}  
+
+ 
 #searchinput {
-	 height:30px; 
-	 font: 20px Georgia, 'Times New Roman', Times, serif;  
-	 border:0px;  
-	 -moz-border-radius-topleft: 5px;   
-	 -moz-border-radius-bottomleft: 5px;      
-	 -webkit-border-top-left-radius: 5px;     
-	 -webkit-border-bottom-left-radius: 5px;
-	 border-bottom-left-radius:5px;    
-	 border-top-left-radius:5px;  
-	 float:left;	 
-	 margin:0;
+	float:left;	 
+	width: 367px;
+	height: 30px;
+	line-height: 32px;
+	border: 1px solid #0055AC; 
+	box-shadow: inset 0 1px 4px rgba(0, 0, 0, .2),0 1px 0 rgba(255, 255, 255, .2);
+	background-color: #E6F3FA;
+	padding:0;
+	margin:0;
+	color: #999; 
+	font-size: 14px; 
+	overflow: hidden;  
+	border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
 }
 
-#stext {
-	 margin:0;
-	 padding-top:5px;
-	 padding-left:5px;
-	 height:27px; 
-	 width:110px;
-	 font:bold 20px Georgia, 'Times New Roman', Times, serif;  
-	 border:0px;  
-	 color:white;
-	 background-color:#f17f1b;
-	 -moz-border-radius-topright: 5px;   
-	 -moz-border-radius-bottomright: 5px;      
-	 -webkit-border-top-right-radius: 5px;     
-	 -webkit-border-bottom-right-radius: 5px;
-	 border-bottom-right-radius:5px;    
-	 border-top-right-radius:5px;  
-	 float:left;
+#askbut {
+	position:relative;
+	float:left;
+	margin: 0 0 0 5px;
+	background-color:#0070A1;
+	/*background: url(http://static.zhihu.com/static/img/sticky_header/add-button.png) no-repeat;   */
+	color: #EEE;
+	font-size: 13px;
+	width: 66px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	border: 0;
+	text-decoration: none!important;
+	cursor: pointer;
+	display:block;
+	border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px
 }
 
+ 
 #headnav {
-	 float:left; 
-	 padding-top:25px; 
-	 margin-left:60px;
+	margin: 7px 0 0 12px;
+	float:right;   
 }
 
-#headnav a {
-	font: bold 20px Georgia, 'Times New Roman', Times, serif; 
-	 float:left; 
-	 margin-left:10px; 
-	 text-decoration:none; 
+#headnav a {  
+	float:right;  
+	color: #EEE;
+	font-size: 13px;
+	width: 38px;
+	height: 32px;
+	line-height: 32px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	border: 0;
+	text-decoration: none!important;
+	cursor: pointer;
 }
-#headnav a:visited {
-	color:#FFF;
-	text-decoration: none;
-}
+ 
 
 /*  - --------head ------end-----*/
 
@@ -299,22 +396,18 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	margin:8px 0 13px 0;
 	}
 .summary .question-hyperlink{
-	color:#ec9902; 
-	font-size:24px; 
+	color:#393939; 
+	font-size:16px; 
 	font-weight:bold;
 	}
- .qcreator{
-	color:#F1A842; 
-	cursor:pointer
-	}	
+ 	
 .qinfo .qcreatedate{
 	margin:0 10px 0 5px;
 	}	
 .summary .guanzhu{
 	margin-left: 5px; 
 	}	
-.summary .guanzhu a{
-	color:#ec9902; 
+.summary .guanzhu a{ 	
 	font-weight:bold;
 	}
 	 
@@ -331,47 +424,48 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 .userarea .headimg{
 	float:left;
 	padding:0;
-	margin:15px 10px 0 0 ;
+	margin:5px 10px 0 0 ;
 	}
 .userarea .userinfo{
 	width:180px;
-	float:left;
-	margin-bottom:10px;
+	float:left; 
 	}
 .userinfo .username	{
-	color:#F1A842;
+	color:#4A4A4A;
 	font-weight:bold;
 	margin-bottom:5px;
-	cursor:pointer
+	cursor:pointer;
 	}
 
-.userinfo .usertag	{
-	color:#B1B1B1;
+.userinfo .usertag	{ 
 	font-size:12px;
+	color:#777777;
 	margin-bottom:5px;
 	}
 	
 .userinfo .signing	{
 	font-size:14px;
-	margin-bottom:5px;
+	margin-bottom:5px; 
 	}	
 	
 .shortcut{
+	padding:20px 0 0 0; 
 	clear:both;
 	}	
 
-.shortcut a{
+.shortcut a{ 
 	font-size:12px;
-	font-weight:bold;
-	color:#B1B1B1;
-	margin-left: 30px;
+	font-weight:bold; 
+	margin:0 0 0 30px;
 	}
 /* ---end------- user_infor  --------*/	
 
 /* --- ----- 感兴趣  --------*/	
-.invite{
-	color:#000;
-	background:url(../images/invite.jpg) no-repeat;  
+.invite{ 
+	background-color:#D3D1CE;
+	/*
+	background:url(../images/invite.png) no-repeat;  
+	*/
 	padding-left:25px;
 	font-weight:bold;
 	}	
@@ -398,16 +492,14 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 /* --- ----- 关注  -- ------*/
 .attentionlink{ 
 	color:#FFF; 
-	font-weight:bold;
-	background: #FF8511;
+	font-weight:bold; 
 	padding: 1px 2px;
 	border-radius: 5px; 
 	-webkit-border-radius: 5px; 
 	-moz-border-radius: 5px;
 	}
 
-.unattentionlink{ 
-	background-color:#F3F3F3; 
+.unattentionlink{  
 	color:#969696;
 	font-weight:bold; 
 	padding: 1px 2px;
@@ -415,14 +507,14 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	-webkit-border-radius: 5px; 
 	-moz-border-radius: 5px;
 	}
+	
+
 /* --- -----  关注  --end------*/	
 	 
-.taglink{
-	color:#FFF;
-	margin-left: 10px; 
-	background: #BDD776;
-	padding: 2px 4px;
-	font-size:14px;
+.taglink{  
+	background: #B1B3B7;
+	padding: 2px 6px 4px 6px; 
+	font-size:14px; 
 	border-radius: 5px; 
 	-webkit-border-radius: 5px; 
 	-moz-border-radius: 5px;
@@ -431,31 +523,49 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	margin-top: 10px; 
 	}
 
-.upvote{
-	background:url(../images/up_down.png) no-repeat center;
-	background-position: 0px 0px; 
+.bigtag{
+	color:#0072A3;  
+	font-size:24px; 
+	margin-right:10px; 
+	background-color:#B1B3B7; 
+	padding:2px 6px 4px 6px; 
+	border-radius: 5px; 
+	 -webkit-border-radius: 5px; 
+	 -moz-border-radius: 5px;
+}
+
+
+.votearea {
+	padding:10x 1px;
+	width:30px;  
+	float:left; 
+	}
+	
+.vote{
+	background:url(../images/up1.png) no-repeat center;
+	background-position: -51px -3px; 
 	display: block;
 	margin: 0 auto;
-	width: 28px;
+	width: 30px;
 	height: 18px;
 	overflow: hidden;
 	text-indent: -999em;
 	font-size: 1px; 
 	}
 	
-.downvote{
-	background:url(../images/up_down.png) no-repeat right;
-	background-position: 0px -34px;
+.voted{
+	background:url(../images/up1.png) no-repeat right;
+	background-position: -8px  -3px;  /*  -34px;  */
 	display: block;
 	margin: 0 auto;
-	width: 28px;
+	width: 30px;
 	height: 18px;
 	overflow: hidden;
 	text-indent: -999em;
 	font-size: 1px; 
 	}
 .votecount{
-	font-size:18px;
+	font-size:14px;
 	color:#808185;
 	font-weight:bold;
 	display: block;
@@ -471,14 +581,13 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 .question{
 	border-bottom: 1px solid #BFBFBF;
 	padding-bottom: 20px;
-	margin-bottom:15px;
+	margin-bottom:10px;
 	}	
+.qtitle{ 
+	color:#393939; 
+}
 .answer{
-	padding-top:0px;
-	}
-.votearea {
-	width:30px;  
-	float:left; 
+	padding-top:10px;
 	}
 .aarea{
 	float:left;
@@ -495,12 +604,19 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	-moz-border-radius: 5px; 
 	}	
 
+
 /* --- -----  问题详情  --end------*/		
 
 .tuserarea{
 	padding:10px 0 20px 0;
 	}
+.tuserinfo{
+	float:left; 
+	width:580px;
+	padding:0 10px;
+}
 .tusername{
+	color:#4A4A4A;
 	width:460px; 
 	float:left; 
 	font-weight:bold; 
@@ -508,24 +624,76 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* 这将更改鼠标和键盘
 	}
 .tusertagd{
 	font-size:12px; 
-	
+	color:#777777; 
 	}	
+.tusertag{
+	font-size:12px; 
+	color:#777777;
+	}
 .excerpt{
-	width:670px;
+	width:700px;
 	word-break:break-all;
 }
-
+body[class="ke-content"]{
+	background-color:#E6F3FA;
+	}
 /*  修改问题title、正文   答案时的编辑textarea框      */
 .contentarea{
-	font: 120% 'Times New Roman',宋体， Times, serif;
+	font: 14px 'Times New Roman',宋体， Times, serif;
 	border: 1px solid #bfbfbf;
 	width:610px;
+	height:50px;
 	overflow-y:auto; 
 	overflow-x:hidden; 
-	resize:none; 
+	resize:vertical ; 
 	display:none;
 } 
 .editb{
 	float:right; 
+}
+
+.editt{
+	cursor:pointer;
+	margin:0 10px;
+	}
+/*  返回顶部     */
+.back-to{ 
+	cursor: auto;
+	position: fixed;
+	right: 10px;
+	bottom: 10px;   
+	width: 50px;
+	height: 50px;
+	background: #666 url(images/btt.png) 8px -57px no-repeat;
+	margin-bottom: 15px;
+	outline: 0 none;
+	text-indent: -9999em;
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	}
+	
+.backtotop {
+	float: left;
+	display: block;
+	width: 50px;
+	height: 50px;
+	background: #666 url(images/btt.png) 8px -57px no-repeat;
+	margin-bottom: 15px;
+	outline: 0 none;
+	text-indent: -9999em;
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	position: relative;
+}
+.backtotop:hover {
+	background: #666 url(images/btt.png) 8px 13px no-repeat;
+}
+.more{
+	width:700px;
+	height:150px;
 }
  

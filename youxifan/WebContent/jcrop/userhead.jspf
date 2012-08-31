@@ -1,20 +1,17 @@
 <%@ page language="java" pageEncoding="UTF-8"%>  
 
+ 
+   
+
+
 <link rel="stylesheet" href="<%=contextPath %>/jcrop/css/jquery.Jcrop.css" type="text/css" />
 <link rel="stylesheet" href="<%=contextPath %>/jcrop/css/uploadify.css" type="text/css" /> 
-
-
-   
-<script language="javascript"   src="<%=contextPath %>/jcrop/js/jquery.1.3.2.js"></script>  
-<script language="javascript"  src="<%=contextPath %>/jcrop/js/swfobject.js"></script> 
-<script language="javascript"  src="<%=contextPath %>/jcrop/js/jquery.uploadify.v2.1.4.js"></script>
-<script language="javascript"   src="<%=contextPath %>/jcrop/js/jquery.Jcrop.js"></script>
 	
 	
 	
 <script language="Javascript">
 var imgname=null;//上传后返回的路径
-$().ready(  function() {
+$().ready(  function() { 
     $("#upload").uploadify({
         'uploader'       : '<%=contextPath %>/jcrop/images/uploadify.swf',
        // 'script'         : 'servlet/Upload',
@@ -33,6 +30,7 @@ $().ready(  function() {
        	'fileExt'   : '*.jpg;',
        	'sizeLimit ' : 19871202,
        	'onComplete' :function(event, ID, fileObj, response, data) {
+           	//alert(" event="+event+" ID="+ID+" fileObj="+fileObj+" response="+response+" data="+data);
        		imgname= response;
        		insert_img("<%=contextPath %>/uploads/"+response);//生成时插入图片 
        		//url_img="/tmp/"+response;
@@ -53,65 +51,24 @@ $().ready(  function() {
     });
 });
 </script>
-<script language="Javascript">
-jQuery(window).load(function(){
-	//on_load();
-
-});
+<script language="Javascript"> 
 
 //生成时插入图片 
 function insert_img(imgsrc){
-	var cxtsmall='<img src="'+imgsrc+'" id="preview" style="border:0px;margin:auto;padding:0px;"/>';
-	var cxtbig='<img src="'+imgsrc+'" id="cropbox" style="border:0px;margin:auto;padding:0px;"/>';
-	$("#imgsmall_div").html(cxtsmall);
-	$("#imgbig_div").html(cxtbig);
 	
-	judgement();//判断浏览器类型,做不同图片加载处理
+	var cxtsmall='<img src="'+imgsrc+'" id="preview" style="border:0px;margin:auto;padding:0px;"/>';
+	var cxtbig='<img src="'+imgsrc+'" id="cropbox" onload="opeimgwidth()" style="border:0px;margin:auto;padding:0px;"/>';
+	$("#imgsmall_div").html(cxtsmall);
+	$("#imgbig_div").html(cxtbig); 
+	//judgement();//判断浏览器类型,做不同图片加载处理
 }
 
-//判断浏览器类型
-function judgement(){
-	var Sys = {}; 
-	var ua = navigator.userAgent.toLowerCase(); 
-	var s; 
-	(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] : 
-	(s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] : 
-	(s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] : 
-	(s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] : 
-	(s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0; 
-	
-	//以下进行测试 
-	if (Sys.ie) {//alert('IE: ' + Sys.ie); 
-		EnhancedImg_ie();
-	}
-	else {
-		EnhancedImg_firebox();
-	}
-}
-var interval_ie = null;
-function EnhancedImg_ie(){
-	if($("#cropbox").attr("readyState")=="complete"){
-		opeimgwidth();//控制图片呈现的宽高
-    	clearTimeout(interval_ie);
-	}
-	else
-		interval_ie = setTimeout("EnhancedImg_ie()",1000);
-}//ie判断图片加载是否完成
-var interval_firebox = null;
-function EnhancedImg_firebox(){
-    if($("#cropbox").attr("width")> 0 && $("#cropbox").attr("height") > 0){
-    	opeimgwidth();//控制图片呈现的宽高
-        clearTimeout(interval_firebox);
-    }
-    else
-		interval_firebox = setTimeout("EnhancedImg_firebox()",1000);
-}//ie判断图片加载是否完成
 
 //主图片的宽高比例
-function opeimgwidth(){
-	var width= $("#cropbox").attr("width");
-	var height= $("#cropbox").attr("height");
-	if(width>height){//竖版的
+function opeimgwidth(){ 
+	var width= $("#cropbox").width();
+	var height= $("#cropbox").height(); 
+	if( width > height){//竖版的
 		$("#cropbox").attr("width","300");
     	$("#cropbox").attr("height",$("#cropbox").attr("height"));
 	}else{//横版的
@@ -122,13 +79,17 @@ function opeimgwidth(){
     on_load();//加载 图片裁剪 模式
 }
 
-function on_load(){
-	jQuery('#cropbox').Jcrop({
+function on_load(){ 
+	var jcrop_api;
+	$('#cropbox').Jcrop({ 
 		onChange: showPreview,
 		onSelect: showPreview,
-		aspectRatio: 1,
-		setSelect: [5,5,100,100]
-	});
+		aspectRatio: 1 },
+		function(){ 
+            jcrop_api = this;
+            jcrop_api.setSelect([100,100,5,5]); 
+        }
+	);  
 }
 var x=null; 
 var y=null; 
@@ -137,14 +98,14 @@ var h=null;
 
 function showPreview(coords)
 {
-	x=coords.x;   
-	y=coords.y;
-	w=coords.w;
-	h=coords.h;
+	x=Math.round(coords.x);   
+	y=Math.round(coords.y);
+	w=Math.round(coords.w);
+	h=Math.round(coords.h);
 	if (parseInt(coords.w) > 0)
 	{
-		var rx = 50 / coords.w;
-		var ry = 50 / coords.h;
+		var rx = 100 / coords.w;
+		var ry = 100 / coords.h;
 		jQuery('#preview').css({
 			width: Math.round(rx * $("#cropbox").attr("width")) + 'px',
 			height: Math.round(ry * $("#cropbox").attr("height")) + 'px',
@@ -195,7 +156,7 @@ function saveimg( ){
 				
 			</div>
 			<p>
-				显示头像50*50像素			
+				显示头像100*100像素			
 			</p>
 			<div>
 				<input id="saveimg" type="image" src="<%=contextPath %>/jcrop/images/upload.jpg" />

@@ -7,36 +7,34 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>首页</title> 
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">
-<script language="javascript" src="<%=contextPath%>/script/jquery.js"></script>
+<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
 <script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
 </head>
 
 <body>
+<%@ include file="/include/header.jspf"%>
+<div class="container"> 
 
-<div class="container">
-
-  <%@ include file="/include/header.jspf"%>
-    
   <div class="content">
   	
     <div class="subheader">  
         <div id="tabs">
-            <a ${tab== "newest"?"class=\"youarehere\"":""}  href="<%=contextPath%>/doc/tab/newest" title="">最新</a> 
-            <a ${tab== "hot"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/hot" title=" ">最热</a> 
-            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/noanswer" title=" ">等待回复</a> 
+            <a ${tab== "newest"?"class=\"youarehere\"":""}  href="<%=contextPath%>/doc/tab/newest"  >最新</a> 
+            <a ${tab== "hot"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/hot"  >最热</a> 
+            <a ${tab== "noanswer"?"class=\"youarehere\"":""} href="<%=contextPath%>/doc/tab/noanswer"  >等待回复</a> 
         </div> 
     </div> 
     
     <div id="questions"> 
 <c:forEach items="${doclist}" var="doc">
         <div class="summary" id="question-summary-${doc.docid}">
-            <h3 style=""><a href="<%=contextPath%>/doc/id/${doc.docid}" class="question-hyperlink">${doc.title}</a></h3>
+            <h3 style=""><a href="<%=contextPath%>/doc/id/${doc.docid}" target="_blank" class="question-hyperlink">${doc.title}</a></h3>
             <div class="qinfo"  >
-                <span class="qcreator" onclick="location='<%=contextPath%>/user/${doc.createrid}/tab/askq'" >${doc.creatername}</span>  
+                <a href="<%=contextPath%>/user/${doc.createrid}/tab/askq" target="_blank" >${doc.creatername}</a>  
                 <span class="qcreatedate">发表于${doc.createdateStr}</span>
  
-                <span class="guanzhu  ${doc.followed == 1 ? "notdisplay":""}" id="add3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',${doc.docid},${loginuser.userid},3)"  >关注 </a></span>
-                <span class="guanzhu ${doc.followed == 0 ? "notdisplay":""}" id="del3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',${doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
+                <span class="guanzhu  ${doc.isFollowed == 1 ? "notdisplay":""}" id="add3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',${doc.docid},${loginuser.userid},3)"  >关注 </a></span>
+                <span class="guanzhu ${doc.isFollowed == 0 ? "notdisplay":""}" id="del3${doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',${doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
         
             </div>
             <div class="excerpt">
@@ -50,7 +48,7 @@
         </div> 
 </c:forEach>
 <c:if  test="${fn:length(doclist)== 30}">
-    <input id="nextp" type="button" onclick="nextpage('doclist',30,20)" value="更多"/>
+    <input id="nextp" type="button" class="more"  onclick="nextpage('doclist',30,20)" value="更多"/>
 </c:if>     
     <!-- end #questions --></div>
   
@@ -63,7 +61,7 @@
   <!-- end .sidebar --></div>
     
   <div class="footer">
-    <p>此 .footer 包含声明 position:relative，以便为 .footer 指定 Internet Explorer 6 hasLayout，并使其以正确方式清除。如果您不需要支持 IE6，则可以将其删除。</p>
+    <%@ include file="../include/footer.jspf"%> 
     <!-- end .footer --></div>
   <!-- end .container --></div>
   
@@ -75,13 +73,13 @@
 		
 		{#foreach $T as doc}
 		<div class="summary" id="question-summary-{$T.doc.docid}">
-			<h3 style=""><a href="<%=contextPath%>/doc/id/{$T.doc.docid}" class="question-hyperlink">{$T.doc.title}</a></h3>
+			<h3 style=""><a href="<%=contextPath%>/doc/id/{$T.doc.docid}" target="_blank" class="question-hyperlink">{$T.doc.title}</a></h3>
 			<div class="qinfo"  >
-				<span class="qcreator" onclick="location='<%=contextPath%>/user/{$T.doc.createrid}/tab/askq'" >{$T.doc.creatername}</span>  
+				<a href="<%=contextPath%>/user/{$T.doc.createrid}/tab/askq" target="_blank" >{$T.doc.creatername}</a>  
 				<span class="qcreatedate">发表于{$T.doc.createdateStr}</span>
 				
-				<span class="guanzhu {#if $T.doc.followed == 1 }notdisplay{#/if}" id="add3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',{$T.doc.docid},${loginuser.userid},3)"  >关注 </a></span>
-                <span class="guanzhu {#if $T.doc.followed == 0 }notdisplay{#/if}" id="del3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',{$T.doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
+				<span class="guanzhu {#if $T.doc.isFollowed == 1 }notdisplay{#/if}" id="add3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('add',{$T.doc.docid},${loginuser.userid},3)"  >关注 </a></span>
+                <span class="guanzhu {#if $T.doc.isFollowed == 0 }notdisplay{#/if}" id="del3{$T.doc.docid}${loginuser.userid}"  ><a href="javascript:void(0);" onclick="editFollow('del',{$T.doc.docid},${loginuser.userid},3)"  >取消关注 </a></span>
                 
 			</div>
 			<div class="excerpt">

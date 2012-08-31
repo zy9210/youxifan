@@ -1,6 +1,7 @@
 package com.youxifan.dao;
 
 import java.util.List;
+import java.util.Map;
 
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -16,16 +17,18 @@ public class VoteDaoImpl extends SqlSessionDaoSupport implements VoteDao{
 		return selectList;
 
 	}
-
+	
+	public int getVoteNum(Map map){
+		return (Integer) getSqlSession().selectOne("Vote.getVoteNum", map);
+	}
 
 	public void delete(Vote model) {
 		int row = getSqlSession().insert("Vote.delVote",model);
 	}
 
 
-	public Vote save(Vote model) {
-		int row = getSqlSession().insert("Vote.insertVote",model);
-		return model;
+	public void save(Vote model) {
+		int row = getSqlSession().insert("Vote.insertVote",model); 
 	}
 
 

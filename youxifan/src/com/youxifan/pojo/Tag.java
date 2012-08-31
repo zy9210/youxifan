@@ -16,7 +16,8 @@ public class Tag implements Serializable {
 	private String tagtype;
 	private long  followers;
 	private String bsflag = "1";
-	private int followed;
+	//查看他人页面时   是否关注该人  1：关注   0：未关注
+	private int isFollowed;
 
 	private Date modifydate;
 	private Date createdate;
@@ -56,12 +57,12 @@ public class Tag implements Serializable {
 		this.creator = creator;
 	}
 
-	public int getFollowed(){
-		return this.followed;
+	public int getIsFollowed(){
+		return this.isFollowed;
 	}
 	
-	public void setFollowed(int followed){
-		this.followed = followed;
+	public void setIsFollowed(int isFollowed){
+		this.isFollowed = isFollowed;
 	}
 	
 	public long getTagid() {

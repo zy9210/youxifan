@@ -3,6 +3,7 @@ package com.youxifan.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter; 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam; 
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.youxifan.pojo.Doc; 
@@ -49,7 +51,7 @@ public class DocController {
 		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", 0);
-		map.put("end", 30);
+		map.put("step", 30);
 		map.put("loginuserid", user.getUserid());
 		
 		List<Doc> list = docService.queryDoc(map);
@@ -63,7 +65,7 @@ public class DocController {
 		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", 0);
-		map.put("end", 30);
+		map.put("step", 30);
 		map.put("sort", tab);
 		map.put("loginuserid", user.getUserid());
 		List<Doc> list = docService.queryDoc(map);
@@ -78,7 +80,7 @@ public class DocController {
 		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		Map map = new HashMap();
 		map.put("start", start);
-		map.put("end", start+step);
+		map.put("step", step);
 		map.put("sort", tab);
 		map.put("loginuserid", user.getUserid());
 		List<Doc> list = docService.queryDoc(map);
@@ -144,36 +146,27 @@ public class DocController {
 
 	
 	@RequestMapping(value = "/answer/{docid}" ,method=RequestMethod.POST , headers = "Accept=application/json")
-	//@ResponseBody
-	public void answer(@PathVariable Long docid, HttpServletRequest request, HttpServletResponse response){
-		String retValue ="";
-		PrintWriter out = null;
-		try {
-			out = response.getWriter();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("application/json;charset=UTF-8");
+	@ResponseBody
+	public String answer(@PathVariable Long docid, HttpServletRequest request, HttpServletResponse response){
+		String retValue =""; 
+//		response.setCharacterEncoding("utf-8");
+//		response.setContentType("application/json;charset=UTF-8");
 		HttpSession session = request.getSession();
-		User user = (User)session.getAttribute("loginuser");
+		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
 		if (user == null) {
 			retValue = "{\"success\":\"false\",\"msg\":\"请登录\"}";
-			out.println(retValue);
-			return ;
+			return retValue;
 		} 
 		String content = request.getParameter("post-text");
-		String doctype = request.getParameter("doctype");
+		String doctype = "3";  //答案
 		Long upperdocid = docid;
 		if (StringUtils.isEmpty(content)) {
-			retValue = "{\"success\":\"false\",\"msg\":\"请作答！\"}";
-			out.print(retValue);
-			return ;
+			retValue = "{\"success\":\"false\",\"msg\":\"请作答！\"}"; 
+			return retValue;
 		}
 		Doc doc = new Doc(); 
 		doc.setContent(content);
+		System.out.println(java.net.URLDecoder.decode(content));
 		doc.setDoctype(doctype); 
 		doc.setUpperdocid(upperdocid);
 		doc.setCreater(user);
@@ -181,15 +174,15 @@ public class DocController {
 		doc.setCreatername(user.getUsername());
 		try{
 			docService.save(doc);
-			retValue = "{\"success\":\"true\",\"msg\":\"提交成功\"}";
-			out.print(retValue);
-			return;
+			docService.updateAnswers(1, upperdocid);  //问题的答案数+1
+			String nowStr = CommonUtil.getDateTimeStr(new Date(),null);
+			retValue = "{\"success\":\"true\",\"msg\":\"提交成功\",\"docid\":\""+doc.getDocid()+"\",\"nowStr\":\""+nowStr+"\"}"; 
+			return retValue ;
 		}
 		catch(Exception e){
 			log.error(e.getMessage());
-			retValue = "{\"success\":\"false\",\"msg\":\"保存失败\"}";
-			out.print(retValue);
-			return;
+			retValue = "{\"success\":\"false\",\"msg\":\"保存失败\"}"; 
+			return retValue;
 		}
 		
 	}
@@ -217,7 +210,8 @@ public class DocController {
 		Map map = new HashMap();
 		map.put("docid", docid);
 		if ("title".equals(type)) {
-			map.put("title", content);
+			
+			map.put("title", StringEscapeUtils.escapeHtml4(content));
 		}else if ("content".equals(type)) {
 			map.put("content", content);
 		}
@@ -253,9 +247,9 @@ public class DocController {
 	public List docSearch(@PathVariable String docStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
 		log.debug("doc搜索 :"+docStr);
 		Map map = new HashMap();
-		map.put("docStr", "%"+docStr+"%");
+		map.put("docStr", "%"+docStr.replace(" ", "%")+"%");
 		map.put("start", start);
-		map.put("end", start+ step);
+		map.put("step", step);
 		List<Doc> list = docService.docSearch(map);
 		 
 		return list;
