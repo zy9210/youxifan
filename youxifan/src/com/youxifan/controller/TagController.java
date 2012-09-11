@@ -52,6 +52,19 @@ public class TagController {
 		 
 	}
 	
+	
+	//根据fatherid搜索tag的name
+	@RequestMapping(value="/tag/searchObj/fid/{fatherid}")
+	@ResponseBody
+	public List getTagObjByFID(@PathVariable long fatherid,HttpServletRequest request, ModelMap modelMap){
+		List<Tag> list = tagService.queryByFatherID(fatherid); 
+		return list;
+	}
+	
+	
+	
+	
+	//根据fatherid搜索tag的name
 	@RequestMapping(value="/tag/search/fid/{fatherid}")
 	@ResponseBody
 	public Map getTagByFID(@PathVariable long fatherid,HttpServletRequest request, ModelMap modelMap){
@@ -66,6 +79,7 @@ public class TagController {
 		return map;
 	}
 	
+	//根据fathertagstr搜索tag的name
 	@RequestMapping(value="/tag/search/fstr/{fatherStr}")
 	@ResponseBody
 	public Map getTagByFstr(@PathVariable String fatherStr,HttpServletRequest request, ModelMap modelMap){
@@ -81,7 +95,7 @@ public class TagController {
 		return map;
 	}
 	
-	
+	//搜索栏    tag搜索。
 	@RequestMapping(value="/tag/search/{tagStr}/page/{start}/{step}")
 	@ResponseBody
 	public List tagSearch(@PathVariable String tagStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, ModelMap modelMap){
@@ -171,6 +185,7 @@ public class TagController {
 	  return "tag"; 
 	}
 	
+	//tag页面展示  更多doc
 	@RequestMapping("/tag/{tagid}/tab/{tab}/page/{start}/{step}") 
 	@ResponseBody
 	public List showPage(ModelMap modelMap,@PathVariable long tagid,@PathVariable String tab,@PathVariable int start, @PathVariable int step,HttpSession session) { 

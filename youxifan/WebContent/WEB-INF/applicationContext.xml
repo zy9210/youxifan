@@ -41,8 +41,8 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="${db.url}" />
-		<property name="username" value="root" />
-		<property name="password" value="123456" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
 	</bean>
 	
 	<!--  -->
@@ -102,6 +102,9 @@
 		<property name="sqlSessionTemplate" ref="sqlSession" /> 
 	</bean>
 	<bean id="inviteDao" class="com.youxifan.dao.InviteDaoImpl"> 
+		<property name="sqlSessionTemplate" ref="sqlSession" /> 
+	</bean>
+	<bean id="suggestionDao" class="com.youxifan.dao.SuggestionDaoImpl"> 
 		<property name="sqlSessionTemplate" ref="sqlSession" /> 
 	</bean>
 

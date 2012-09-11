@@ -23,14 +23,16 @@
 </head> 
 <body> 
 <pre>
-尊敬的youxifan用户： 
+尊敬的天木游戏社区用户： 
 您好！
-您在youxifan申请了找回youxifan的密码，请点击以下链接确认更改。
-<a href="http://localhost:8080/youxifan/jsp/getpwd.jsp?pwdstr=@{pwdstr}&email=@{email}" >
-http://localhost:8080/youxifan/jsp/getpwd.jsp?pwdstr=@{pwdstr}&email=@{email}
+您在天木游戏社区申请了找回密码，请点击以下链接完成密码重置。
+<a href="http://www.wan181.com/jsp/getpwd.jsp?pwdstr=@{pwdstr}&email=@{email}" >
+http://www.wan181.com/jsp/getpwd.jsp?pwdstr=@{pwdstr}&email=@{email}
 </a>
-如果上面的链接无法点击，您也可以复制链接，粘贴到您浏览器的地址栏内，然后按“回车”键打开预设页面，完成密码的找回。
+如果上面的链接无法点击，您也可以复制链接，粘贴到您浏览器的地址栏内，然后按“回车”键打开页面，完成密码的找回。
 谢谢！  
+
+天木游戏问答社区
 </pre>
 </body>
 </html> 

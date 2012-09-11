@@ -73,13 +73,22 @@ public class UserController {
 		user.setSigning(signing);
 		user.setGame(gametext);
 		user.setGender(gender);
-		int defaultImgTotle = 1 + Integer.parseInt(PropertiesUtil.getProperty("defaultImgTotle"));
+		int defaultImgTotle = Integer.parseInt(PropertiesUtil.getProperty("defaultImgTotle"));
 		user.setImageurl("/uploads/0/"+(1+new Random().nextInt(defaultImgTotle))+".jpg");
 		if (!userService.checkEmail(user.getEmail())) {
-			modelMap.put("addstate", "该邮箱已经被注册！");
-			modelMap.put("email", email);
+			modelMap.put("addstate", "该邮箱已经被注册！"); 
 			modelMap.put("psw", psw);
 			modelMap.put("name", name);
+			modelMap.put("signing", signing);
+			modelMap.put("gender", gender);
+			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
+			modelMap.put("invitecode", invitecode); 
+			return "register";
+		}	
+		if (!userService.checkName(user.getUsername())) {
+			modelMap.put("addstate", "该昵称已经被注册！");
+			modelMap.put("email", email);
+			modelMap.put("psw", psw); 
 			modelMap.put("signing", signing);
 			modelMap.put("gender", gender);
 			modelMap.put("gametext", "\""+gametext.replace(",", "\",\"")+"\"");
@@ -229,6 +238,19 @@ public class UserController {
 	}
 	
 	
+	@RequestMapping(value = "/checkName/{name}/")
+	@ResponseBody
+	public String checkName(@PathVariable String name ){
+
+		String retValue = "";
+		if (userService.checkName(name)) {
+			retValue = "{\"check\":\"OK\"}";
+		}else {
+			retValue = "{\"check\":\"False\"}";
+		}
+		return retValue;
+	}
+	
 	@RequestMapping(value="/headImg" ,method = RequestMethod.POST)
 	public void saveHeadImg(HttpServletRequest request, HttpServletResponse response,PrintWriter writer){
 		User user = (User)request.getSession().getAttribute("loginuser") ;
@@ -288,7 +310,11 @@ public class UserController {
 			String gametext = request.getParameter("gametext");
 			String signing = request.getParameter("signing");
 			String gender = request.getParameter("gender");
-  
+			User u = userService.getUserByName(uname);
+			if (u != null && u.getUserid() != user.getUserid()) {
+				retValue = "{\"ret\":\"False\",\"msg\":\"昵称已被注册\"}";
+				return retValue;
+			}
 			user.setUsername(uname);
 			user.setSigning(signing);
 			user.setGame(gametext);
@@ -410,10 +436,11 @@ public class UserController {
 	public List userSearch(@PathVariable String searchStr,@PathVariable int start, @PathVariable int step,HttpServletRequest request, HttpSession session){
 		log.debug("doc搜索 :"+searchStr);
 		User user = (User)session.getAttribute(CommonUtil.USER_CONTEXT);
+		
 		Map map = new HashMap();
 		map.put("nameStr", "%"+searchStr.replace(" ", "%")+"%");
 		map.put("start", start);
-		map.put("loginuserid", user.getUserid());
+		map.put("loginuserid", user == null ? 0 :user.getUserid());
 		map.put("step",  step);
 		List<User> list = userService.userSearch(map);
 		 

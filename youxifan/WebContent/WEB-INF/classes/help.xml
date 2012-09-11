@@ -1,0 +1,282 @@
+<help>
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+
+
+
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations"
+			value="classpath*:sample/config/mappers/**/*.xml" />
+	</bean>
+
+
+
+	标准配置
+
+	要开启 Spring 的 事务处 理，在 Spring 的 XML 配 置文件中 简单创 建一个
+	DataSourceTransactionManager对象：
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+
+
+
+	容器管理事务
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionFactoryClass"
+			value="org.apache.ibatis.transaction.managed.ManagedTransactionFactory" />
+	</bean>
+
+
+	编程式事物
+
+	DefaultTransactionDefinition def = new
+	DefaultTransactionDefinition();
+	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	TransactionStatus status = txManager.getTransaction(def); try {
+	userMapper.insertUser(user); }catch (MyException ex) {
+	txManager.rollback(status); throw ex; } txManager.commit(status);
+
+
+
+
+
+	5.1 SqlSessionTemplate
+	SqlSessionTemplate是MyBatis-Spring的核心。这个类负责管理MyBatis的SqlSession， 调用
+	MyBatis的 SQL 方法，翻译异常。 SqlSessionTemplate是线程安全的，可以被多个 DAO 所共享使用
+
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	public class UserDaoImpl implements UserDao { private SqlSession
+	sqlSession; public void setSqlSession(SqlSession sqlSession) {
+	this.sqlSession = sqlSession; } public User getUser(String userId) {
+	return (User) sqlSession.selectOne
+	("org.mybatis.spring.sample.mapper.UserMapper.getUser", userId); } }
+
+	如下注入 SqlSessionTemplate：
+	<bean id="userDao"
+		class="org.mybatis.spring.sample.dao.UserDaoImpl">
+		<property name="sqlSession" ref="sqlSession" />
+	</bean>
+
+
+
+	SqlSessionTemplate 有一个使用 ExecutorType 作为参数的构造方法。这允许你用来 创建对象，比如，一个批量
+	SqlSession，但是使用了下列 Spring 配置的 XML 文件：
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+		<constructor-arg index="1" value="BATCH" />
+	</bean>
+
+	public void insertUsers(User[] users) { SqlSession sqlSession =
+	getSqlSession(); for (User user : users) {
+	sqlSession.insert("org.mybatis.spring.sample.mapper.UserMapper.insertUser",
+	user); } }
+
+
+
+	5.2 sqlSessionDaoSupport sqlSessionDaoSupport 是一个抽象的支持类，用来为你提供
+	SqlSession。调用 getSqlSession()方法你会得到一个 SqlSessionTemplate，之后可以用于执行
+	SQL 方法， 就像下面这样：
+
+	public class UserDaoImpl extends SqlSessionDaoSupport implements
+	UserDao { public User getUser(String userId) { return (User)
+	getSqlSession()
+	.selectOne("org.mybatis.spring.sample.mapper.UserMapper.getUser",
+	userId); } }
+
+	<bean id="userMapper"
+		class="org.mybatis.spring.sample.mapper.UserMapperImpl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+
+
+	第六章 注入映射器 为了代替手工使用 SqlSessionDaoSupport或 SqlSessionTemplate编写数据访问对象
+	（DAO）的代码，MyBatis-Spring 提供了一个动态代理的实现：MapperFactoryBean。这个类
+	可以让你直接注入数据映射器接口到你的 service 层 bean 中。当使用映射器时，你仅仅如调 用你的 DAO
+	一样调用它们就可以了，但是你不需要编写任何 DAO 实现的代码，因为 MyBatis-Spring 将会为你创建代理。
+	使用注入的映射器代码，在 MyBatis，Spring 或 MyBatis-Spring 上面不会有直接的依赖。
+	MapperFactoryBean 创建的代理控制开放和关闭 session，翻译任意的异常到 Spring 的
+	DataAccessException异常中。此外，如果需要或参与到一个已经存在活动事务中，代理将 会开启一个新的 Spring 事务。
+
+
+	<bean id="userMapper"
+		class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="org.mybatis.spring.sample.mapper.UserMapper" />
+		<!--  注意指定的映射器类必须是一个接口，而不是具体的实现类  -->
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+
+	<bean id="fooService"
+		class="org.mybatis.spring.sample.mapper.FooServiceImpl">
+		<property name="userMapper" ref="userMapper" />
+	</bean>
+
+
+
+
+
+	<!-- 非常复杂的结果映射  -->
+
+	<resultMap id="detailedBlogResultMap" type="Blog">
+		<constructor>
+			<idArg column="blog_id" javaType="int" />
+		</constructor>
+
+		<result property="title" column="blog_title" />
+
+		<association property="author" column="blog_author_id"
+			javaType="Author">
+			<id property="id" column="author_id" />
+			<result property="username" column="author_username" />
+			<result property="password" column="author_password" />
+			<result property="email" column="author_email" />
+			<result property="bio" column="author_bio" />
+			<result property="favouriteSection"
+				column="author_favourite_section" />
+		</association>
+
+		<collection property="posts" ofType="Post">
+			<id property="id" column="post_id" />
+			<result property="subject" column="post_subject" />
+			<association property="author" column="post_author_id"
+				javaType="Author" />
+			<collection property="comments" column="post_id"
+				ofType=" Comment">
+				<id property="id" column="comment_id" />
+			</collection>
+			<collection property="tags" column="post_id"
+				ofType=" Tag">
+				<id property="id" column="tag_id" />
+			</collection>
+			<discriminator javaType="int" column="draft">
+				<case value="1" resultType="DraftPost" />
+			</discriminator>
+		</collection>
+	</resultMap>
+
+
+	关联
+
+	<resultMap id="blogResult" type="Blog">
+		<id property="blog_id" column="id" />
+		<result property="title" column="blog_title" />
+		<association property="author" column="blog_author_id"
+			javaType="Author" resultMap="authorResult" />
+	</resultMap>
+
+	<resultMap id="authorResult" type="Author">
+		<id property="id" column="author_id" />
+		<result property="username" column="author_username" />
+		<result property="password" column="author_password" />
+		<result property="email" column="author_email" />
+		<result property="bio" column="author_bio" />
+	</resultMap>
+
+	<resultMap id="blogResult" type="Blog"> 
+		<id property="blog_id" column="id" /> 
+		<result property="title" column="blog_title" /> 
+		<association property="author" column="blog_author_id"
+			javaType="Author">
+			<id property="id" column="author_id" /> 
+			<result property="username" column="author_username" /> 
+			<result property="password" column="author_password" /> 
+			<result property="email" column="author_email" /> 
+			<result property="bio" column="author_bio" />
+		</association>
+	</resultMap>
+
+
+
+	集合
+
+	<resultMap id="blogResult" type="Blog">
+		<id property="id" column="blog_id" />
+		<result property="title" column="blog_title" />
+		<collection property="posts" ofType="Post">
+			<id property="id" column="post_id" />
+			<result property="subject" column="post_subject" />
+			<result property="body" column="post_body" />
+		</collection>
+	</resultMap>
+
+
+	<resultMap id="blogResult" type="Blog">
+		<id property="id" column="blog_id" />
+		<result property="title" column="blog_title" />
+		<collection property="posts" ofType="Post"
+			resultMap="blogPostResult" />
+	</resultMap>
+	<resultMap id="blogPostResult" type="Post">
+		<id property="id" column="post_id" />
+		<result property="subject" column="post_subject" />
+		<result property="body" column="post_body" />
+	</resultMap>
+
+
+
+
+	鉴别器
+	<resultMap id="vehicleResult" type="Vehicle">
+		<id property="id" column="id" />
+		<result property="vin" column="vin" />
+		<result property="year" column="year" />
+		<result property="make" column="make" />
+		<result property="model" column="model" />
+		<result property="color" column="color" />
+		<discriminator javaType="int" column="vehicle_type">
+			<case value="1" resultMap="carResult" />
+			<case value="2" resultMap="truckResult" />
+			<case value="3" resultMap="vanResult" />
+			<case value="4" resultMap="suvResult" />
+		</discriminator>
+	</resultMap>
+
+	<resultMap id="vehicleResult" type="Vehicle">
+		<id property="id" column="id" />
+		<result property="vin" column="vin" />
+		<result property="year" column="year" />
+		<result property="make" column="make" />
+		<result property="model" column="model" />
+		<result property="color" column="color" />
+		<discriminator javaType="int" column="vehicle_type">
+			<case value="1" resultType="carResult">
+				<result property="doorCount" column="door_count" />
+			</case>
+			<case value="2" resultType="truckResult">
+				<result property="boxSize" column="box_size" />
+				<result property="extendedCab" column="extended_cab" />
+			</case>
+			<case value="3" resultType="vanResult">
+				<result property="powerSlidingDoor"
+					column="power_sliding_door" />
+			</case>
+			<case value="4" resultType="suvResult">
+				<result property="allWheelDrive"
+					column="all_wheel_drive" />
+			</case>
+		</discriminator>
+	</resultMap>
+
+
+</help>

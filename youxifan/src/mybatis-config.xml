@@ -21,6 +21,7 @@
       <typeAlias alias="Getpwd" type="com.youxifan.pojo.Getpwd"/>
       <typeAlias alias="Follow" type="com.youxifan.pojo.Follow"/>
       <typeAlias alias="Invite" type="com.youxifan.pojo.Invite"/>
+      <typeAlias alias="Suggestion" type="com.youxifan.pojo.Suggestion"/>
     </typeAliases>  
  
     <mappers> 
@@ -32,6 +33,7 @@
         <mapper resource="com/youxifan/dao/GetpwdDao.xml" />
         <mapper resource="com/youxifan/dao/FollowDao.xml" />
         <mapper resource="com/youxifan/dao/InviteDao.xml" />
+        <mapper resource="com/youxifan/dao/SuggestionDao.xml" />
     </mappers> 
  
 </configuration>  

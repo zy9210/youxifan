@@ -165,8 +165,7 @@ public class DocController {
 			return retValue;
 		}
 		Doc doc = new Doc(); 
-		doc.setContent(content);
-		System.out.println(java.net.URLDecoder.decode(content));
+		doc.setContent(content); 
 		doc.setDoctype(doctype); 
 		doc.setUpperdocid(upperdocid);
 		doc.setCreater(user);

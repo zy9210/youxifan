@@ -6,11 +6,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>${user.username}个人页面</title> 
+<title>${user.username} - 天木游戏问答社区</title> 
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
 <script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
 <script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
 
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34289945-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 
 <body>
@@ -82,7 +96,7 @@
 <c:forEach items="${tagList}" var="tag">	
  		<div class="tagiterm" style="border-bottom: 1px solid #BFBFBF; padding-bottom:10px; margin-bottom:10px;">
         	<a href="<%=contextPath%>/tag/${tag.tagid}" class="taglink" style="font-size:25px;">${tag.tagname}</a> 
-            <span>该话题下有${tag.followers}个问题</span> 
+            <%--<span>该话题下有${tag.followers}个问题</span> --%>
             
            <a href="javascript:void(0);" onclick="editFollow('del',${tag.tagid},${loginuser.userid},4)"  id="del4${tag.tagid}${loginuser.userid}" class="attentionlink fltrt ${tag.isFollowed == 0 ? "notdisplay":""}" >取消关注</a>
            <a href="javascript:void(0);" onclick="editFollow('add',${tag.tagid},${loginuser.userid},4)"  id="add4${tag.tagid}${loginuser.userid}" class="attentionlink fltrt ${tag.isFollowed == 1 ? "notdisplay":""}" >关注</a>
@@ -197,7 +211,7 @@
 {#foreach $T as tag}	
  		<div class="tagiterm" style="border-bottom: 1px solid #BFBFBF; padding-bottom:10px; margin-bottom:10px;">
         	<a href="<%=contextPath%>/tag/{$T.tag.tagid}" class="taglink" style="font-size:25px;">{$T.tag.tagname} </a> 
-            <span>该话题下有${tag.followers}个问题</span>
+            
  
            <a href="javascript:void(0);" onclick="editFollow('del',{$T.tag.tagid},${loginuser.userid},4)"  id="del4{$T.tag.tagid}${loginuser.userid}" class="attentionlink fltrt {#if $T.tag.isFollowed == 0 }notdisplay{#/if}" >取消关注</a>
            <a href="javascript:void(0);" onclick="editFollow('add',{$T.tag.tagid},${loginuser.userid},4)"  id="add4{$T.tag.tagid}${loginuser.userid}" class="attentionlink fltrt {#if $T.tag.isFollowed == 1 }notdisplay{#/if}" >关注</a>

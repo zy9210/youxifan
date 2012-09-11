@@ -16,13 +16,13 @@
            </tr>
            <tr>
                <td class="cell lable">昵称</td>
-               <td class="cell  "><input id="uname" name="uname" type="text" value="${user.username}"></input> </td>  
+               <td class="cell  "><input id="uname" name="uname" type="text" value="${user.username}"  "></input> </td>  
            </tr>
            <tr>
                <td class="cell lable">性别</td>
                <td class="cell  ">
-					<input type="radio" name="gender" value="1" ${gender == null || gender == '1' ? "checked" : ""}> 男     
-					<input type="radio" name="gender" value="0" ${ gender == '0' ? "checked" : ""}> 女  
+					<input type="radio" name="gender" value="1" ${user.gender == null || user.gender == '1' ? "checked" : ""}> 男     
+					<input type="radio" name="gender" value="0" ${ user.gender == '0' ? "checked" : ""}> 女  
 				</td>  
            </tr>
            <tr>
@@ -50,7 +50,7 @@ function savebaseinfo(){
 	var uname = $("#uname").val();
 	var gametext = $("#gametext").val();
 	var signing = $("#signing").val();
-
+	var gender = $('input:radio[name="gender"]:checked').val();
  
 	if($.trim(uname) == ""){
 		$("#retMsg").html("昵称不能为空！");
@@ -74,11 +74,15 @@ function savebaseinfo(){
 	}
 	$.ajax({type:"POST", 
         url:"<%=contextPath%>/user/set/baseinfo/", 
-        data:"uname="+uname+"&gametext="+gametext+"&signing="+signing, 
+        data:"uname="+uname+"&gametext="+gametext+"&signing="+signing+"&gender="+gender, 
         dataType:"json",
         success:function (data) {
         	if(data.ret=="OK"){ 
         		$("#retMsg").html("保存成功！");
+        		$("#retMsg").show();
+        		setTimeout( function() {$("#retMsg").hide();}, 15000);
+        	}else if(data.ret=="False"){
+        		$("#retMsg").html(data.msg);
         		$("#retMsg").show();
         		setTimeout( function() {$("#retMsg").hide();}, 15000);
         	}
@@ -87,6 +91,43 @@ function savebaseinfo(){
 }
 
 
+function checkName(){
+	var name = $("#uname").val();
+	
+	if($.trim(name) == ""){
+		$("#retMsg").html("昵称不能为空");
+		$("#retMsg").show();
+		setTimeout( function() {$("#retMsg").hide();}, 15000);
+		return;
+	}
+	
+	if($.trim(name).length > 60){
+		$("#retMsg").html("昵称过长");
+		$("#retMsg").show();
+		setTimeout( function() {$("#retMsg").hide();}, 15000); 
+		return;
+	}
+
+	$.ajax( {
+		type : "POST",
+		url : "<%=contextPath%>/checkName/" +encodeURIComponent(name)+"/",
+		dataType: "json",
+		success : function(data) { 
+			if(data.check == "False"){   
+				$("#retMsg").html("该昵称已经被注册");
+				$("#retMsg").show();
+				setTimeout( function() {$("#retMsg").hide();}, 15000); 
+				return;
+			} 
+		},
+		error :function(){
+			alert("网络连接出错！");
+			return false;
+		}
+	});
+	 
+	return true;
+}
 
 jQuery(document).ready(function(){
 	$('#game').tagHandler({

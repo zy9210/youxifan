@@ -25,8 +25,6 @@ body{
 	font-size: 14px ;
 	color:#393939;
 	font-family: 微软雅黑, Microsoft YaHei, Helvetica, Tahoma, StSun, 宋体, SimSun, sans-serif !important;
-	text-transform: none !important;
-	letter-spacing: 0 !important;
 }
 
 
@@ -34,8 +32,7 @@ input[type=text] {
 	 height: 30px;
 	 line-height: 32px;
 	 text-indent:3px; 
-	 width:170px;  
-	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 width:170px;   
 	 border: 1px solid silver;  
 	 background-color: #E6F3FA;
 	 border-radius: 5px; 
@@ -47,8 +44,7 @@ input[type=password] {
 	 height: 30px;
 	 line-height: 32px;
 	 text-indent:3px; 
-	 width:170px;  
-	 font: 14px Georgia, 'Times New Roman', Times, serif; 
+	 width:170px;   
 	 border: 1px solid silver; 
 	 background-color: #E6F3FA;
 	 
@@ -63,9 +59,8 @@ input[type=submit] {
 	 line-height: 32px;
 	 text-indent:3px; 
 	 width:60px;  
-	 color:#EEE;
-	 font: bold 14px Georgia, 'Times New Roman', Times, serif; 
-	 border: 1px solid silver; 
+	 color:#EEE; 
+	 border: 0px; 
 	 background-color: #0070A1;
 	 
 	 border-radius: 5px; 
@@ -80,27 +75,26 @@ input[type=submit] {
 	font-size: 14px ;
 	color:#393939;
 } 
-.centerdiv{
+.centerdiv{ 
 	width:100%; 
-	height:100%; 
-	/*   */
+	min-width:1000px;
+	height:768px;  
 	background:#000 url(<%=contextPath%>/images/wallpaper/<%=new java.util.Random().nextInt(5)%>.jpg) no-repeat center;
-	
 }
-
-.content{
-	font: bold 14px/18px 宋体,sans-serif;
+.content{ 
 	width:1000px;
 	height:100%;
 	margin:0 auto; 
 	padding:1px 0px 1px 0px;
-	background:#D3D1CE;  
+	background:#D3D1CE;   
 	
 	filter:alpha(opacity=90);
 	-moz-opacity:0.9;
 	-khtml-opacity: 0.9;
 	opacity: 0.9;
 	}
+ 
+
 a:hover, a:focus {
 color: #00C0FF;
 }
@@ -137,7 +131,7 @@ function checkEmail( ){
 		dataType: "json",
 		success : function(data) { 
 			if(data.check == "False"){ 
-				$("#msg").html("该邮箱不可用");  
+				$("#msg").html("该邮箱已经被注册");  
 				return false;
 			}else{
 				$("#msg").html("");
@@ -199,17 +193,37 @@ function checkGame(){
 }
 
 function checkName(){
-	var gametext = $("#name").val();
+	var name = $("#name").val();
 	
-	if($.trim(gametext) == ""){
+	if($.trim(name) == ""){
 		$("#namemsg").html("昵称不能为空");
 		return false;
 	}
 	
-	if($.trim(gametext).length > 60){
+	if($.trim(name).length > 60){
 		$("#namemsg").html("昵称过长");
 		return false;
 	}
+
+	$.ajax( {
+		type : "POST",
+		url : "<%=contextPath%>/checkName/" +encodeURIComponent(name)+"/",
+		dataType: "json",
+		success : function(data) { 
+			if(data.check == "False"){ 
+				$("#namemsg").html("该昵称已经被注册");  
+				return false;
+			}else{
+				$("#namemsg").html("");
+				return true;
+			} 
+		},
+		error :function(){
+			alert("网络连接出错！");
+			return false;
+		}
+	});
+	
 	$("#namemsg").html("");
 	return true;
 }
@@ -234,10 +248,11 @@ function submitCheck(){
 	}
 	if(!checkGame()){
 		return false;
-	} 
+	}   
 	if(!checkName()){
 		return false;
 	} 
+	
 	return true;
 }
 </script>
@@ -247,9 +262,12 @@ function submitCheck(){
 <div class="centerdiv">
 	<div class="content"> 
 	</div>
-	<div style="position: absolute;left:0px; top:0px; width:100%;height:100%; z-index:11">
+	<div style="position: absolute;left:0px; top:0px; width:100%;height:100%; z-index:11;TEXT-ALIGN: center; ">
+		<div style="height:10%;" ></div>
+		<img   src="<%=contextPath%>/images/LOGO_background.jpg"  style="width:380px; margin:0 auto 0;" >
+		
 		<form method="post" action="<%=contextPath%>/register"  onsubmit="return submitCheck();"> 
-	    	<table style="margin:300px auto 0; "> 
+	    	<table style="margin:20px auto 0; TEXT-ALIGN:left;  "> 
 	    	 	<tr>
 	    	 	    <td> </td>
 	                <td  colspan=2 style="color:red;" >${addstate}</td> 

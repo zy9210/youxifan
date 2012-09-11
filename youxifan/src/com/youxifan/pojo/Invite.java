@@ -14,6 +14,15 @@ public class Invite implements Serializable {
 	private String invitestr;
 	private long userid;
 	private Date usedate;
+	private String username;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	public long getInviteid() {
 		return inviteid;
 	}

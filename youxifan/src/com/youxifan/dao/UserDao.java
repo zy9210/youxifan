@@ -13,6 +13,7 @@ public interface UserDao {
 	public void setUserImageUrl(final User model);
 	public void delete(final User model);
 	public User getUserByEmail(String email);
+	public User getUserByName(String name);
 	public User getUserByID(Map map);
 	public void changePassword(Map param);
 	public List<User> followedUsers(Map  map );

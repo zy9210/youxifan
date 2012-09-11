@@ -1,7 +1,8 @@
+	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<div class="fltlft">
-        ssssssssssssss
+        <a class="footer-item" href="http://www.miibeian.gov.cn/" target="_blank">京ICP备12036482号</a>
     </div>
     
     <div class="fltrt">
-        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        欢迎加入天木游戏问答社区！！！
     </div>

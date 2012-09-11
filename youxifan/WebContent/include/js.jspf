@@ -87,7 +87,7 @@
 					var stepint = parseInt(step)
 				    var startnext = parseInt(start)+stepint;
 				    if(data.length == stepint){
-				    	container.append($("<input id='nextp' type='button' class='more'  onclick='nextpage('"+type+"',"+startnext+","+step+")' value='更多'/>") ); 
+				    	container.append($("<input id='nextp' type='button' class='more'  onclick='nextpage(\""+type+"\","+startnext+","+step+")' value='更多'/>") ); 
 				    }
 				},
 				error :function(){

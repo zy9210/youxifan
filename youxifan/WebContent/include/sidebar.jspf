@@ -27,7 +27,7 @@
             我的邀请
         </a>
     </div>
-    
+    <!-- 
     <div>
     	<strong>你可能感兴趣的话题</strong>
         <div class="interest" >
@@ -56,8 +56,8 @@
             <a href="#" class="attentionlink fltrt">关注</a>
             <span class="desc"  >该话题下有333个问题</span>
         </div>
-        
+       
         
     </div>
-
+ 	-->
  

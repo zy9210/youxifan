@@ -45,6 +45,27 @@
 		  and bs_flag = '1'
     </select>
     
+    <select id="getUserByName" parameterType="String" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			game as game,
+			create_date as createdate,
+			modify_date as modifydate
+		from user 
+		where user.user_name = #{name}
+		  and bs_flag = '1'
+    </select>
+    
+    
 	<select id="getUserByID" parameterType="map" resultType="User"  >
         select 
 			u.user_id as userid,
@@ -128,9 +149,11 @@
 			u.bs_flag as bsflag,
 			u.create_date as createdate,
 			u.game as game,
-			u.modify_date as modifydate
+			u.modify_date as modifydate,
+			if(loginf.upper,1,0) as isFollowed 
 		from user u
 		inner join follow f on (f.upper = #{userid}  and f.follower = u.user_id and f.follow_type = '1')
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
 		where u.bs_flag = '1'
 		order by f.create_date desc
 		limit #{start}, #{step} ;

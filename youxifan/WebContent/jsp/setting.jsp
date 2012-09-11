@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>设置</title> 
+	<title>个人信息修改   - 天木游戏问答社区</title> 
 	<script language="javascript"   src="<%=contextPath %>/jcrop/js/jquery.min.js"></script>
 	<script language="javascript"  src="<%=contextPath %>/jcrop/js/swfobject.js"></script> 
 	<script language="javascript"  src="<%=contextPath %>/jcrop/js/jquery.uploadify.v2.1.4.js"></script>
@@ -14,6 +14,19 @@
 
 	<link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
 	
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34289945-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>	
 </head>
 
 <body>
@@ -77,17 +90,41 @@
 
 <c:if  test="${tab == 'invite'}">
 	<div> 您所有拥有的邀请码：</div> <br/>
+	<table>
 	<c:forEach items="${invitelist}" var="invite" varStatus="status" >
-        <div >
-            <span>${invite.invitestr}</span>
-            <span></span>
+        <tr>
+            <td  >
+            	<c:if test="${invite.userid != 0}">
+            		<span><S>${invite.invitestr}</S></span>
+	            </c:if>
+	            <c:if test="${invite.userid == 0}">
+	            	<span>${invite.invitestr}</span>
+	            </c:if>
+            </td>
+            <td>
+            	<span style="margin-left:100px;"><a href="/user/${invite.userid}/tab/askq"> ${invite.username} </a></span>
+            </td>
+        </tr> 
+        <c:if  test="${status.count % 5 == 0}">
+        	<tr><td>&nbsp; </td><td> &nbsp;</td></tr>
+        </c:if>	
+	</c:forEach>
+	</table>
+</c:if>	
+<%-- 
+<div >
+            <c:if test="${invite.userid != 0}">
+            	<span><S>${invite.invitestr}</S></span>
+            </c:if>
+            <c:if test="${invite.userid == 0}">
+            	<span>${invite.invitestr}</span>
+            </c:if>
+            <span style="margin-left:100px;"><a href="/user/${invite.userid}/tab/askq"> ${invite.username} </a></span>
         </div> 
         <c:if  test="${status.count % 5 == 0}">
         	<br/>
-        </c:if>	
-	</c:forEach>
-</c:if>	
-		
+        </c:if>
+ --%>		
 		
 		
 		

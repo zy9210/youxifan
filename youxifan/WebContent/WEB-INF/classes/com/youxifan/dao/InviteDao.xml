@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    Copyright 2010-2011 The myBatis Team
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!--
+    version: $Id: voteMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="Invite">
+
+    <select id="getOwnerInvite" parameterType="map"  resultType="Invite">
+select 
+   i.invite_id as inviteid,
+   i.owner_id as ownerid,
+   i.invite_str as invitestr,
+   i.user_id as userid,
+   i.use_date as usedate ,
+   u.user_name as username
+from invite i
+left join user u on(u.user_id = i.user_id)
+where owner_id = ${ownerid}
+    </select>
+    
+    <resultMap id="docResult" type="Doc"> 
+		<id property="docid" column="docid" /> 
+		<result property="upperdocid" column="upperdocid" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="doctype" column="doctype" />
+		<association property="creater" column="createrid"
+			javaType="User">
+			<id property="userid" column="createrid" /> 
+			<result property="username" column="username" /> 
+			<result property="alias" column="alias" /> 
+			<result property="email" column="email" /> 
+			<result property="userpoint" column="userpoint" /> 
+			<result property="imageurl" column="imageurl" />  
+			<result property="createdate" column="usercreatedate" /> 
+			<result property="modifydate" column="usermodifydate" /> 
+		</association>
+	</resultMap>
+    
+    <select id="getUserUsefulInvite" parameterType="map"  resultType="map">
+<![CDATA[
+select 
+	u.user_id as userid,
+	count(i.owner_id) as myin
+from user u 
+left join invite i on(i.owner_id = u.user_id and i.user_id = 0) 
+where u.bs_flag = '1'
+group by u.user_id
+having count(i.owner_id) < #{maxinvite}
+
+]]>
+    </select>
+    
+    
+    <select id="findInviteByCode" parameterType="map"  resultType="Invite">
+<![CDATA[
+select 
+	invite_id as inviteid,
+   owner_id as ownerid,
+   invite_str as invitestr,
+   user_id as userid,
+   use_date as usedate 
+from   invite  
+where invite_str = #{invitestr} 
+and user_id = 0
+
+]]>
+    </select>
+    
+    
+     
+    <insert id="insertInvite" parameterType="Invite">   
+insert into invite (owner_id,invite_str) values 
+				(#{ownerid},#{invitestr});
+	</insert>  
+    
+    
+    
+    <update id="updateInvite" parameterType="Invite"> 
+update Invite set user_id = #{userid},use_date = now() where invite_id = #{inviteid}
+	</update> 
+
+
+	<update id="useInvite" parameterType="map"> 
+	<![CDATA[
+update Invite set user_id = #{userid},use_date = now() where invite_str = #{invitestr}
+	]]>
+	</update>
+
+    <delete id="delInvite" parameterType="Invite" > 
+		delete from student where id = #{id} 
+	</delete>
+	
+</mapper>

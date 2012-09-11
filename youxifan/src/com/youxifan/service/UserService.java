@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,8 @@ public class UserService {
 	 */
 	public void save(User user){
 		user.setPassword(CommonUtil.encoderStr(user.getPassword()));
-		user.setUsername(user.getUsername().trim());
+		user.setUsername( StringEscapeUtils.escapeHtml4(user.getUsername().trim()));
+		user.setSigning(StringEscapeUtils.escapeHtml4(user.getSigning()));
 		entityDao.save(user);
 	}
 	
@@ -66,6 +68,12 @@ public class UserService {
 	}
 	
 	/**
+	 * 根据name得到user
+	 */
+	public User getUserByName(String name){
+		return  entityDao.getUserByName(name);
+	}
+	/**
 	 * 检查email是否注册
 	 */
 	public boolean checkEmail(String email){
@@ -76,6 +84,17 @@ public class UserService {
 		return false;
 	}
 	
+	
+	/**
+	 * 检查name是否注册
+	 */
+	public boolean checkName(String name){
+		User user = getUserByName(name);
+		if (user == null) {
+			return true;
+		}
+		return false;
+	}
 	/**
 	 *根据email修改对账号的密码
 	 */
@@ -93,7 +112,8 @@ public class UserService {
 	 */
 	public boolean updateinfo(User user){
 		try {
-			user.setUsername(user.getUsername().trim());
+			user.setUsername(StringEscapeUtils.escapeHtml4(user.getUsername().trim()));
+			user.setSigning(StringEscapeUtils.escapeHtml4(user.getSigning()));
 			entityDao.updateinfo(user); 
 			return true;
 		} catch (Exception e) {

@@ -25,15 +25,35 @@
 
     <select id="getOwnerInvite" parameterType="map"  resultType="Invite">
 select 
-   invite_id as inviteid,
-   owner_id as ownerid,
-   invite_str as invitestr,
-   user_id as userid,
-   use_date as usedate 
-from invite 
+   i.invite_id as inviteid,
+   i.owner_id as ownerid,
+   i.invite_str as invitestr,
+   i.user_id as userid,
+   i.use_date as usedate ,
+   u.user_name as username
+from invite i
+left join user u on(u.user_id = i.user_id)
 where owner_id = ${ownerid}
     </select>
     
+    <resultMap id="docResult" type="Doc"> 
+		<id property="docid" column="docid" /> 
+		<result property="upperdocid" column="upperdocid" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="doctype" column="doctype" />
+		<association property="creater" column="createrid"
+			javaType="User">
+			<id property="userid" column="createrid" /> 
+			<result property="username" column="username" /> 
+			<result property="alias" column="alias" /> 
+			<result property="email" column="email" /> 
+			<result property="userpoint" column="userpoint" /> 
+			<result property="imageurl" column="imageurl" />  
+			<result property="createdate" column="usercreatedate" /> 
+			<result property="modifydate" column="usermodifydate" /> 
+		</association>
+	</resultMap>
     
     <select id="getUserUsefulInvite" parameterType="map"  resultType="map">
 <![CDATA[

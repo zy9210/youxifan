@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    Copyright 2010-2011 The myBatis Team
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!--
+    version: $Id: SuggestionMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="Suggestion">
+
+    <select id="querySuggestion" resultType="Suggestion"  parameterType="map" >
+        select 
+		  suggestion_id as sugid,
+		  upper_sug_id as uppersugid,
+		  user_id as userid,
+		  contact as contact,
+		  content as content,
+		  bs_flag as bsflag,
+		  sug_type as sugtype
+		from suggestion
+		limit #{start}, #{step} ;
+    </select>
+     
+    
+    <insert id="insertSuggestion" parameterType="Suggestion">   
+insert into suggestion (upper_sug_id,user_id,contact,content)
+values (#{uppersugid},#{userid},#{contact},#{content})
+	</insert>  
+    
+    
+    
+    <update id="updateSuggestion" parameterType="Suggestion"> 
+
+	</update> 
+
+
+
+    <delete id="delSuggestion" parameterType="Suggestion" > 
+		delete from Suggestion where Suggestion_id = #{sugid} ;
+	</delete>
+	
+</mapper>

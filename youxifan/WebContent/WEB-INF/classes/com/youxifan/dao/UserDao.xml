@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    version: $Id: UserMapper.xml 2444 2010-09-15 07:38:37Z simone.tripodi $
+-->
+<mapper namespace="User">
+
+    <select id="queryUser" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			game as game,
+			create_date as createdate,
+			modify_date as modifydate
+		from user;
+    </select>
+    
+    <select id="getUserByEmail" parameterType="String" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			game as game,
+			create_date as createdate,
+			modify_date as modifydate
+		from user 
+		where user.email = #{email}
+		  and bs_flag = '1'
+    </select>
+    
+    <select id="getUserByName" parameterType="String" resultType="User"  >
+        select 
+			user_id as userid,
+			user_name as username,
+			alias as alias,
+			email as email,
+			password as password,
+			signing_message as signing,
+			user_point as userpoint,
+			image_url as imageurl,
+			user_level as userlevel,
+			bs_flag as bsflag,
+			game as game,
+			create_date as createdate,
+			modify_date as modifydate
+		from user 
+		where user.user_name = #{name}
+		  and bs_flag = '1'
+    </select>
+    
+    
+	<select id="getUserByID" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			u.game as game,
+			if(f.upper,1,0) as isFollowed  
+		from user u
+		left join follow f on(f.upper = u.user_id and f.follower = #{loginuserid} and f.follow_type = '1')
+		where u.user_id = #{userid};
+    </select>
+    
+    
+    <select id="userSearch" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			u.game as game,
+			if(loginf.upper,1,0) as isFollowed 
+		from user u
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
+		where u.bs_flag = '1'
+		and  u.user_name  like #{nameStr}
+		limit #{start}, #{step} ;
+    </select>
+    
+    <select id="userFollowedUser" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.modify_date as modifydate,
+			u.game as game,
+			if(loginf.upper,1,0) as isFollowed 
+		from user u
+		inner join follow f on (f.upper = u.user_id  and f.follower = #{userid} and f.follow_type = '1')
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
+		where u.bs_flag = '1'
+		order by f.create_date desc
+		limit #{start}, #{step} ;
+    </select>
+    
+    <select id="usersFans" parameterType="map" resultType="User"  >
+        select 
+			u.user_id as userid,
+			u.user_name as username,
+			u.alias as alias,
+			u.email as email,
+			u.password as password,
+			u.signing_message as signing,
+			u.user_point as userpoint,
+			u.image_url as imageurl,
+			u.user_level as userlevel,
+			u.bs_flag as bsflag,
+			u.create_date as createdate,
+			u.game as game,
+			u.modify_date as modifydate,
+			if(loginf.upper,1,0) as isFollowed 
+		from user u
+		inner join follow f on (f.upper = #{userid}  and f.follower = u.user_id and f.follow_type = '1')
+		left join follow loginf on(loginf.upper = u.user_id and loginf.follower = #{loginuserid} and loginf.follow_type = '1')
+		where u.bs_flag = '1'
+		order by f.create_date desc
+		limit #{start}, #{step} ;
+    </select>
+    
+    
+    
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userid" >   
+	    <![CDATA[
+	    insert into user
+		  (user_name,
+		   alias,
+		   email, 
+		   password, 
+		   signing_message, 
+		   user_point,
+		   user_level, 
+		   bs_flag,
+		   game,
+		   image_url,
+		   gender,
+		   create_date, 
+		   modify_date)
+		values
+		  (#{username},
+		    #{alias},
+		  	#{email},
+		  	#{password},
+		  	#{signing}, 
+		  	#{userpoint},
+		  	#{userlevel}, 
+		  	'1',
+		  	#{game},
+		  	#{imageurl},
+		  	#{gender},
+		  	now(),
+		  	now());
+		  	]]> 
+		  	<selectKey resultType="long" keyProperty="userid"> 
+                <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>    
+                <!-- 该方法LAST_INSERT_ID()与数据库连接绑定，同属统一会话级别，不会发生上述MS SQL Server的函数问题。 --> 
+        </selectKey> 
+		  	
+	</insert>  
+    
+    <update id="updateHeadUrl" parameterType="User"> 
+		update User set 
+		image_url = concat("/uploads/",user_id ,"/",user_id ,".jpg") 
+		where user_id = #{userid} 
+	</update> 
+    
+
+
+	<update id="changePassword" parameterType="map"> 
+		update User set 
+		password = #{password}
+		where email = #{email} 
+	</update>
+	
+	
+	<update id="updateinfo" parameterType="User"> 
+		update User set 
+		user_name = #{username}
+		,signing_message = #{signing}
+		,modify_date = now()
+		,game = #{game}
+		,gender= #{gender}
+		where email = #{email} 
+	</update>
+	
+
+    <delete id="delUser" parameterType="User" > 
+		delete from User where id = #{id} 
+	</delete>
+	
+</mapper>

@@ -32,6 +32,7 @@ import com.youxifan.service.GetpwdService;
 import com.youxifan.service.UserService;
 import com.youxifan.utils.CommonUtil;
 import com.youxifan.utils.EMail;
+import com.youxifan.utils.PropertiesUtil;
 
 @Controller
 @RequestMapping("/getpwd")
@@ -98,11 +99,17 @@ public class GetpwdController {
 			properties.put("email", email);
 			String htmlstr = CommonUtil.complete(getpwdhtml, properties);
 			
-			EMail mail = new EMail("smtp.163.com", 25,false, 
-			"zy9210@163.com", "youxiafan", email, email, 
-			"找回密码", ""); 
+			
+//			EMail mail = new EMail("smtp.163.com", 25,false, 
+//			"zy9210@163.com", "youxiafan", email, email, 
+//			"找回密码", ""); 
+			
+			EMail mail = new EMail(PropertiesUtil.getProperty("smtpHost"),Integer.parseInt(PropertiesUtil.getProperty("smtpPort")),false, 
+					PropertiesUtil.getProperty("fromEMail"), PropertiesUtil.getProperty("fromName"), email, email, 
+					"密码找回_wan181.com", ""); 
+			
 			mail.setMessageHTML(htmlstr); 
-			mail.createAuthenticator("zy9210@163.com","zy43489537");
+			mail.createAuthenticator(PropertiesUtil.getProperty("fromEMail"),PropertiesUtil.getProperty("emailpassword"));
 			mail.sendWithoutWait();
 			
 		} catch (Exception e) {

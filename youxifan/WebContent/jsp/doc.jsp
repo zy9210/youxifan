@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>问题详情</title> 
+<title>问题详情  - 天木游戏问答社区</title> 
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css"> 
 <script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
 
@@ -14,7 +14,19 @@
 <script charset="utf-8" src="<%=contextPath%>/script/kindeditor/lang/zh_CN.js"></script> 
 <link rel="stylesheet" href="<%=contextPath%>/script/kindeditor/themes/default/default.css" />	
 
- 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34289945-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 
 <body>

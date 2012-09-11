@@ -2,23 +2,25 @@
  
 <link type="text/css" rel="stylesheet" href="<%=contextPath %>/css/all.css">  
 <script language="javascript" src="<%=contextPath%>/script/jquery-jtemplates.js"></script>
-
-
+<script language="javascript" src="<%=contextPath%>/script/jquery.placeholder.js"></script> 
 <div class="header">
 	<div class="headercenter">
-		<a href="<%=contextPath%>/doc"   id="headlogo">wan181</a>
+		<a href="<%=contextPath%>/doc"   id="headlogo" ><img src="/images/LOGO_head.png"  /> </img></a>
 		
 		<div style="float:left; margin: 7px 0 0 12px;"> 
 		
 		 	<input id="searchinput" type="text"  placeholder="搜索标签、问题或人" />   
 		     
-			<a href="<%=contextPath%>/jsp/ask.jsp" target="_blank"  id="askbut">提问</a> 
+			 <a href="#"  onClick="openask()"  id="askbut">提问</a> 
 			
 		</div> 
 		
 		<div  id="headnav">   
 		    <a href="<%=contextPath%>/doc/" style="float:left; margin-left:50px; color:#FFF;">
 			首页
+			</a> 
+			<a href="<%=contextPath%>/jsp/tagwall.jsp" style="width:auto;float:left; margin-left:50px; color:#FFF;">
+			   标签墙
 			</a> 
 			<a href="<%=contextPath%>/set/userinfo/" style="float:left; margin-left:50px; color:#FFF;">
 			   设置 
@@ -41,7 +43,7 @@
 <div id="toolBackTo" class="back-to"  >
 	<a   class="backtotop" href="javascript:scroll(0,0)" onclick="window.scrollTo(0,0);return false;">返回顶部 
 	</a>
-</div>
+</div> 
 
 <style type="text/css"> 
 
@@ -98,6 +100,8 @@
 
 
 $(document).ready(function(){ 
+	$('#searchinput').placeholder(); 
+	
 	$("#searchinput").focus(function(){
 		var inval = $("#searchinput").val();
 		if(inval != ""){
@@ -112,7 +116,8 @@ $(document).ready(function(){
 	
 	if($.browser.msie)
     {
-		$("#searchinput").bind("propertychange",show );
+		 document.getElementById("searchinput").attachEvent("onpropertychange", show);
+		//$("#searchinput").bind("propertychange",show );
 		//$("#searchinput").bind("propertychange", function() { 
 		//	alert($(this).val()); 
 		//	}); 
@@ -124,28 +129,42 @@ $(document).ready(function(){
     	//	alert($(this).val()); 
     	//	}); 
     }
-	
 	 
 });
 
-
+function openask(){
+window.open ('<%=contextPath%>/jsp/ask.jsp?title='+ encodeURIComponent(document.getElementById('searchinput').value) ,'searchwindow');
+}
+var globalCount = 0;
 function show( ){   
-	var val = $("#searchinput").val(); 
+	globalCount = globalCount +1 ;
+	setTimeout( "getdate("+globalCount+")", 100); 
+}
+
+function getdate(mycount){
+	if(mycount != globalCount){ 
+		return ;
+	} 
+	
+	var val = $("#searchinput").val();  
 	var container = $("#resultcontent");
 	container.html("");
 	var sinput =$('#searchinput');
 	var newdiv = $("<div></div>");   
 	 
-
-	var searchStr = $.trim(sinput.val());
+	var searchtext = $.trim(sinput.val());
+	var searchStr = encodeURIComponent($.trim(sinput.val()));
 	if(searchStr == ""){
 		return;
-	}
+	} 
 	$.ajax( {
 		type : "POST",
 		url : "<%=contextPath%>/tag/search/"+searchStr+"/page/0/5",
 		dataType: "json",
 		success : function(data) {  
+			if(mycount != globalCount){
+				return ;
+			} 
 			$(newdiv).setTemplateElement("Tag-Template").processTemplate(data);
 			container.html($(newdiv).html());
 			///container.append($(newdiv).html());
@@ -153,7 +172,10 @@ function show( ){
 						type : "POST",
 						url : "<%=contextPath%>/doc/search/"+searchStr+"/page/0/5",
 						dataType: "json",
-						success : function(data) {  
+						success : function(data) {
+							if(mycount != globalCount){
+								return ;
+							} 
 							$(newdiv).setTemplateElement("Doc-Template").processTemplate(data);
 							//container.html($(newdiv).html());
 							container.append($(newdiv).html());
@@ -161,12 +183,15 @@ function show( ){
 											type : "POST",
 											url : "<%=contextPath%>/user/search/"+searchStr+"/page/0/5",
 											dataType: "json",
-											success : function(data) {  
+											success : function(data) { 
+												if(mycount != globalCount){
+													return ;
+												}
 												$(newdiv).setTemplateElement("User-Template").processTemplate(data);
 												//container.html($(newdiv).html());
 												container.append($(newdiv).html());
 												container.append('<div class="searchiterm" style="clear:both;"   onmouseover="this.style.backgroundColor=\'#F3F3F3\';" onmouseout="this.style.backgroundColor=\'\';">' 
-														+  '<a href="<%=contextPath%>/search/doc/'+searchStr+'" target= "_BLANK "  >点击查看更多搜索 : '+searchStr+'</a>  </div>');
+														+  '<a href="<%=contextPath%>/search/doc/'+searchStr+'" target= "_BLANK "  >点击查看更多搜索 : '+searchtext+'</a>  </div>');
 											} 
 										});
 							
@@ -179,7 +204,9 @@ function show( ){
 
 	  
 	$("#resultcontent").show();
+	
 }
+
 </script>
   
 <style type="text/css">
@@ -231,4 +258,231 @@ function show( ){
 	margin:10px 10px 0 0 ;
 }
 
+
+
+
+
+
+
+
+	
+.serv-box{
+	position: fixed;
+	height: 205px;
+	opacity: 1;
+	right:-320px;
+	top: 300px; 
+	width: 348px; 
+	overflow: hidden;
+	border: 1px solid #E8E8E8;
+	background-color: white;
+	font-size: 12px;
+	z-index: 2000;
+	border-radius: 5px 0px 0px 5px;
+	
+	box-shadow: -2px -2px 15px #CCC;
+	-webkit-box-shadow: -2px -2px 15px #CCC;
+	-moz-box-shadow: -2px -2px 15px #ccc; 
+	/* 
+	right:-320px;
+	*/
+}
+.serv_header{
+	width: 100%;
+	height: 38px;
+	border-bottom: 1px solid #F0F0F0;
+	line-height: 38px;
+	color: #333;
+	font-size:16px;
+}
+.serv_main{
+	padding: 10px 10px 15px 20px;
+	width: 267px;
+}
+
+.serv_text {
+	color: #999;
+	clear: both;
+	width: 100%;
+	height: 70px;
+	border: 1px solid #D1D1D1;
+	margin-top: 8px;
+	margin-bottom:10px;
+	padding: 5px;
+	resize: none;
+	_display: inline;
+	font-size: 12px;
+	overflow: auto;
+}
+.serv_submit{
+	font-size: 12px;
+	background: #FAFAFA;
+	border: 1px solid #CCC;
+	cursor: pointer;
+	width: 50px;
+	height: 20px;
+	float: right;
+	margin-top: 5px;
+	border-radius: 2px;
+}
+
+.serv_mask{
+	background: #EEE;
+	width: 318px;
+	height: 167px;
+	position: absolute;
+	left: 30px;
+	top: 38px;
+	z-index: 10;
+	opacity: .5;
+	filter: alpha(opacity=50);
+	display: none;
+}
+
+.serv_tip{
+	width: 178px;
+	height: 20px;
+	line-height: 20px;
+	border: 1px solid #48B6FE;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -25px 0 0 -104px;
+	z-index: 11; 
+	text-indent: 20px;
+	padding: 15px;
+	display: none;
+	background-color: white;
+	-webkit-box-shadow: -2px -2px 15px #CCC;
+	-moz-box-shadow: -2px -2px 15px #ccc;
+	box-shadow: -2px -2px 15px #CCC;
+	opacity: .8;
+	filter: alpha(opacity=80);
+} 
+
+#contactway{
+	color: #999;
+	width:100%;
+	font-size:12px;
+	height: 20px;
+	line-height: 22px;
+}
+
+#ServHideB {
+	float: right;
+	display: block;
+	margin: 12px 12px 0 0;
+	_margin-right: 6px;
+	height: 16px;
+	width: 16px;
+	background: url(/images/close.png) no-repeat 2px -8px;
+}
+
+.servtitle{
+	margin: 65px 9px 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	font-weight: bold;
+	color: white;
+	font-size: 14px;
+	width: 16px;
+}
+.servtitlearea{
+	width: 30px;
+	height:100%;
+	background-color:#666;
+	float:left;
+	cursor:pointer;
+	border-radius: 5px 0px 0px 5px;
+}
 </style>
+
+
+<div class="serv-box" id="ServBox" style="display:inline; ">
+	<div class="servtitlearea"  onclick="$('#ServBox').animate({right:0},'slow');" >
+		<div class="servtitle">意见反馈</div>
+	</div>
+	<div style="width:318px;float:left;">
+		<div class="serv_header">
+			<div class="fltlft">反馈意见给开发团队 </div>
+			<a id="ServHideB" class="fltrt" href="#" onclick="hideservbox()"></a>
+			<div class="clboth" ></div>
+		</div>
+		<div class="serv_main">  
+			<input type="text" id="contactway" style="" placeholder="联系方式:EMail或电话"  />
+			<textarea id="sugcontent" class="serv_text"  placeholder="您的建议是我们不断改进的动力"></textarea>
+			<button id="ServSubmit" class="fltrt" onclick="subsuggestion()" >提 交</button>
+		</div>
+		<div id="ServMask" class="serv_mask" style="display: none ">
+		</div>
+		<div id="ServTip" class="serv_tip" style="display: none; ">提交成功! 感谢您的反馈!</div>
+	</div>
+</div>
+
+<script language="javascript">
+
+$(document).ready(function(){  
+	$('#sugcontent').placeholder(); 
+	$('#contactway').placeholder();
+});
+function showservbox(){
+	$('#ServBox').animate({right:0},"slow");
+	$('#ServBox').show(500); 
+}
+
+function hideservbox(){
+	$('#ServBox').animate({right:-320},"slow");
+	//$("#ServBox").hide(1000);
+}
+function subsuggestion(){
+	var contactway = $('#contactway').val();
+	var sugcontent = $('#sugcontent').val();
+
+	if(contactway.length > 200){
+		alert("联系方式内容太长！");
+		return;
+	}
+
+	if(sugcontent.length > 2000){
+		alert("内容太长！");
+		return;
+	}
+	
+	$('#ServMask').show();
+	$('#ServTip').show();
+
+	if(contactway == "" && sugcontent == ""){ 
+		$('#ServBox').animate({right:-320},"slow");
+		$('#ServMask').hide();
+		$('#ServTip').hide();
+		return;
+	}
+
+	if(contactway == "联系方式:EMail或电话" && sugcontent == "您的建议是我们不断改进的动力"){ 
+		$('#ServBox').animate({right:-320},"slow");
+		$('#ServMask').hide();
+		$('#ServTip').hide();
+		return;
+	}
+	
+	$.ajax( {
+		type : "POST",
+		url : "<%=contextPath%>/suggestion/",
+		data:"contact="+encodeURIComponent(contactway)+"&content="+encodeURIComponent(sugcontent),
+		dataType: "json",
+		async:false,
+		success : function(data) {  
+			//$("#ServHideB").trigger("click");
+			$('#ServBox').animate({right:-320},"slow");
+			$('#contactway').val("");
+			$('#sugcontent').val("");
+			
+			$('#ServMask').hide();
+			$('#ServTip').hide();
+		} 
+	});
+	//$("#ServHideB").trigger("click");
+	//$('#ServBox').animate({right:0},"slow");
+} 
+</script>

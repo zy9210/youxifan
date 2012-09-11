@@ -5,8 +5,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<%   
+String title = request.getParameter("title");
+if("搜索标签、问题或人".equals(title)){
+	title="";
+}
+%>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>问题详情</title>  
+<title>提问 - 天木游戏问答社区</title>  
 
   	<script language="javascript" src="<%=contextPath%>/script/jquery.min.js"></script>
     <script language="javascript" src="<%=contextPath%>/script/jquery-ui-1.8.20.custom.js"></script>
@@ -21,7 +27,21 @@
 	<script charset="utf-8" src="<%=contextPath%>/script/kindeditor/kindeditor-min.js"></script>
 	<script charset="utf-8" src="<%=contextPath%>/script/kindeditor/lang/zh_CN.js"></script> 
 	<link rel="stylesheet" href="<%=contextPath%>/script/kindeditor/themes/default/default.css" />
- 
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34289945-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 
 <body>
@@ -38,7 +58,7 @@
   <form action="<%=contextPath %>/doc/add" method="post" onsubmit="return submitTest();"> 
   	  <input type="hidden" name="post_type" value="1"/>
   	  <label>标题</label>  <br/>
-	  <input type="text" id="post_title" name="post_title"  style="width:610px;height:25px;" />  <br/>
+	  <input type="text" id="post_title" name="post_title" value="<%=title %>" style="width:610px;height:25px;" />  <br/>
 	  
 	  <label>内容</label><br/>
 	  <textarea id="post_content" name="post_content" style="width:610px;height:300px;" ></textarea><br/>
